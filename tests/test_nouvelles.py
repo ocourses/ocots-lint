@@ -16,11 +16,15 @@ def git(*args):
 @pytest.fixture
 def depot(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
+    for variable in ("GIT_AUTHOR_NAME", "GIT_COMMITTER_NAME"):
+        monkeypatch.setenv(variable, "essai")
+    for variable in ("GIT_AUTHOR_EMAIL", "GIT_COMMITTER_EMAIL"):
+        monkeypatch.setenv(variable, "essai@exemple.org")
     (tmp_path / "cours").mkdir()
     (tmp_path / "cours" / "a.tex").write_text("Texte.\n\n" + CHAINE, encoding="utf-8")
     git("init", "-q")
     git("add", "-A")
-    git("-c", "user.email=x@y", "-c", "user.name=x", "commit", "-qm", "init")
+    git("commit", "-qm", "init")
     return tmp_path
 
 
