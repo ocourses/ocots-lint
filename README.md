@@ -81,10 +81,24 @@ raison** :
 ```
 
 - En fin de ligne, la directive couvre sa ligne. Seule sur sa ligne, elle
-  couvre la ligne suivante.
+  couvre la prochaine ligne qui n'est pas un commentaire seul : on peut en
+  empiler plusieurs.
 - Sans raison, elle est ignorée et signalée.
 - Une directive qui n'exempte plus rien est signalée : pas d'exemption morte.
 - `verifier --sans-exemptions` montre tout, pour une revue des exemptions.
+
+Pour poser une exemption sans rien toucher d'autre, par exemple depuis un
+agent :
+
+```bash
+ocots-lint exempter poly/ch1.tex:42 P2 "la proposition en découle"
+ocots-lint exempter poly/ch1.tex@3f9a0c2e71b84d55:0 P2 "…"   # par empreinte
+git diff | ocots-lint exempter --controler -                 # le diff n'ajoute que des directives ?
+```
+
+`exempter` ajoute une seule ligne de commentaire au-dessus de la trouvaille,
+refuse s'il n'y a pas de trouvaille active à cet endroit ou si la ligne est
+dans un verbatim, et vérifie après coup que la trouvaille a disparu.
 
 ### Dans la CI d'un cours
 
