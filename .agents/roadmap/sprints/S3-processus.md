@@ -202,6 +202,13 @@ est le dépôt lui-même, pas l'historique des issues.
   promotion : bloc JSON réduit aux points confirmés, lu par
   `conventions-fixer`. Contrôle testé en local (cinq cas) ; aucun run réel
   (facturation), d'où S3.10 encore ouverte.
+- 2026-09-28 — Démo sur `ocourses/ocots-demo`, premier passage complet de
+  la file (4 issues, 7 PR) : tri, correction et nettoyage **conformes aux
+  verdicts attendus** (`demo/attendus.md`), y compris les deux rejets
+  exemptés. Défaut trouvé : une issue fermée par la file à l'ouverture de
+  la PR de correction était recréée le lundi suivant si la PR n'était pas
+  fusionnée (les trouvailles restent actives sur `main`). `synchroniser` ne
+  recrée plus une issue citée par une PR ouverte.
 
 ## Bilan
 

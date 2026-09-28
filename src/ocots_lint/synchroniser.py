@@ -27,6 +27,11 @@ corrige par `ocots-lint nettoyer` sans modèle, sur la branche
 `ocots-lint/nettoyer/<fichier>`. Tant qu'une PR est ouverte sur cette
 branche, l'issue `[nettoyer]` n'est pas recréée.
 
+De même, une issue fermée n'est pas recréée tant qu'une PR ouverte la cite
+(« Closes #N », ou « #N » dans son corps) : la PR de correction d'un agent,
+ou celle de ses exemptions, attend sa relecture — les trouvailles restent
+actives sur la branche de base d'ici là, ce n'est pas une nouveauté.
+
 Les issues promues `conventions-style` ne sont jamais touchées ; un fichier
 exclu par `.agents-ignore` (préfixes de chemins, `#` commente) voit sa
 candidate fermée.
@@ -52,6 +57,7 @@ PREFIXE_TITRE = "[conventions] "
 PREFIXE_NETTOYER = "[nettoyer] "
 BRANCHE_NETTOYER = "ocots-lint/nettoyer/"
 RE_BLOC = re.compile(r"<!-- ocots-lint (\{.*?\}) -->", re.S)
+RE_REFERENCE = re.compile(r"(?<![\w/&])#(\d+)\b")
 DOC_LIMITES = "https://github.com/ocourses/ocots-lint#ce-que-loutil-garantit--et-ce-quil-ne-garantit-pas"
 
 
@@ -202,13 +208,14 @@ class Constat:
 
 
 def planifier(constats, avertissements, issues, ignores=(), versions="",
-              branches_ouvertes=frozenset()):
+              branches_ouvertes=frozenset(), issues_citees=frozenset()):
     """Le plan : fonction pure, sans accès à GitHub ni au disque.
 
     constats          : trouvailles non exemptées (Constat)
     avertissements    : sorties.Avertissement, rattachés à leur fichier
     issues            : Issue existantes portant l'un des labels suivis
     branches_ouvertes : branches des PR ouvertes du dépôt
+    issues_citees     : numéros d'issues cités par une PR ouverte
 
     Deux familles d'issues par fichier : `[conventions]` (tri, correction) et
     `[nettoyer]` (voie mécanique). Les avertissements d'exemption vont dans
@@ -229,13 +236,13 @@ def planifier(constats, avertissements, issues, ignores=(), versions="",
                 par_fichier.setdefault(c.fichier, []).append(c)
         _planifier_famille(plan, famille, par_fichier, avert_par_fichier,
                            fichiers_conventions, issues, ignores, versions,
-                           branches_ouvertes)
+                           branches_ouvertes, issues_citees)
     return plan
 
 
 def _planifier_famille(plan, famille, par_fichier, avert_par_fichier,
                        fichiers_conventions, issues, ignores, versions,
-                       branches_ouvertes):
+                       branches_ouvertes, issues_citees):
     ouvertes = {i.titre: i for i in issues
                 if i.ouverte and famille.label in i.labels}
     promues = ({i.titre for i in issues if i.ouverte and LABEL_PROMU in i.labels}
@@ -264,6 +271,13 @@ def _planifier_famille(plan, famille, par_fichier, avert_par_fichier,
             plan.actions.append(Action(
                 "pr_en_cours", fichier, famille,
                 commentaire=f"PR ouverte sur `{branche_nettoyer(fichier)}`"))
+            continue
+        liees = sorted(i.numero for i in issues if i.titre == t
+                       and not i.ouverte and i.numero in issues_citees)
+        if liees:
+            plan.actions.append(Action(
+                "pr_en_cours", fichier, famille, liees[-1],
+                commentaire=f"une PR ouverte cite #{liees[-1]}"))
             continue
         actuelles = {c.empreinte for c in par_fichier[fichier]}
         deja = [i for i in rejetees.get(t, []) if actuelles <= i.empreintes]
@@ -322,7 +336,7 @@ def afficher(plan, depot):
           f"{plan.compte('fermer')} à fermer, {plan.compte('inchangee')} "
           f"inchangée(s), {plan.compte('promue')} promue(s), "
           f"{plan.compte('rejet')} rejet(s) sans exemption, "
-          f"{plan.compte('pr_en_cours')} PR mécanique(s) en cours.", file=sys.stderr)
+          f"{plan.compte('pr_en_cours')} PR en cours.", file=sys.stderr)
 
 
 # ------------------------------------------------------------ GitHub (gh)
@@ -356,10 +370,16 @@ def lire_issues(depot):
     return issues
 
 
-def lire_branches_ouvertes(depot):
+def lire_prs_ouvertes(depot):
+    """(branches des PR ouvertes, numéros d'issues qu'elles citent)."""
     brut = _gh("pr", "list", "--repo", depot, "--state", "open", "--limit",
-               "1000", "--json", "headRefName")
-    return frozenset(p["headRefName"] for p in json.loads(brut or "[]"))
+               "1000", "--json", "headRefName,body,closingIssuesReferences")
+    branches, citees = set(), set()
+    for p in json.loads(brut or "[]"):
+        branches.add(p["headRefName"])
+        citees.update(int(n) for n in RE_REFERENCE.findall(p.get("body") or ""))
+        citees.update(r["number"] for r in p.get("closingIssuesReferences") or [])
+    return frozenset(branches), frozenset(citees)
 
 
 def appliquer(plan, depot):
@@ -445,9 +465,10 @@ def main(argv):
     try:
         depot = options["depot"] or depot_courant()
         issues = lire_issues(depot)
+        branches, citees = lire_prs_ouvertes(depot)
         plan = planifier(constats_depuis(trouvailles), avertissements, issues,
                          lire_ignores(options["ignore"]), versions,
-                         lire_branches_ouvertes(depot))
+                         branches, citees)
         afficher(plan, depot)
         for a in avertissements:
             print(f"{a.fichier}:{a.ligne}: [ocots-lint] {a.message}", file=sys.stderr)

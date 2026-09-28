@@ -118,6 +118,8 @@ with open(journal, "a", encoding="utf-8") as fh:
 if sys.argv[1:3] == ["issue", "list"]:
     label = sys.argv[sys.argv.index("--label") + 1]
     print(json.dumps(json.loads(os.environ.get("GH_ISSUES", "{}")).get(label, [])))
+if sys.argv[1:3] == ["pr", "list"]:
+    print(os.environ.get("GH_PRS", "[]"))
 if os.environ.get("GH_ECHEC") and sys.argv[1:3] == ["issue", "create"]:
     sys.exit(1)
 """
@@ -272,3 +274,56 @@ def test_applique_avec_le_label_mecanique(cours, capsys):
     (creation,) = ecritures(cours)
     assert "[nettoyer] a.tex" in creation["args"]
     assert sync.LABEL_MECANIQUE in creation["args"]
+
+
+# ------------------------------------- PR ouverte qui cite l'issue (démo S3.10)
+
+def test_issue_fermee_citee_par_une_pr_ouverte_non_recreee():
+    """La correction d'un agent a fermé l'issue ; sa PR attend la relecture."""
+    fermee = issue(5, ouverte=False, label=sync.LABEL_PROMU, raison="COMPLETED")
+    plan = planifier([constat()], [], [fermee], issues_citees=frozenset({5}))
+    assert genres(plan) == [("pr_en_cours", "a.tex", 5)]
+    assert "#5" in plan.actions[0].commentaire
+
+
+def test_pr_qui_cite_une_autre_issue_ne_bloque_pas():
+    fermee = issue(5, ouverte=False, raison="COMPLETED")
+    plan = planifier([constat()], [], [fermee], issues_citees=frozenset({6}))
+    assert genres(plan) == [("creer", "a.tex", 0)]
+
+
+def test_pr_citee_ne_concerne_que_le_fichier_de_l_issue():
+    fermee = issue(5, "b.tex", ouverte=False, raison="COMPLETED")
+    plan = planifier([constat()], [], [fermee], issues_citees=frozenset({5}))
+    assert genres(plan) == [("creer", "a.tex", 0)]
+
+
+def test_issue_ouverte_citee_reste_mise_a_jour():
+    plan = planifier([constat()], [], [issue(7, corps="ancien")],
+                     issues_citees=frozenset({7}))
+    assert genres(plan) == [("mettre_a_jour", "a.tex", 7)]
+
+
+def test_lire_prs_ouvertes(cours, monkeypatch):
+    monkeypatch.setenv("GH_PRS", json.dumps([
+        {"headRefName": "agent/tri-1", "closingIssuesReferences": [],
+         "body": "Trie le candidat ouvert dans l'issue #12 (fichier a.tex)."},
+        {"headRefName": "agent/fix-2", "body": "Closes #13",
+         "closingIssuesReferences": [{"number": 13}]},
+        {"headRefName": "doc", "body": "voir ocourses/x#99 et &#39; et a#3",
+         "closingIssuesReferences": None}]))
+    branches, citees = sync.lire_prs_ouvertes("ocourses/essai")
+    assert branches == {"agent/tri-1", "agent/fix-2", "doc"}
+    assert citees == {12, 13}
+
+
+def test_commande_ne_recree_pas_l_issue_d_une_pr_ouverte(cours, capsys, monkeypatch):
+    monkeypatch.setenv("GH_ISSUES", json.dumps({sync.LABEL_PROMU: [{
+        "number": 4, "title": "[conventions] a.tex", "body": "", "state": "CLOSED",
+        "labels": [{"name": sync.LABEL_PROMU}], "stateReason": "COMPLETED"}]}))
+    monkeypatch.setenv("GH_PRS", json.dumps([{
+        "headRefName": "agent/correction-a-1", "body": "Closes #4",
+        "closingIssuesReferences": [{"number": 4}]}]))
+    assert sync.main([]) == 0
+    assert "non recréée, PR en cours #4" in capsys.readouterr().out
+    assert ecritures(cours) == []
