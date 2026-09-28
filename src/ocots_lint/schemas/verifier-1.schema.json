@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ocourses/ocots-lint/blob/main/src/ocots_lint/schemas/verifier-1.schema.json",
+  "title": "ocots-lint verifier --format json, schéma 1",
+  "description": "Contrat entre ocots-lint et ses consommateurs (agents, scripts). Un changement incompatible crée un schéma 2 ; un champ ajouté reste compatible.",
+  "type": "object",
+  "required": ["schema", "outil", "version", "regles", "trouvailles", "avertissements"],
+  "properties": {
+    "schema": {"const": 1},
+    "outil": {"const": "ocots-lint"},
+    "version": {"type": "string"},
+    "regles": {
+      "description": "Les vérificateurs lancés, par identifiant de règle ocots-conventions.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["garantie", "resume"],
+        "properties": {
+          "garantie": {"$ref": "#/$defs/garantie"},
+          "resume": {"type": "string"}
+        }
+      }
+    },
+    "trouvailles": {
+      "description": "Toutes les trouvailles, exemptées comprises (exemption non nulle).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["regle", "garantie", "fichier", "ligne", "message", "empreinte", "exemption"],
+        "properties": {
+          "regle": {"type": "string", "pattern": "^[A-Z]{1,2}[0-9]+$"},
+          "garantie": {"$ref": "#/$defs/garantie"},
+          "fichier": {"type": "string", "description": "Chemin POSIX relatif au dossier où l'outil est lancé."},
+          "ligne": {"type": "integer", "minimum": 1},
+          "message": {"type": "string"},
+          "empreinte": {"type": "string", "pattern": "^[0-9a-f]{16}:[0-9]+$", "description": "Identité stable, indépendante du numéro de ligne."},
+          "exemption": {"type": ["string", "null"], "description": "Raison de l'exemption, ou null."}
+        }
+      }
+    },
+    "avertissements": {
+      "description": "Exemptions invalides ou inutiles.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fichier", "ligne", "message"],
+        "properties": {
+          "fichier": {"type": "string"},
+          "ligne": {"type": "integer", "minimum": 1},
+          "message": {"type": "string"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "garantie": {"enum": ["exact", "heuristique", "signal"]}
+  }
+}

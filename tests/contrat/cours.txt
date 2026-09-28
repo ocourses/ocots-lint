@@ -1,0 +1,15 @@
+code : 1
+--- stdout
+cours.tex:7: [C4] `~:` inutile — babel-french pose l'espace seul
+cours.tex:7: [C4] guillemets : utiliser \enquote{…}
+cours.tex:7: [C4] mot composé — trait d'union
+cours.tex:4: [P2] theorem -> proposition
+cours.tex:2: [P3] amorce passe-partout : « …Soit $f$ une fonction mesurable. Nous avons le théorème suivant. »
+--- stderr
+C4 : 3 infraction(s)
+C6 : 0 infraction(s)
+P2 : 1 infraction(s) (+ 1 exemptée(s))
+P3 : 1 infraction(s)
+P5 : 0 infraction(s)
+cours.tex:14: [ocots-lint] exemption sans règle ou sans raison, ignorée — « % ocots-lint: ignore P5 — raison »
+cours.tex:13: [ocots-lint] exemption P5 inutile — plus rien à exempter ici

@@ -58,16 +58,16 @@ est le dépôt lui-même, pas l'historique des issues.
 
 ## Stories
 
-- [ ] **S3.1** — Décision [0003](../decisions/0003-processus.md) écrite et
+- [x] **S3.1** — Décision [0003](../decisions/0003-processus.md) écrite et
   acceptée : le déterministe dans `ocots-lint`, le jugement dans `agents`,
   un contrat JSON versionné entre les deux.
-- [ ] **S3.2** — En tant que *mainteneur*, je veux une **empreinte stable**
+- [x] **S3.2** — En tant que *mainteneur*, je veux une **empreinte stable**
   par trouvaille (règle, fichier, contenu normalisé de la ligne signalée,
   rang parmi les lignes identiques), afin qu'une trouvaille garde son
   identité quand le fichier bouge au-dessus d'elle.
   - Critère : fixtures où l'on insère des lignes avant une trouvaille ;
     empreinte inchangée. Exposée en JSON et en SARIF (`partialFingerprints`).
-- [ ] **S3.3** — En tant qu'*agent*, je veux un **contrat JSON versionné**
+- [x] **S3.3** — En tant qu'*agent*, je veux un **contrat JSON versionné**
   (`"schema": 1`) : trouvailles avec empreinte, garantie, exemption, voie ;
   avertissements (exemptions invalides ou inutiles), afin de ne plus dépendre
   d'une regex sur du texte (D1, D3).
@@ -132,6 +132,13 @@ est le dépôt lui-même, pas l'historique des issues.
   des conventions, sous-module du cours) : automatisation au backlog.
 
 ## Journal
+
+- 2026-09-28 — S3.1 à S3.3. Empreinte : contexte (ligne signalée et voisines
+  non vides, sans commentaires) plutôt que la ligne seule, trop générique
+  pour `\end{theorem}`. Sur `mesure-integration-enseignants` : 21
+  trouvailles, 21 empreintes distinctes, inchangées après insertion de trois
+  lignes en tête de chaque fichier. Limite connue : une trouvaille dont une
+  ligne voisine change reçoit une nouvelle empreinte.
 
 ## Bilan
 

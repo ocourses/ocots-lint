@@ -47,3 +47,20 @@ erreur (`XPASS(strict)`). La fixture change alors de dossier, vers
 `conventions/bin/verifier` (sous-module épinglé) : même sortie standard,
 même sortie d'erreur, même code de sortie. À partir de S4, l'outil
 s'écartera volontairement de l'ancien, et ce test sera retiré.
+
+## Contrat (`test_contrat.py`)
+
+La sortie de `verifier` est lue par d'autres : les agents (JSON) et
+l'ancien détecteur `conventions.sh` (texte, codes de sortie). Le test compare
+les sorties sur `contrat/cours.tex` à des références (`contrat/cours.json`,
+`contrat/cours.txt`) et valide le JSON contre le schéma publié.
+
+Si une sortie change **volontairement** :
+
+```bash
+OCOTS_LINT_REGENERER=1 uv run pytest tests/test_contrat.py
+```
+
+puis relire le diff des références : c'est le changement de contrat vu par
+les consommateurs. Un changement incompatible du JSON fait monter
+`SCHEMA_JSON`.

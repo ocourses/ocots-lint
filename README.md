@@ -96,10 +96,26 @@ licence**, donc aussi pour un dépôt privé :
 - run: uvx --from git+https://github.com/ocourses/ocots-lint@v0.2.0 ocots-lint verifier --format github poly/
 ```
 
-Autres formats : `--format json` (pour un script ou un agent) et
+Autres formats : `--format json` (pour un script ou un agent — voir
+ci-dessous) et
 `--format sarif` (SARIF 2.1.0, pour le *code scanning* de GitHub — gratuit
 sur un dépôt public seulement). Une trouvaille exemptée figure en SARIF comme
 suppression, avec sa raison.
+
+### Le contrat JSON
+
+`verifier --format json` est **le** format à lire pour un programme : la
+sortie texte est faite pour un humain. Il porte un numéro de schéma
+(`"schema": 1`), et le schéma est publié avec le paquet
+([`schemas/verifier-1.schema.json`](src/ocots_lint/schemas/verifier-1.schema.json)).
+Un champ ajouté reste compatible ; un changement incompatible crée un
+schéma 2.
+
+Chaque trouvaille porte une **empreinte** (`3f9a0c2e71b84d55:0`), son
+identité indépendante du numéro de ligne : la règle, le fichier, la ligne
+signalée et ses voisines non vides, commentaires retirés. Ajouter des lignes
+ailleurs, ou une exemption au-dessus, ne la change pas. La sortie JSON porte
+aussi les avertissements sur les exemptions (sans raison, inutiles).
 
 ---
 

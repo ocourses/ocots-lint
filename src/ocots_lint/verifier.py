@@ -18,7 +18,7 @@ Sans exemption dans les sources, arguments et sorties sont identiques à
 import os
 import sys
 
-from ocots_lint import sorties
+from ocots_lint import empreintes, sorties
 from ocots_lint.exemptions import Exemptions
 from ocots_lint.lecture import sources
 from ocots_lint.mesures import MESURES, mesurer
@@ -87,6 +87,10 @@ def main(argv):
             resultats.append(sorties.Trouvaille(
                 nom, os.path.relpath(chemin), ligne, message,
                 directive.raison if directive else None))
+    resultats = empreintes.attribuer(resultats)
+    avertissements = [
+        sorties.Avertissement(os.path.relpath(chemin), ligne, message)
+        for chemin, ligne, message in exemptions.avertissements(sources(racines), noms)]
 
     total = 0
     for nom in noms:
@@ -102,7 +106,7 @@ def main(argv):
         total += len(retenues)
 
     if fmt == "json":
-        print(sorties.json_(resultats, noms))
+        print(sorties.json_(resultats, noms, avertissements))
     elif fmt == "sarif":
         print(sorties.sarif(resultats, noms))
     elif fmt == "github":
@@ -110,8 +114,7 @@ def main(argv):
         if annotations:
             print(annotations)
 
-    for chemin, ligne, message in exemptions.avertissements(sources(racines), noms):
-        print(f"{os.path.relpath(chemin)}:{ligne}: [ocots-lint] {message}",
-              file=sys.stderr)
+    for a in avertissements:
+        print(f"{a.fichier}:{a.ligne}: [ocots-lint] {a.message}", file=sys.stderr)
 
     return 1 if total else 0

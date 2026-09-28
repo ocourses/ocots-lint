@@ -10,6 +10,16 @@ au moment du tag.
 
 ## Non publié
 
+- **Empreintes** : chaque trouvaille a une identité stable, indépendante du
+  numéro de ligne (règle, fichier, ligne signalée et voisines non vides,
+  commentaires retirés). En JSON (`empreinte`) et en SARIF
+  (`partialFingerprints`).
+- **Contrat JSON versionné** : `"schema": 1`, schéma publié avec le paquet
+  (`schemas/verifier-1.schema.json`). Chaque trouvaille porte sa garantie,
+  son empreinte et son exemption ; les avertissements sur les exemptions y
+  figurent (`avertissements`). Le champ `fichier` est désormais en POSIX.
+- Sorties texte et JSON figées par des références (`tests/contrat/`).
+
 ---
 
 ## v0.2.0 — 2026-09-28
