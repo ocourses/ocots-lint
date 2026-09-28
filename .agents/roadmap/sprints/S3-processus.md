@@ -97,13 +97,13 @@ est le dépôt lui-même, pas l'historique des issues.
   `ocots-lint synchroniser` ; la file envoie la voie `mecanique` à
   `nettoyer` sans modèle ; `conventions-reviewer` consigne un rejet par
   `ocots-lint exempter` ; `conventions-fixer` lit le JSON.
-- [ ] **S3.8** — En tant qu'*auteur*, je veux `verifier --nouvelles <réf>`,
+- [x] **S3.8** — En tant qu'*auteur*, je veux `verifier --nouvelles <réf>`,
   qui ne signale que les trouvailles absentes de `<réf>` (par empreinte),
   et un workflow de PR pour le cours, afin de voir un écart au moment où je
   l'écris (D6).
   - Critère : `runs-on` paramétrable (runner de l'auteur) ; quelques
     secondes sur une PR qui touche un chapitre.
-- [ ] **S3.9** — En tant que *mainteneur*, je veux `ocots-lint comparer`,
+- [x] **S3.9** — En tant que *mainteneur*, je veux `ocots-lint comparer`,
   qui liste les trouvailles qui apparaissent et disparaissent entre deux
   versions de l'outil (ou deux révisions du cours), afin de savoir avant une
   montée de version combien d'issues vont bouger (D5).
@@ -150,6 +150,10 @@ est le dépôt lui-même, pas l'historique des issues.
   que l'ancien `conventions.sh` (simulé avec un faux `gh`). Voies : 13
   trouvailles sur 21 sont `mecanique` (12 `~:`, 1 paire de guillemets), 8 au
   `tri` (7 P3, 1 renvoi C4) — 13 tris de modèle évités.
+- 2026-09-28 — S3.8 et S3.9. Sur une copie du cours de mesure, trois
+  trouvailles ajoutées dans `td1.tex` : `--nouvelles HEAD` ne signale
+  qu'elles (pas les 21 existantes), aussi depuis un sous-dossier ;
+  `comparer` sur les deux états : +3, −0, 21 inchangées.
 
 ## Bilan
 

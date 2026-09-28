@@ -10,6 +10,16 @@ au moment du tag.
 
 ## Non publié
 
+- **`verifier --nouvelles <réf>`** : seulement les trouvailles absentes de
+  la révision git `<réf>` (par empreinte). Retirer une exemption fait
+  réapparaître la trouvaille.
+- **Workflow réutilisable `verifier-pr.yml`** pour les PR des cours :
+  annotations des seules trouvailles nouvelles ; `runs-on` en paramètre.
+  Testé sur ce dépôt à chaque PR.
+- **Nouvelle commande `comparer`** : trouvailles apparues et disparues entre
+  deux sorties JSON (deux versions de l'outil, ou deux révisions du cours),
+  bilan par règle, issues à créer ou à fermer.
+
 - **Nouvelle commande `synchroniser`** : une issue par fichier en
   infraction, à partir d'un plan calculé par une fonction pure et testée
   (`--dry-run` pour le voir). Remplace le détecteur en bash des agents, avec

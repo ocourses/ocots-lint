@@ -7,6 +7,7 @@
     ocots-lint verifier --mesure   compte des motifs non bloquants
     ocots-lint verifier --sans-exemptions   ignore les `% ocots-lint: ignore …`
     ocots-lint verifier --format json|sarif|github  sortie pour une CI (défaut : texte)
+    ocots-lint verifier --nouvelles origin/main     seulement ce qui est nouveau
 
 Sortie 1 si au moins une infraction est trouvée, 2 pour un argument inconnu,
 0 sinon : utilisable en CI.
@@ -18,7 +19,7 @@ Sans exemption dans les sources, arguments et sorties sont identiques à
 import os
 import sys
 
-from ocots_lint import empreintes, sorties, voies
+from ocots_lint import empreintes, reference, sorties, voies
 from ocots_lint.exemptions import Exemptions
 from ocots_lint.lecture import sources
 from ocots_lint.mesures import MESURES, mesurer
@@ -27,21 +28,28 @@ from ocots_lint.regles import REGLES
 FORMATS = ("texte", "json", "sarif", "github")
 
 
-def extraire_format(argv):
-    """(format, argv sans l'option) ; ValueError si la valeur est inconnue."""
-    reste, fmt, i = [], "texte", 0
+def extraire_option(argv, nom):
+    """(valeur ou None, argv sans l'option) ; accepte `--nom v` et `--nom=v`."""
+    reste, valeur, i = [], None, 0
     while i < len(argv):
         a = argv[i]
-        if a == "--format":
+        if a == nom:
             if i + 1 >= len(argv):
-                raise ValueError("--format attend une valeur")
-            fmt, i = argv[i + 1], i + 2
+                raise ValueError(f"{nom} attend une valeur")
+            valeur, i = argv[i + 1], i + 2
             continue
-        if a.startswith("--format="):
-            fmt = a.split("=", 1)[1]
+        if a.startswith(nom + "="):
+            valeur = a.split("=", 1)[1]
         else:
             reste.append(a)
         i += 1
+    return valeur, reste
+
+
+def extraire_format(argv):
+    """(format, argv sans l'option) ; ValueError si la valeur est inconnue."""
+    fmt, reste = extraire_option(argv, "--format")
+    fmt = fmt or "texte"
     if fmt not in FORMATS:
         raise ValueError(f"format inconnu : {fmt} ({', '.join(FORMATS)})")
     return fmt, reste
@@ -69,6 +77,7 @@ def analyser(racines, noms, exemptions_actives=True):
 def main(argv):
     try:
         fmt, argv = extraire_format(argv)
+        nouvelles, argv = extraire_option(argv, "--nouvelles")
     except ValueError as e:
         print(e, file=sys.stderr)
         return 2
@@ -100,6 +109,15 @@ def main(argv):
 
     resultats, avertissements = analyser(
         racines, noms, exemptions_actives="--sans-exemptions" not in argv)
+    if nouvelles:
+        try:
+            anciennes = reference.empreintes_actives(nouvelles, racines, noms,
+                                                     analyser)
+        except reference.ErreurReference as e:
+            print(e, file=sys.stderr)
+            return 2
+        resultats = [t for t in resultats
+                     if not t.exemption and t.empreinte not in anciennes]
 
     total = 0
     for nom in noms:
@@ -109,6 +127,8 @@ def main(argv):
             for t in retenues:
                 print(f"{t.fichier}:{t.ligne}: [{nom}] {t.message}")
         bilan = f"{nom} : {len(retenues)} infraction(s)"
+        if nouvelles:
+            bilan += f" nouvelle(s) depuis {nouvelles}"
         if exemptees:
             bilan += f" (+ {exemptees} exemptée(s))"
         print(bilan, file=sys.stderr)
