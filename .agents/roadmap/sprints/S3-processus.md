@@ -154,6 +154,9 @@ est le dépôt lui-même, pas l'historique des issues.
   trouvailles ajoutées dans `td1.tex` : `--nouvelles HEAD` ne signale
   qu'elles (pas les 21 existantes), aussi depuis un sous-dossier ;
   `comparer` sur les deux états : +3, −0, 21 inchangées.
+- 2026-09-28 — `v0.3.0` publiée avant S3.7, comme en S2 : les agents et le
+  relais des conventions ont besoin d'une version à épingler. Correctif
+  préalable : `nettoyer` respecte les exemptions.
 
 ## Bilan
 
