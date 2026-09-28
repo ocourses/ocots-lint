@@ -182,6 +182,16 @@ est le dépôt lui-même, pas l'historique des issues.
   doublon, rien à corriger ; ligne exemptée intacte). Sur le cours de mesure :
   5 issues `[conventions]`, 3 `[nettoyer]`. `v0.4.0` ; les versions visées
   par S4 à S7 passent à `v0.5.0`–`v0.8.0`.
+- 2026-09-28 — Incident de release : un push refusé à tort a laissé la
+  suite de la commande poser un tag `v0.4.0` sur `main` sans le commit de
+  release. Le garde-fou de `release.yml` (version du paquet = tag) a fait
+  échouer la publication ; le tag, poussé depuis quelques minutes et
+  référencé nulle part, a été supprimé puis reposé au bon endroit. Leçon :
+  enchaîner PR, CI verte, fusion, vérification de version et tag avec des
+  `&&` stricts.
+- 2026-09-28 — `ocots-conventions` v2.3.0 (relais sur `v0.4.0`) ; le cours
+  de mesure la monte, avec `agent-nettoyer.yml` (#306). Premier cours sur la
+  voie mécanique.
 
 ## Bilan
 
