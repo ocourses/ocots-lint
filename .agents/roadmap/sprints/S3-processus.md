@@ -103,7 +103,7 @@ est le dépôt lui-même, pas l'historique des issues.
     `voie:mecanique` ; la file (`next-task.sh`) l'envoie à un workflow sans
     modèle qui lance `./conventions/bin/ocots-lint nettoyer C4 <fichier>
     --appliquer`, compile, et ouvre une PR Draft liée à l'issue.
-  - [ ] Étape 3 — tri : `conventions-reviewer` ignore les lignes
+  - [x] Étape 3 — tri : `conventions-reviewer` ignore les lignes
     `mecanique`, consigne chaque rejet par `ocots-lint exempter` (PR
     contrôlée par `exempter --controler`) ; `conventions-fixer` lit le bloc
     JSON de l'issue.
@@ -192,6 +192,16 @@ est le dépôt lui-même, pas l'historique des issues.
 - 2026-09-28 — `ocots-conventions` v2.3.0 (relais sur `v0.4.0`) ; le cours
   de mesure la monte, avec `agent-nettoyer.yml` (#306). Premier cours sur la
   voie mécanique.
+
+- 2026-09-28 — S3.7 étape 3 (agents#32, cours #307). `conventions-reviewer`
+  retrouve les trouvailles par empreinte et pose une exemption par rejet
+  dans la PR Draft de son run ; `scripts/controle-tri.sh`
+  (`exempter --controler`, fichier de suivi exclu) fait échouer le run si le
+  diff contient autre chose. Rejet total : corps de l'issue intact, pour que
+  `synchroniser` ne la rouvre pas avant la fusion des exemptions ;
+  promotion : bloc JSON réduit aux points confirmés, lu par
+  `conventions-fixer`. Contrôle testé en local (cinq cas) ; aucun run réel
+  (facturation), d'où S3.10 encore ouverte.
 
 ## Bilan
 
