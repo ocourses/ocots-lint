@@ -10,6 +10,12 @@ au moment du tag.
 
 ## Non publié
 
+- **`synchroniser` : une issue `[nettoyer] <fichier>` pour la voie
+  mécanique** (label `conventions-mecanique`), à côté de `[conventions]
+  <fichier>` qui ne garde que ce qui demande un jugement. La correction se
+  fait sans modèle, par PR sur la branche `ocots-lint/nettoyer/<fichier>` ;
+  tant qu'une PR est ouverte sur cette branche, l'issue n'est pas recréée.
+
 ---
 
 ## v0.3.0 — 2026-09-28

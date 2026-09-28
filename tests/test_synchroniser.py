@@ -161,7 +161,7 @@ def ecritures(cours):
 
 def test_dry_run_ne_touche_rien(cours, capsys):
     assert sync.main(["--dry-run"]) == 0
-    assert "+ créer : a.tex" in capsys.readouterr().out
+    assert "+ créer : [conventions] a.tex" in capsys.readouterr().out
     assert ecritures(cours) == []
 
 
@@ -201,3 +201,74 @@ def test_echec_de_l_analyse_ne_touche_rien(cours, capsys, monkeypatch):
 
 def test_option_inconnue(capsys):
     assert sync.main(["--rien"]) == 2
+
+
+# ------------------------------------------------- deux familles (S3.7, étape 2)
+
+def mecanique(fichier="a.tex", ligne=5, empreinte="cccccccccccccccc:0"):
+    return Constat(fichier, ligne, "C4", "heuristique", "mecanique",
+                   "`~:` inutile", empreinte)
+
+
+def titres(plan):
+    return [(a.genre, sync.titre(a.fichier, a.famille)) for a in plan.actions]
+
+
+def test_mecanique_a_sa_propre_issue():
+    plan = planifier([constat(), mecanique()], [], [])
+    assert titres(plan) == [("creer", "[conventions] a.tex"),
+                            ("creer", "[nettoyer] a.tex")]
+    nettoyer = plan.actions[1]
+    assert nettoyer.famille.label == sync.LABEL_MECANIQUE
+    assert "ocots-lint/nettoyer/a.tex" in nettoyer.corps
+    assert "| 5 | C4 | heuristique | mecanique |" in nettoyer.corps
+    assert "| 5 |" not in plan.actions[0].corps
+
+
+def test_pr_en_cours_bloque_la_recreation():
+    plan = planifier([mecanique()], [], [],
+                     branches_ouvertes=frozenset({"ocots-lint/nettoyer/a.tex"}))
+    assert titres(plan) == [("pr_en_cours", "[nettoyer] a.tex")]
+
+
+def test_candidate_fermee_quand_il_ne_reste_que_du_mecanique():
+    plan = planifier([mecanique()], [], [issue(7)])
+    assert titres(plan) == [("fermer", "[conventions] a.tex"),
+                            ("creer", "[nettoyer] a.tex")]
+
+
+def test_issue_nettoyer_fermee_quand_corrige():
+    ouverte = Issue(9, "[nettoyer] a.tex", True, frozenset({sync.LABEL_MECANIQUE}))
+    assert titres(planifier([constat()], [], [ouverte])) == [
+        ("creer", "[conventions] a.tex"), ("fermer", "[nettoyer] a.tex")]
+
+
+def test_avertissements_dans_l_issue_conventions_sinon_nettoyer():
+    avert = [Avertissement("a.tex", 2, "exemption P5 inutile")]
+    mixte = planifier([constat(), mecanique()], avert, [])
+    assert "exemption P5 inutile" in mixte.actions[0].corps
+    assert "exemption P5 inutile" not in mixte.actions[1].corps
+    seul = planifier([mecanique()], avert, [])
+    assert "exemption P5 inutile" in seul.actions[0].corps
+
+
+def test_rejet_ne_concerne_que_les_candidates():
+    """Une issue [nettoyer] fermée n'empêche pas d'en recréer une."""
+    fermee = Issue(5, "[nettoyer] a.tex", False, frozenset({sync.LABEL_MECANIQUE}),
+                   sync.corps_issue("a.tex", [mecanique()], [], "", sync.NETTOYER),
+                   "NOT_PLANNED")
+    assert titres(planifier([mecanique()], [], [fermee])) == [
+        ("creer", "[nettoyer] a.tex")]
+
+
+def test_branche_nettoyer():
+    assert sync.branche_nettoyer("poly/ch 1/a+b.tex") == (
+        "ocots-lint/nettoyer/poly/ch-1/a-b.tex")
+
+
+def test_applique_avec_le_label_mecanique(cours, capsys):
+    (cours / "cours" / "a.tex").write_text("Question~: ici.\n", encoding="utf-8")
+    assert sync.main([]) == 0
+    (creation,) = ecritures(cours)
+    assert "[nettoyer] a.tex" in creation["args"]
+    assert sync.LABEL_MECANIQUE in creation["args"]
