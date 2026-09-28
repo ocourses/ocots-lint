@@ -53,9 +53,9 @@ nouveau passe par de nouvelles options ou de nouvelles commandes.
   identique à `bin/nettoyer`, afin que les deux outils partagent la même
   lecture.
   - Critère : test de parité (aperçu et `--appliquer` sur une copie).
-- [ ] **S2.7** — Dans `ocots-conventions`, `bin/verifier` et `bin/nettoyer`
-  renvoient vers `ocots-lint` ; README mis à jour. *Décision à prendre avec
-  l'auteur : relais, gel ou retrait.*
+- [x] **S2.7** — Dans `ocots-conventions`, `bin/verifier` et `bin/nettoyer`
+  renvoient vers `ocots-lint` ; README mis à jour. *Décision de l'auteur :
+  relais.*
 - [x] **S2.8** — Release `v0.2.0`.
 
 ## Découpage en PR
@@ -85,6 +85,31 @@ nouveau passe par de nouvelles options ou de nouvelles commandes.
   (`scripts/checkers/conventions.sh`) et les `AGENTS.md` de quatre cours
   appellent `conventions/bin/verifier`.
 
+- 2026-09-28 — S2.7, option relais :
+  - [ocourses/agents#28](https://github.com/ocourses/agents/pull/28) : `uv`
+    dans `check.yml` et `agent.yml` ; **bug corrigé** — le détecteur ignorait
+    le code de sortie de `verifier`, et une sortie vide sur échec aurait
+    refermé les candidates ouvertes ;
+  - [ocots-conventions#20](https://github.com/ocourses/ocots-conventions/pull/20),
+    release `v2.1.0` : `bin/` relaie vers `ocots-lint v0.2.0` ; sorties
+    identiques à l'ancien script sur le cours de mesure ;
+  - `mesure-integration-enseignants#303` : le cours épingle
+    `template v1.0.0` et `conventions v2.1.0`.
+- Le sous-module `conventions` d'`ocots-lint` **reste à `v2.0.0`** : c'est le
+  dernier `bin/verifier` en Python, la référence du test de parité. À partir
+  de `v2.1.0`, `bin/` relaie vers `ocots-lint` lui-même.
+
 ## Bilan
 
-*À écrire en fin de sprint.*
+Sprint clos le 2026-09-28, `v0.2.0`.
+
+- **Livré** : toutes les stories. Garanties déclarées, `couverture`,
+  exemptions, formats `json`/`sarif`/`github`, `nettoyer`, relais depuis les
+  conventions. La sortie texte est restée identique à l'ancien outil.
+- **Appris** : les dépôts de cours sont privés, et le SARIF n'y est pas
+  gratuit ; le format `github` (annotations de workflow) est celui qui sert.
+  Brancher un relais a révélé un défaut latent du détecteur des agents
+  (code de sortie ignoré).
+- **Pour la suite** : S3 peut s'écarter de l'ancien outil. Le test de parité
+  sera remplacé par un instantané des trouvailles sur le corpus, relu à
+  chaque écart.

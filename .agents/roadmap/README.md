@@ -39,7 +39,7 @@ les règles qui s'y prêtent, *qu'il n'y a rien à trouver*.
 |---|---|---|---|
 | [S0](sprints/S0-versions.md) | SemVer et releases pour le template et les conventions | — | fini |
 | [S1](sprints/S1-parite.md) | l'outil reproduit `bin/verifier` à l'identique, avec des tests | `v0.1.0` | fini |
-| [S2](sprints/S2-registre.md) | registre des vérificateurs, garanties, couverture, exemptions | `v0.2.0` | **en cours** |
+| [S2](sprints/S2-registre.md) | registre des vérificateurs, garanties, couverture, exemptions | `v0.2.0` | fini |
 | [S3](sprints/S3-arbre.md) | lecture par arbre syntaxique ; les limites de P2 et C4 tombent | `v0.3.0` | à faire |
 | [S4](sprints/S4-vocabulaire.md) | le vocabulaire des boîtes vient du template | `v0.4.0` | à faire |
 | [S5](sprints/S5-journal.md) | journal de compilation instrumenté ; règles sur les labels | `v0.5.0` | à faire |
