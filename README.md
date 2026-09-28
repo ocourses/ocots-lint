@@ -28,6 +28,7 @@ uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint verifier
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint verifier P2 poly/
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint verifier --list
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint verifier --mesure poly/
+uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint couverture
 ```
 
 Épingler une version : `git+https://github.com/ocourses/ocots-lint@v0.1.0`.
@@ -42,7 +43,20 @@ Un vérificateur peut se tromper de deux façons :
 - **faux positif** — il signale du correct (mesure : la *précision*) ;
 - **faux négatif** — il rate une infraction (mesure : le *rappel*).
 
-Zéro trouvaille ne veut donc pas dire règle respectée. Chaque limite connue
+Zéro trouvaille ne veut donc pas dire règle respectée. Chaque vérificateur
+déclare sa **garantie** :
+
+| Garantie | Ce qu'elle promet |
+|---|---|
+| `exact` | aucun faux négatif ni faux positif connu dans le périmètre déclaré |
+| `heuristique` | une trouvaille est presque toujours une infraction, mais l'outil en rate |
+| `signal` | une trouvaille dit *où regarder* ; elle n'est pas forcément une faute |
+| `mesure` | compte, ne bloque jamais (`--mesure`) |
+
+`ocots-lint couverture` liste chaque règle des conventions du cours
+(`./conventions`) avec sa garantie, ou « non outillée ». Il sort `2` si
+l'outil cite une règle que ces conventions ne connaissent pas.
+ Chaque limite connue
 d'un vérificateur est écrite comme un **test attendu en échec**
 ([`tests/fixtures/*/limites/`](tests/fixtures/)) : la liste de ce que l'outil
 rate est lisible, et le jour où il ne le rate plus, le test le signale.

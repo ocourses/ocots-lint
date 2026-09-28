@@ -10,6 +10,16 @@ au moment du tag.
 
 ## Non publié
 
+- **Registre des vérificateurs** : chaque règle outillée déclare sa garantie
+  (`exact`, `heuristique`, `signal`, `mesure`). `P2`, `C4`, `C6` sont
+  heuristiques ; `P3`, `P5` des signaux.
+- **Nouvelle commande `couverture`** : chaque règle des conventions du cours,
+  avec sa garantie ou « non outillée » ; `--markdown` pour un rapport, avec
+  un lien vers la règle à la révision exacte. Sortie `2` si l'outil cite une
+  règle absente de ces conventions.
+- Les tests vérifient que toute règle outillée existe dans les conventions
+  épinglées (sous-module passé à `v2.0.0`).
+
 ---
 
 ## v0.1.0 — 2026-09-28
