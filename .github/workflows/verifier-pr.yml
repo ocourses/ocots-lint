@@ -1,0 +1,60 @@
+name: Vérifier une PR (réutilisable)
+
+# Sur une PR d'un cours : ne signale que les trouvailles NOUVELLES par rapport
+# à la branche de base (par empreinte), en annotations dans la PR. Quelques
+# secondes ; aucune licence requise, même pour un dépôt privé.
+#
+# Dans un cours (.github/workflows/conventions-pr.yml) :
+#
+#   on:
+#     pull_request:
+#       paths: ["**.tex"]
+#   jobs:
+#     conventions:
+#       uses: ocourses/ocots-lint/.github/workflows/verifier-pr.yml@v0.3.0
+#       with:
+#         runs-on: '["self-hosted"]'     # facultatif ; défaut : ubuntu-latest
+#
+# La commande par défaut est ./conventions/bin/verifier : la version
+# d'ocots-lint est celle qu'épinglent les conventions du cours.
+
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        description: "Runner, en JSON : '\"ubuntu-latest\"' ou '[\"self-hosted\"]'"
+        type: string
+        default: '"ubuntu-latest"'
+      commande:
+        description: "Commande qui lance verifier"
+        type: string
+        default: ./conventions/bin/verifier
+      chemins:
+        description: "Périmètre, séparé par des espaces"
+        type: string
+        default: "."
+      sous-modules:
+        description: "Initialiser les sous-modules (conventions)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  nouvelles:
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0              # la branche de base, pour comparer
+          submodules: ${{ inputs.sous-modules }}
+      - uses: astral-sh/setup-uv@v6
+      - name: Trouvailles nouvelles
+        env:
+          COMMANDE: ${{ inputs.commande }}
+          CHEMINS: ${{ inputs.chemins }}
+          BASE: origin/${{ github.base_ref }}
+        run: |
+          # shellcheck disable=SC2086 — COMMANDE et CHEMINS sont des listes
+          $COMMANDE --nouvelles "$BASE" --format github $CHEMINS

@@ -8,6 +8,7 @@ import sys
 
 from ocots_lint import (
     __version__,
+    comparer,
     couverture,
     exempter,
     nettoyer,
@@ -21,6 +22,7 @@ COMMANDES = {
     "nettoyer": (nettoyer.main, "corrections mécaniques (aperçu, --appliquer)"),
     "exempter": (exempter.main, "consigner un rejet par une directive, rien d'autre"),
     "synchroniser": (synchroniser.main, "une issue par fichier en infraction"),
+    "comparer": (comparer.main, "ce qui change entre deux analyses"),
 }
 
 AIDE = """\
@@ -37,6 +39,7 @@ Commandes :
   ocots-lint nettoyer C4 poly/   aperçu des corrections (--appliquer pour écrire)
   ocots-lint exempter f.tex:42 P2 "raison"   poser une exemption
   ocots-lint synchroniser --dry-run   plan des issues, sans rien toucher
+  ocots-lint comparer a.json b.json   ce qui change entre deux analyses
   ocots-lint --version
 """
 

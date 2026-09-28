@@ -102,19 +102,43 @@ dans un verbatim, et vérifie après coup que la trouvaille a disparu.
 
 ### Dans la CI d'un cours
 
-`--format github` produit des annotations affichées dans la PR, **sans
-licence**, donc aussi pour un dépôt privé :
+Sur une PR, ne signaler **que ce qui est nouveau** par rapport à la branche
+de base (par empreinte), en annotations dans la PR — quelques secondes, sans
+licence, même sur un dépôt privé :
 
 ```yaml
-- uses: astral-sh/setup-uv@v6
-- run: uvx --from git+https://github.com/ocourses/ocots-lint@v0.2.0 ocots-lint verifier --format github poly/
+# .github/workflows/conventions-pr.yml du cours
+on:
+  pull_request:
+    paths: ["**.tex"]
+jobs:
+  conventions:
+    uses: ocourses/ocots-lint/.github/workflows/verifier-pr.yml@v0.3.0
+    with:
+      runs-on: '["self-hosted"]'   # facultatif ; défaut : ubuntu-latest
 ```
 
-Autres formats : `--format json` (pour un script ou un agent — voir
-ci-dessous) et
-`--format sarif` (SARIF 2.1.0, pour le *code scanning* de GitHub — gratuit
-sur un dépôt public seulement). Une trouvaille exemptée figure en SARIF comme
+À la main : `ocots-lint verifier --nouvelles origin/main`. Retirer une
+exemption fait réapparaître la trouvaille.
+
+Formats : `--format github` (annotations de workflow), `--format json`
+(pour un script ou un agent — voir ci-dessous) et `--format sarif`
+(SARIF 2.1.0, pour le *code scanning* de GitHub — gratuit sur un dépôt
+public seulement). Une trouvaille exemptée figure en SARIF comme
 suppression, avec sa raison.
+
+### Avant une montée de version : `comparer`
+
+```bash
+OL=git+https://github.com/ocourses/ocots-lint
+uvx --from $OL@v0.3.0 ocots-lint verifier --format json > avant.json
+uvx --from $OL@v0.4.0 ocots-lint verifier --format json > apres.json
+ocots-lint comparer avant.json apres.json
+```
+
+Trouvailles apparues et disparues (par empreinte), bilan par règle, et les
+issues que `synchroniser` créera ou fermera. Sortie `1` s'il y a un
+changement, comme `diff`.
 
 ### Les issues du cours : `synchroniser`
 
