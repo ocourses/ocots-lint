@@ -23,18 +23,18 @@ nouveau passe par de nouvelles options ou de nouvelles commandes.
 
 ## Stories
 
-- [ ] **S2.1** — En tant que *mainteneur*, je veux que chaque vérificateur
+- [x] **S2.1** — En tant que *mainteneur*, je veux que chaque vérificateur
   soit déclaré dans un registre avec sa règle, sa garantie et son résumé,
   afin que `--list` et la couverture soient produits à partir d'une seule
   source.
   - Critère : `--list` inchangé (parité) ; test qui échoue si un
     vérificateur n'a pas de garantie du vocabulaire.
-- [ ] **S2.2** — En tant que *mainteneur*, je veux que la CI échoue si un
+- [x] **S2.2** — En tant que *mainteneur*, je veux que la CI échoue si un
   vérificateur ou une mesure cite une règle absente de la version épinglée
   des conventions, afin qu'une renumérotation (comme celle des `SL` en
   `v2.0.0`) ne passe pas inaperçue.
   - Critère : sous-module `conventions` à `v2.0.0` ; test de cohérence.
-- [ ] **S2.3** — En tant que *relecteur*, je veux `ocots-lint couverture`,
+- [x] **S2.3** — En tant que *relecteur*, je veux `ocots-lint couverture`,
   qui liste chaque règle des conventions du cours avec son vérificateur et sa
   garantie, ou « non outillée », afin d'interpréter une absence de
   trouvaille.
@@ -68,6 +68,10 @@ nouveau passe par de nouvelles options ou de nouvelles commandes.
 6. S2.8 — release.
 
 ## Journal
+
+- 2026-09-28 — S2.1 à S2.3. Sur `mesure-integration-enseignants` :
+  46 règles, 5 vérifiées, 2 mesurées seulement (C1, C3), 39 non outillées.
+  Le cours épingle encore les conventions à `v1.0.0-53-g88c6a56`.
 
 ## Bilan
 
