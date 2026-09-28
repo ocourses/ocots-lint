@@ -79,6 +79,21 @@ raison** :
 - Une directive qui n'exempte plus rien est signalée : pas d'exemption morte.
 - `verifier --sans-exemptions` montre tout, pour une revue des exemptions.
 
+### Dans la CI d'un cours
+
+`--format github` produit des annotations affichées dans la PR, **sans
+licence**, donc aussi pour un dépôt privé :
+
+```yaml
+- uses: astral-sh/setup-uv@v6
+- run: uvx --from git+https://github.com/ocourses/ocots-lint@v0.2.0 ocots-lint verifier --format github poly/
+```
+
+Autres formats : `--format json` (pour un script ou un agent) et
+`--format sarif` (SARIF 2.1.0, pour le *code scanning* de GitHub — gratuit
+sur un dépôt public seulement). Une trouvaille exemptée figure en SARIF comme
+suppression, avec sa raison.
+
 ---
 
 ## Développement

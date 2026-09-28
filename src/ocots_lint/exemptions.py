@@ -63,13 +63,14 @@ class Exemptions:
         return self._fichiers[chemin]
 
     def exempte(self, chemin, ligne, regle):
+        """La directive qui exempte cette trouvaille, ou None."""
         if not self.actives:
-            return False
+            return None
         for d in self._directives(chemin)[0]:
             if d.couverte == ligne and regle in d.regles:
                 d.utilisees.add(regle)
-                return True
-        return False
+                return d
+        return None
 
     def avertissements(self, chemins, regles_lancees):
         """(chemin, ligne, message) : directives invalides, ou inutiles pour

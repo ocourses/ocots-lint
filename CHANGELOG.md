@@ -10,6 +10,11 @@ au moment du tag.
 
 ## Non publié
 
+- **Formats de sortie** : `verifier --format json|sarif|github`. `github`
+  produit des annotations de workflow, affichées dans la PR même sur un dépôt
+  privé ; `sarif` (2.1.0, validé contre le schéma) porte les exemptions comme
+  suppressions. Un signal est un avertissement, une trouvaille heuristique
+  une erreur. La sortie texte reste le défaut.
 - **Exemptions** : `% ocots-lint: ignore P5 — raison` exempte une trouvaille
   justifiée (sur sa ligne, ou seule sur la ligne précédente). Raison
   obligatoire ; directives invalides ou inutiles signalées ;

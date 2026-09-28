@@ -46,7 +46,7 @@ nouveau passe par de nouvelles options ou de nouvelles commandes.
   - Critère : `% ocots-lint: ignore P5 — raison`, sur la ligne signalée ou
     la ligne qui la précède ; raison obligatoire ; `--sans-exemptions` pour
     tout revoir ; fixtures.
-- [ ] **S2.5** — En tant que *mainteneur de CI*, je veux `--format json` et
+- [x] **S2.5** — En tant que *mainteneur de CI*, je veux `--format json` et
   `--format sarif`, afin d'obtenir des annotations dans les PR GitHub.
   - Critère : SARIF 2.1.0 valide avec règles, garanties et lignes.
 - [ ] **S2.6** — En tant qu'*auteur*, je veux `ocots-lint nettoyer`,
@@ -72,6 +72,10 @@ nouveau passe par de nouvelles options ou de nouvelles commandes.
 - 2026-09-28 — S2.1 à S2.3. Sur `mesure-integration-enseignants` :
   46 règles, 5 vérifiées, 2 mesurées seulement (C1, C3), 39 non outillées.
   Le cours épingle encore les conventions à `v1.0.0-53-g88c6a56`.
+- 2026-09-28 — S2.4 (exemptions). S2.5 : les dépôts de cours sont privés, et
+  le code scanning (SARIF) n'y est pas gratuit. Ajout d'un format `github`
+  (annotations de workflow), qui marche partout ; SARIF gardé pour les
+  dépôts publics.
 
 ## Bilan
 

@@ -6,6 +6,7 @@
     ocots-lint verifier --list     les règles implémentées
     ocots-lint verifier --mesure   compte des motifs non bloquants
     ocots-lint verifier --sans-exemptions   ignore les `% ocots-lint: ignore …`
+    ocots-lint verifier --format json|sarif|github  sortie pour une CI (défaut : texte)
 
 Sortie 1 si au moins une infraction est trouvée, 2 pour un argument inconnu,
 0 sinon : utilisable en CI.
@@ -17,13 +18,42 @@ Sans exemption dans les sources, arguments et sorties sont identiques à
 import os
 import sys
 
+from ocots_lint import sorties
 from ocots_lint.exemptions import Exemptions
 from ocots_lint.lecture import sources
 from ocots_lint.mesures import MESURES, mesurer
 from ocots_lint.regles import REGLES
 
+FORMATS = ("texte", "json", "sarif", "github")
+
+
+def extraire_format(argv):
+    """(format, argv sans l'option) ; ValueError si la valeur est inconnue."""
+    reste, fmt, i = [], "texte", 0
+    while i < len(argv):
+        a = argv[i]
+        if a == "--format":
+            if i + 1 >= len(argv):
+                raise ValueError("--format attend une valeur")
+            fmt, i = argv[i + 1], i + 2
+            continue
+        if a.startswith("--format="):
+            fmt = a.split("=", 1)[1]
+        else:
+            reste.append(a)
+        i += 1
+    if fmt not in FORMATS:
+        raise ValueError(f"format inconnu : {fmt} ({', '.join(FORMATS)})")
+    return fmt, reste
+
 
 def main(argv):
+    try:
+        fmt, argv = extraire_format(argv)
+    except ValueError as e:
+        print(e, file=sys.stderr)
+        return 2
+
     if "--list" in argv:
         print("Règles implémentées :")
         for nom, fn in sorted(REGLES.items()):
@@ -50,21 +80,35 @@ def main(argv):
         noms = sorted(REGLES)
 
     exemptions = Exemptions(actives="--sans-exemptions" not in argv)
+    resultats = []
+    for nom in noms:
+        for chemin, ligne, message in REGLES[nom](racines):
+            directive = exemptions.exempte(chemin, ligne, nom)
+            resultats.append(sorties.Trouvaille(
+                nom, os.path.relpath(chemin), ligne, message,
+                directive.raison if directive else None))
+
     total = 0
     for nom in noms:
-        trouvailles, exemptees = [], 0
-        for chemin, ligne, message in REGLES[nom](racines):
-            if exemptions.exempte(chemin, ligne, nom):
-                exemptees += 1
-            else:
-                trouvailles.append((chemin, ligne, message))
-        for chemin, ligne, message in trouvailles:
-            print(f"{os.path.relpath(chemin)}:{ligne}: [{nom}] {message}")
-        bilan = f"{nom} : {len(trouvailles)} infraction(s)"
+        retenues = [t for t in resultats if t.regle == nom and not t.exemption]
+        exemptees = sum(1 for t in resultats if t.regle == nom and t.exemption)
+        if fmt == "texte":
+            for t in retenues:
+                print(f"{t.fichier}:{t.ligne}: [{nom}] {t.message}")
+        bilan = f"{nom} : {len(retenues)} infraction(s)"
         if exemptees:
             bilan += f" (+ {exemptees} exemptée(s))"
         print(bilan, file=sys.stderr)
-        total += len(trouvailles)
+        total += len(retenues)
+
+    if fmt == "json":
+        print(sorties.json_(resultats, noms))
+    elif fmt == "sarif":
+        print(sorties.sarif(resultats, noms))
+    elif fmt == "github":
+        annotations = sorties.github(resultats, noms)
+        if annotations:
+            print(annotations)
 
     for chemin, ligne, message in exemptions.avertissements(sources(racines), noms):
         print(f"{os.path.relpath(chemin)}:{ligne}: [ocots-lint] {message}",
