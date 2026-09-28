@@ -24,3 +24,5 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
 - Cohérence terminologique (`C2`) : table de variantes par cours, comptée par
   l'outil.
 - Intégration `pre-commit`.
+- CI du template qui compile `examples/` (TeX Live dans GitHub Actions) :
+  prérequis des tests d'instrumentation de S5.

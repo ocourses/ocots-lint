@@ -2,7 +2,7 @@
 
 # 0002 — SemVer pour les trois dépôts
 
-**Date** : 2026-09-28 — **État** : proposée (question du tag `v1.0.0` ouverte)
+**Date** : 2026-09-28 — **État** : acceptée
 
 ## Contexte
 
@@ -24,9 +24,9 @@ Chaque dépôt suit SemVer, avec un sens propre de la rupture :
 Chaque version est un tag `vX.Y.Z` annoté, avec son entrée de CHANGELOG et
 une release GitHub créée par la CI à partir de ce CHANGELOG.
 
-## Question ouverte : repartir des conventions à `v0.1.0` ?
+## Repartir des conventions à `v0.1.0` ? Non
 
-Avis : **garder `v1.0.0`**.
+Décision de l'auteur : **garder `v1.0.0`**.
 
 - Des traces le citent déjà ; le supprimer rend ces citations ambiguës (le
   hash reste résoluble, mais plus le nom).
@@ -36,3 +36,6 @@ Avis : **garder `v1.0.0`**.
   qu'un `1.x` promet.
 
 `ocots-lint`, lui, démarre à `v0.1.0` : sa CLI est encore jeune.
+
+Conséquence : la renumérotation `SL2`–`SL7` faite juste après `v1.0.0` fait
+de la version suivante des conventions une `v2.0.0`.
