@@ -18,6 +18,9 @@ casserait la formule.
 
 Par défaut rien n'est écrit : l'aperçu montre chaque remplacement, en contexte.
 
+**Une ligne exemptée pour la règle (`% ocots-lint: ignore C4 — …`) n'est pas
+corrigée** : l'exemption dit que la forme est voulue.
+
 Porté tel quel de `ocots-conventions/bin/nettoyer` (sprint S2, parité).
 """
 
@@ -25,6 +28,7 @@ import os
 import re
 import sys
 
+from ocots_lint.exemptions import Exemptions
 from ocots_lint.lecture import hors_math, sources
 
 RE_TILDE = re.compile(r"~(?=:)")
@@ -116,6 +120,7 @@ def main(argv):
               "  `\\enquote` serait indéfini et le document ne compilerait plus.\n"
               "  Voir le chantier 3 de template.md.\n", file=sys.stderr)
 
+    exemptions = Exemptions()
     total, fichiers_touches = 0, 0
     for chemin in sources(racines):
         with open(chemin, encoding="utf-8") as fh:
@@ -123,7 +128,9 @@ def main(argv):
 
         trouvailles = []
         for nom in noms:
-            trouvailles.extend(CORRECTIONS[nom](brut, guillemets=guillemets))
+            trouvailles.extend(
+                c for c in CORRECTIONS[nom](brut, guillemets=guillemets)
+                if not exemptions.exempte(chemin, brut.count("\n", 0, c[0]) + 1, nom))
         trouvailles.sort()
         if not trouvailles:
             continue
