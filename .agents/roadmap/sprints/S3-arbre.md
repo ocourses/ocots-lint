@@ -9,6 +9,11 @@ position.
 
 **Version livrée** : `v0.3.0`.
 
+**Parité** : la référence reste `conventions v2.0.0` (dernier `bin/` en
+Python). Dès que l'outil s'écarte volontairement de l'ancien, le test de
+parité est remplacé par un instantané des trouvailles sur un corpus, dont
+chaque écart est relu et justifié (S3.5).
+
 ## Stories (à affiner en début de sprint)
 
 - [ ] **S3.1** — Décision écrite : choix de l'analyseur (`pylatexenc`,
