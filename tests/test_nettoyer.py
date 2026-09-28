@@ -60,3 +60,12 @@ def test_sans_csquotes_le_dit(tmp_path, capsys):
 
 def test_chemin_inconnu(capsys):
     assert nettoyer.main(["C4", "n-existe-pas/"]) == 2
+
+
+def test_ligne_exemptee_non_corrigee(tmp_path, capsys):
+    f = tmp_path / "a.tex"
+    f.write_text("voulu~: ici % ocots-lint: ignore C4 — forme voulue\n"
+                 "corrigé~: là\n", encoding="utf-8")
+    assert nettoyer.main(["C4", str(tmp_path), "--appliquer"]) == 0
+    assert f.read_text(encoding="utf-8") == (
+        "voulu~: ici % ocots-lint: ignore C4 — forme voulue\ncorrigé: là\n")

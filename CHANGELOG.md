@@ -10,6 +10,9 @@ au moment du tag.
 
 ## Non publié
 
+- `nettoyer` ne corrige plus une ligne exemptée pour la règle
+  (`% ocots-lint: ignore C4 — …`) : l'exemption dit que la forme est voulue.
+
 - **`verifier --nouvelles <réf>`** : seulement les trouvailles absentes de
   la révision git `<réf>` (par empreinte). Retirer une exemption fait
   réapparaître la trouvaille.
