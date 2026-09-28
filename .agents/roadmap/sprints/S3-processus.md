@@ -122,6 +122,11 @@ est le dépôt lui-même, pas l'historique des issues.
 - [ ] **S3.10** — Démo sur `mesure-integration-enseignants` : le plan de
   `synchroniser --dry-run` correspond à ce que fait `conventions.sh` ; puis
   un rejet consigné par exemption ne revient pas au lundi suivant.
+  - [x] Plan à blanc sur le cours de mesure (5 `[conventions]`, 3
+    `[nettoyer]`), identique au détecteur historique.
+  - [ ] Déroulé réel sur [`ocourses/ocots-demo`](https://github.com/ocourses/ocots-demo),
+    cours synthétique et public (pas de quota de minutes privées), contre
+    les verdicts de [`demo/attendus.md`](../demo/attendus.md).
 - [ ] **S3.11** — Release `v0.3.0`, puis relais des conventions et
   épinglage du cours mis à jour.
 
@@ -202,6 +207,11 @@ est le dépôt lui-même, pas l'historique des issues.
   promotion : bloc JSON réduit aux points confirmés, lu par
   `conventions-fixer`. Contrôle testé en local (cinq cas) ; aucun run réel
   (facturation), d'où S3.10 encore ouverte.
+- 2026-09-28 — Dépôt public `ocourses/ocots-demo` : cours synthétique
+  (suites réelles, poly, TD, transparents) avec 14 écarts plantés, verdicts
+  attendus dans `demo/attendus.md`. Remplace la démo réelle sur le cours de
+  mesure, bloquée par le quota des dépôts privés ; secrets posés,
+  ajouté à la file (agents#33).
 - 2026-09-28 — Démo sur `ocourses/ocots-demo`, premier passage complet de
   la file (4 issues, 7 PR) : tri, correction et nettoyage **conformes aux
   verdicts attendus** (`demo/attendus.md`), y compris les deux rejets
