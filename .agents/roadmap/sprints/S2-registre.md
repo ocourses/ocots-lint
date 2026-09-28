@@ -49,7 +49,7 @@ nouveau passe par de nouvelles options ou de nouvelles commandes.
 - [x] **S2.5** — En tant que *mainteneur de CI*, je veux `--format json` et
   `--format sarif`, afin d'obtenir des annotations dans les PR GitHub.
   - Critère : SARIF 2.1.0 valide avec règles, garanties et lignes.
-- [ ] **S2.6** — En tant qu'*auteur*, je veux `ocots-lint nettoyer`,
+- [x] **S2.6** — En tant qu'*auteur*, je veux `ocots-lint nettoyer`,
   identique à `bin/nettoyer`, afin que les deux outils partagent la même
   lecture.
   - Critère : test de parité (aperçu et `--appliquer` sur une copie).
@@ -76,6 +76,9 @@ nouveau passe par de nouvelles options ou de nouvelles commandes.
   le code scanning (SARIF) n'y est pas gratuit. Ajout d'un format `github`
   (annotations de workflow), qui marche partout ; SARIF gardé pour les
   dépôts publics.
+- 2026-09-28 — S2.6 : `nettoyer --appliquer` sur une copie de `poly/` et
+  `td/` du cours de mesure : 9 corrections, arbres identiques à ceux de
+  `bin/nettoyer`.
 
 ## Bilan
 

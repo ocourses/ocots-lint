@@ -29,7 +29,14 @@ uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint verifier P2 pol
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint verifier --list
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint verifier --mesure poly/
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint couverture
+uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint nettoyer C4 poly/              # aperçu
+uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint nettoyer C4 poly/ --appliquer  # écrit
 ```
+
+`verifier` **analyse** ; `nettoyer` **modifie**, et seulement pour les
+corrections dont l'équivalence est vérifiée (`~:`, guillemets si `csquotes`
+est chargé). Après `--appliquer` : recompiler, relire le diff, commiter à
+part.
 
 Épingler une version : `git+https://github.com/ocourses/ocots-lint@v0.1.0`.
 
