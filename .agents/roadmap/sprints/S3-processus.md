@@ -93,7 +93,7 @@ est le dépôt lui-même, pas l'historique des issues.
   garantie et de l'existence d'une correction dans `nettoyer`, afin de ne
   payer un modèle que pour ce qui demande un jugement (D4). Une mesure
   n'ouvre jamais d'issue.
-- [ ] **S3.7** — Dans `ocourses/agents` : `check.yml` appelle
+- [x] **S3.7** — Dans `ocourses/agents` : `check.yml` appelle
   `ocots-lint synchroniser` ; la file envoie la voie `mecanique` à
   `nettoyer` sans modèle ; `conventions-reviewer` consigne un rejet par
   `ocots-lint exempter` ; `conventions-fixer` lit le JSON.
@@ -127,8 +127,10 @@ est le dépôt lui-même, pas l'historique des issues.
   - [ ] Déroulé réel sur [`ocourses/ocots-demo`](https://github.com/ocourses/ocots-demo),
     cours synthétique et public (pas de quota de minutes privées), contre
     les verdicts de [`demo/attendus.md`](../demo/attendus.md).
-- [ ] **S3.11** — Release `v0.3.0`, puis relais des conventions et
-  épinglage du cours mis à jour.
+- [x] **S3.11** — Release `v0.3.0`, puis relais des conventions et
+  épinglage du cours mis à jour. Fait par paliers : `v0.3.0`, `v0.4.0`,
+  `v0.4.1` (correctif de la démo) ; conventions `v2.2.0` à `v2.3.1` ; cours
+  de mesure et démo épinglés sur `v2.3.1`.
 
 ## Découpage en PR
 
@@ -219,6 +221,10 @@ est le dépôt lui-même, pas l'historique des issues.
   la PR de correction était recréée le lundi suivant si la PR n'était pas
   fusionnée (les trouvailles restent actives sur `main`). `synchroniser` ne
   recrée plus une issue citée par une PR ouverte.
+- 2026-09-28 — `v0.4.1` et conventions `v2.3.1` publiées ; cours de
+  mesure et démo épinglés (mesure#309, ocots-demo#12). S3.7 validée par le
+  passage réel sur la démo. Reste S3.10 : fusion des PR de la démo, puis
+  un `check.yml` qui ne doit rouvrir aucune issue.
 
 ## Bilan
 
