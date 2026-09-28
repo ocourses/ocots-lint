@@ -41,7 +41,7 @@ comme limites (tests attendus en échec), corrigés à partir de S3.
     passe sur `mesure-integration-enseignants`.
 - [x] **S1.6** — En tant que *mainteneur*, je veux une CI (tests sur les
   versions de Python supportées, ruff), afin qu'aucune PR ne casse l'outil.
-- [ ] **S1.7** — Release `v0.1.0`.
+- [x] **S1.7** — Release `v0.1.0`.
 
 ## Démo
 
@@ -57,4 +57,12 @@ Sur `mesure-integration-enseignants` : les sorties de
 
 ## Bilan
 
-*À écrire en fin de sprint.*
+Sprint clos le 2026-09-28, `v0.1.0`.
+
+- **Livré** : toutes les stories. L'outil est utilisable par `uvx` depuis un
+  cours, et donne les mêmes résultats que `bin/verifier`.
+- **Appris** : écrire les fixtures a suffi à trouver un faux positif inconnu
+  (P3 sur une amorce finie par une équation en display). Les limites
+  documentées passent de 3 (README des conventions) à 8 testées.
+- **Pour la suite** : S2 part d'une base stable. La parité cessera d'être un
+  objectif en S3, quand l'outil s'écartera volontairement de l'ancien.

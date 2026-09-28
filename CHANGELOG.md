@@ -10,6 +10,10 @@ au moment du tag.
 
 ## Non publié
 
+---
+
+## v0.1.0 — 2026-09-28
+
 Première version : parité avec `ocots-conventions/bin/verifier`
 (conventions `88c6a56`).
 
@@ -26,4 +30,5 @@ Première version : parité avec `ocots-conventions/bin/verifier`
   - `C4` : `\verb`, `\url` et `\ensuremath`, signalés à tort.
 - Test de parité avec l'ancien outil, sur les fixtures et sur un corpus
   local (`OCOTS_LINT_CORPUS`).
-- CI : tests sur Python 3.10 à 3.13, ruff.
+- CI : tests sur Python 3.10 à 3.13, ruff ; un tag `vX.Y.Z` crée la release
+  GitHub à partir de ce CHANGELOG.

@@ -14,8 +14,8 @@ de [`ocots-conventions`](https://github.com/ocourses/ocots-conventions)
 | `ocots-conventions` | quel texte autour, dans quel ordre, avec quelles notations ? |
 | `ocots-lint` (ici) | le document respecte-t-il ces règles, et avec quelle garantie ? |
 
-> **État : sprint S1 (parité).** L'outil reproduit à l'identique
-> `conventions/bin/verifier`. Voir la [roadmap](.agents/roadmap/README.md).
+> **État : `v0.1.0`.** L'outil reproduit à l'identique
+> `conventions/bin/verifier`, avec des tests. Voir la [roadmap](.agents/roadmap/README.md).
 
 ---
 
