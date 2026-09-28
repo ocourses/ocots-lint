@@ -10,6 +10,13 @@ au moment du tag.
 
 ## Non publié
 
+- **`synchroniser` ne recrée pas une issue qu'une PR ouverte cite**
+  (« Closes #N », ou « #N » dans son corps). Trouvé par la démo sur
+  `ocourses/ocots-demo` : la file ferme l'issue quand l'agent de correction
+  ouvre sa PR, et, tant que la PR attend sa relecture, les trouvailles
+  restent actives sur la branche de base — le lundi suivant rouvrait l'issue.
+  La PR d'exemptions du tri est couverte de la même façon.
+
 ---
 
 ## v0.4.0 — 2026-09-28
