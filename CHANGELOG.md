@@ -10,6 +10,14 @@ au moment du tag.
 
 ## Non publié
 
+---
+
+## v0.2.0 — 2026-09-28
+
+Sprint S2 : registre des garanties, couverture, exemptions, formats pour la
+CI, `nettoyer`. Sans exemption dans les sources, `verifier` reste identique
+à `bin/verifier` (conventions `v2.0.0`).
+
 - **Nouvelle commande `nettoyer`**, portée à l'identique de `bin/nettoyer`
   (corrections `C4` : `~:`, guillemets en `\enquote` si `csquotes` est
   chargé), sur la lecture commune. Parité testée en aperçu et en
