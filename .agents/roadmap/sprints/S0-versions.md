@@ -23,7 +23,7 @@ compatible.
   - Critère : le README dit ce qui fait monter majeur (environnement, macro ou
     option retirés ou renommés sans alias), mineur (ajout, alias déprécié),
     correctif (rendu corrigé sans toucher aux sources).
-- [ ] **S0.3** — Release `ocots-conventions v1.1.0` : la section « Non publié »
+- [ ] **S0.3** — Release `ocots-conventions v2.0.0` (et non `v1.1.0`, voir le journal) : la section « Non publié »
   du CHANGELOG devient une version, tag et release GitHub.
 - [ ] **S0.4** — Premier tag `ocots-latex-template`, avec un CHANGELOG
   initial et une release GitHub.
@@ -31,14 +31,20 @@ compatible.
   release GitHub à partir du CHANGELOG, afin de ne pas oublier de publier.
   - Critère : workflow `release.yml` dans chacun des deux dépôts.
 
-## Décision en attente
+## Journal
 
-Faut-il supprimer le tag `v1.0.0` des conventions et repartir de `v0.1.0` ?
-Avis de l'agent : **non**. Des traces de relecture le citent déjà
-(`v1.0.0-53-g88c6a56` dans `mesure-integration-slides-ch2`), et un `v0.1.0`
-postérieur à un `v1.0.0` inverserait l'ordre des versions pour
-`git describe` et `git tag --sort=v:refname`. Voir la
-[décision 0002](../decisions/0002-semver.md).
+- 2026-09-28 — **Décision** (auteur) : on garde le tag `v1.0.0` des
+  conventions. Décision 0002 acceptée.
+- 2026-09-28 — **Découvert** en complétant le CHANGELOG des conventions :
+  `d690b45`, quelques heures après le tag `v1.0.0`, a intercalé un `SL2` et
+  décalé `SL2`–`SL7` en `SL3`–`SL8`, sans le consigner. D'après la politique,
+  c'est une rupture : la prochaine version est **`v2.0.0`**. Table de
+  correspondance ajoutée au CHANGELOG.
+- 2026-09-28 — PR ouvertes : S0.1, S0.3 (préparation) et S0.5 dans
+  [ocots-conventions#18](https://github.com/ocourses/ocots-conventions/pull/18) ;
+  S0.2, S0.4 (préparation) et S0.5 dans
+  [ocots-latex-template#58](https://github.com/ocourses/ocots-latex-template/pull/58).
+  Restent, après fusion : tags `conventions v2.0.0` et `template v1.0.0`.
 
 ## Bilan
 
