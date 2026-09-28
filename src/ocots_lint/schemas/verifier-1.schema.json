@@ -26,7 +26,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["regle", "garantie", "fichier", "ligne", "message", "empreinte", "exemption"],
+        "required": ["regle", "garantie", "fichier", "ligne", "message", "empreinte", "voie", "exemption"],
         "properties": {
           "regle": {"type": "string", "pattern": "^[A-Z]{1,2}[0-9]+$"},
           "garantie": {"$ref": "#/$defs/garantie"},
@@ -34,6 +34,7 @@
           "ligne": {"type": "integer", "minimum": 1},
           "message": {"type": "string"},
           "empreinte": {"type": "string", "pattern": "^[0-9a-f]{16}:[0-9]+$", "description": "Identité stable, indépendante du numéro de ligne."},
+          "voie": {"enum": ["mecanique", "correction", "tri"], "description": "mecanique : nettoyer sait corriger ; correction : garantie exact ; tri : un jugement est nécessaire. Champ ajouté en v0.3.0, compatible."},
           "exemption": {"type": ["string", "null"], "description": "Raison de l'exemption, ou null."}
         }
       }

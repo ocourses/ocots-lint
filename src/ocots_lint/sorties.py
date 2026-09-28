@@ -28,6 +28,7 @@ class Trouvaille:
     message: str
     exemption: Optional[str] = None    # raison, si exemptée
     empreinte: str = ""                # identité stable (empreintes.py)
+    voie: str = "tri"                  # qui s'en occupe (voies.py)
 
 
 @dataclass(frozen=True)
@@ -62,6 +63,7 @@ def json_(trouvailles, noms, avertissements=()):
             "ligne": t.ligne,
             "message": t.message,
             "empreinte": t.empreinte,
+            "voie": t.voie,
             "exemption": t.exemption,
         } for t in trouvailles],
         "avertissements": [asdict(a) for a in avertissements],
