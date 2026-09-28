@@ -14,8 +14,8 @@ de [`ocots-conventions`](https://github.com/ocourses/ocots-conventions)
 | `ocots-conventions` | quel texte autour, dans quel ordre, avec quelles notations ? |
 | `ocots-lint` (ici) | le document respecte-t-il ces règles, et avec quelle garantie ? |
 
-> **État : `v0.1.0`.** L'outil reproduit à l'identique
-> `conventions/bin/verifier`, avec des tests. Voir la [roadmap](.agents/roadmap/README.md).
+> **État : `v0.2.0`.** Garanties déclarées, couverture, exemptions, formats
+> pour la CI. Voir la [roadmap](.agents/roadmap/README.md).
 
 ---
 
@@ -38,7 +38,7 @@ corrections dont l'équivalence est vérifiée (`~:`, guillemets si `csquotes`
 est chargé). Après `--appliquer` : recompiler, relire le diff, commiter à
 part.
 
-Épingler une version : `git+https://github.com/ocourses/ocots-lint@v0.1.0`.
+Épingler une version : `git+https://github.com/ocourses/ocots-lint@v0.2.0`.
 
 Sortie `1` s'il y a au moins une infraction, `2` pour un argument inconnu,
 `0` sinon — utilisable en CI.

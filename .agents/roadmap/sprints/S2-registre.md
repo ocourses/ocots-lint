@@ -56,7 +56,7 @@ nouveau passe par de nouvelles options ou de nouvelles commandes.
 - [ ] **S2.7** — Dans `ocots-conventions`, `bin/verifier` et `bin/nettoyer`
   renvoient vers `ocots-lint` ; README mis à jour. *Décision à prendre avec
   l'auteur : relais, gel ou retrait.*
-- [ ] **S2.8** — Release `v0.2.0`.
+- [x] **S2.8** — Release `v0.2.0`.
 
 ## Découpage en PR
 
@@ -79,6 +79,11 @@ nouveau passe par de nouvelles options ou de nouvelles commandes.
 - 2026-09-28 — S2.6 : `nettoyer --appliquer` sur une copie de `poly/` et
   `td/` du cours de mesure : 9 corrections, arbres identiques à ceux de
   `bin/nettoyer`.
+- 2026-09-28 — `v0.2.0` publiée avant S2.7 : un relais depuis
+  `ocots-conventions` a besoin d'une version à épingler. S2.7 attend la
+  décision de l'auteur (relais, gel ou retrait) ; `ocourses/agents`
+  (`scripts/checkers/conventions.sh`) et les `AGENTS.md` de quatre cours
+  appellent `conventions/bin/verifier`.
 
 ## Bilan
 
