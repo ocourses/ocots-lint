@@ -10,6 +10,10 @@ au moment du tag.
 
 ## Non publié
 
+- **Exemptions** : `% ocots-lint: ignore P5 — raison` exempte une trouvaille
+  justifiée (sur sa ligne, ou seule sur la ligne précédente). Raison
+  obligatoire ; directives invalides ou inutiles signalées ;
+  `--sans-exemptions` pour tout revoir.
 - **Registre des vérificateurs** : chaque règle outillée déclare sa garantie
   (`exact`, `heuristique`, `signal`, `mesure`). `P2`, `C4`, `C6` sont
   heuristiques ; `P3`, `P5` des signaux.

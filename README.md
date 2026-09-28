@@ -61,6 +61,24 @@ d'un vérificateur est écrite comme un **test attendu en échec**
 ([`tests/fixtures/*/limites/`](tests/fixtures/)) : la liste de ce que l'outil
 rate est lisible, et le jour où il ne le rate plus, le test le signale.
 
+### Exempter une trouvaille justifiée
+
+Une trouvaille relue et jugée correcte s'exempte dans la source, **avec sa
+raison** :
+
+```latex
+\end{theorem} % ocots-lint: ignore P2 — la proposition en est un corollaire immédiat
+
+% ocots-lint: ignore P5 — quatre vrais apartés, relus avec l'auteur
+\begin{remark}
+```
+
+- En fin de ligne, la directive couvre sa ligne. Seule sur sa ligne, elle
+  couvre la ligne suivante.
+- Sans raison, elle est ignorée et signalée.
+- Une directive qui n'exempte plus rien est signalée : pas d'exemption morte.
+- `verifier --sans-exemptions` montre tout, pour une revue des exemptions.
+
 ---
 
 ## Développement
