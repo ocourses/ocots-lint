@@ -15,7 +15,7 @@ cours sans raz-de-marée d'issues.
 **Contrainte** : la détection ne change pas dans ce sprint. La sortie texte
 et les codes de sortie de `verifier` restent identiques (parité).
 
-**Versions livrées** : `v0.3.0` (outil), `v0.4.0` (voie mécanique). Architecture : [décision 0003](../decisions/0003-processus.md).
+**Versions livrées** : `v0.3.0` (outil), `v0.4.0` (voie mécanique), `v0.4.1` (correctif de la démo). Architecture : [décision 0003](../decisions/0003-processus.md).
 
 ## État des lieux (2026-09-28)
 
@@ -119,12 +119,12 @@ est le dépôt lui-même, pas l'historique des issues.
   montée de version combien d'issues vont bouger (D5).
   - Critère : utilisé dans la PR qui monte `conventions` dans un cours ;
     sert de référence à S4.5.
-- [ ] **S3.10** — Démo sur `mesure-integration-enseignants` : le plan de
+- [x] **S3.10** — Démo sur `mesure-integration-enseignants` : le plan de
   `synchroniser --dry-run` correspond à ce que fait `conventions.sh` ; puis
   un rejet consigné par exemption ne revient pas au lundi suivant.
   - [x] Plan à blanc sur le cours de mesure (5 `[conventions]`, 3
     `[nettoyer]`), identique au détecteur historique.
-  - [ ] Déroulé réel sur [`ocourses/ocots-demo`](https://github.com/ocourses/ocots-demo),
+  - [x] Déroulé réel sur [`ocourses/ocots-demo`](https://github.com/ocourses/ocots-demo),
     cours synthétique et public (pas de quota de minutes privées), contre
     les verdicts de [`demo/attendus.md`](../demo/attendus.md).
 - [x] **S3.11** — Release `v0.3.0`, puis relais des conventions et
@@ -225,7 +225,41 @@ est le dépôt lui-même, pas l'historique des issues.
   mesure et démo épinglés (mesure#309, ocots-demo#12). S3.7 validée par le
   passage réel sur la démo. Reste S3.10 : fusion des PR de la démo, puis
   un `check.yml` qui ne doit rouvrir aucune issue.
+- 2026-09-28 — Toutes les PR de la démo fusionnées (6), puis `check.yml` à
+  la main : 0 issue créée, 0 rouverte, 0 ouverte ; `versions` voit template
+  `v1.1.0` et conventions `v2.3.1` à jour. S3.10 validée, sprint clos.
 
 ## Bilan
 
-*À écrire en fin de sprint.*
+Sprint clos le 2026-09-28, `v0.3.0`, `v0.4.0`, `v0.4.1`.
+
+- **Livré** : toutes les stories. Le processus hebdomadaire repose sur
+  `ocots-lint synchroniser` (plan pur, testé, `--dry-run`) ; chaque
+  trouvaille porte une empreinte, une garantie et une voie ; la voie
+  mécanique passe par `nettoyer` sans modèle ; le tri consigne ses rejets
+  par `exempter`, sous contrôle (`exempter --controler`) ; `comparer` et
+  `verifier --nouvelles` pour voir venir un changement.
+- **Défauts de départ** : D1 (contrat JSON), D2 (exemptions et mémoire des
+  rejets), D3 (avertissements dans l'issue), D4 (voie mécanique), D5
+  (`comparer`), D7 (`synchroniser` testé, en Python) sont traités. D6 l'est
+  dans l'outil (`verifier-pr.yml`) mais ne tourne encore que sur la démo :
+  les cours privés attendent leur runner.
+- **Démontré en réel** sur `ocourses/ocots-demo` (public, hors quota) :
+  14 écarts plantés, verdicts des agents conformes aux attendus, rejets
+  exemptés, et le lundi suivant n'a rien rouvert. La démo reste en place
+  comme test de bout en bout.
+- **Appris** :
+  - une démo réelle trouve ce que les tests ne voient pas : l'issue fermée
+    à l'ouverture de la PR de correction était recréée tant que la PR
+    n'était pas fusionnée (corrigé en `v0.4.1`) ;
+  - livrer un correctif d'outil coûte trois releases enchaînées (outil,
+    conventions, cours) ; le détecteur `versions` des agents signale
+    désormais le dernier maillon, le deuxième est en backlog (#27) ;
+  - une release se pose à la fin d'une chaîne stricte (PR, CI verte,
+    fusion, vérification de version, tag) — incident de `v0.4.0`.
+- **Non exercé** : la voie `correction` (garantie `exact`) existe dans le
+  contrat mais aucune règle n'a encore cette garantie ; elle passe pour
+  l'instant par le tri.
+- **Pour la suite** : S4 peut changer beaucoup de trouvailles sans
+  raz-de-marée — empreintes, `comparer`, exemptions et démo sont là pour le
+  mesurer avant chaque montée.
