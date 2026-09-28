@@ -37,8 +37,8 @@ les règles qui s'y prêtent, *qu'il n'y a rien à trouver*.
 
 | Sprint | Objectif | Version | État |
 |---|---|---|---|
-| [S0](sprints/S0-versions.md) | SemVer et releases pour le template et les conventions | — | à faire |
-| [S1](sprints/S1-parite.md) | l'outil reproduit `bin/verifier` à l'identique, avec des tests | `v0.1.0` | **en cours** |
+| [S0](sprints/S0-versions.md) | SemVer et releases pour le template et les conventions | — | **en cours** |
+| [S1](sprints/S1-parite.md) | l'outil reproduit `bin/verifier` à l'identique, avec des tests | `v0.1.0` | fini |
 | [S2](sprints/S2-registre.md) | registre des vérificateurs, garanties, couverture, exemptions | `v0.2.0` | à faire |
 | [S3](sprints/S3-arbre.md) | lecture par arbre syntaxique ; les limites de P2 et C4 tombent | `v0.3.0` | à faire |
 | [S4](sprints/S4-vocabulaire.md) | le vocabulaire des boîtes vient du template | `v0.4.0` | à faire |
