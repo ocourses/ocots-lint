@@ -21,7 +21,7 @@ Python, tests unitaires et de non-régression, CI, releases.
   reste cohérent avec eux : une règle citée par un vérificateur doit exister,
   un vocabulaire d'un schéma inconnu est refusé.
 
-L'instrumentation LaTeX (S5) vit dans l'outil, pas dans le template : une
+L'instrumentation LaTeX (S6) vit dans l'outil, pas dans le template : une
 compilation normale d'un cours n'est pas touchée.
 
 ## Conséquence acceptée

@@ -12,7 +12,7 @@ Sortie 1 si au moins une infraction est trouvée, 2 pour un argument inconnu,
 0 sinon : utilisable en CI.
 
 Sans exemption dans les sources, arguments et sorties sont identiques à
-`ocots-conventions/bin/verifier` (parité, jusqu'au sprint S3).
+`ocots-conventions/bin/verifier` (parité, jusqu'au sprint S4).
 """
 
 import os
