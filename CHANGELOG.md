@@ -10,6 +10,12 @@ au moment du tag.
 
 ## Non publié
 
+---
+
+## v0.4.1 — 2026-09-28
+
+Correctif trouvé par la démo sur `ocourses/ocots-demo` (sprint S3).
+
 - **`synchroniser` ne recrée pas une issue qu'une PR ouverte cite**
   (« Closes #N », ou « #N » dans son corps). Trouvé par la démo sur
   `ocourses/ocots-demo` : la file ferme l'issue quand l'agent de correction

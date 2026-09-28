@@ -75,7 +75,7 @@ wheels = [
 
 [[package]]
 name = "ocots-lint"
-version = "0.4.0"
+version = "0.4.1"
 source = { editable = "." }
 
 [package.dev-dependencies]
