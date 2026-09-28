@@ -10,6 +10,15 @@ au moment du tag.
 
 ## Non publié
 
+- **Nouvelle commande `exempter`** : pose une exemption en n'ajoutant qu'une
+  ligne de commentaire (par `FICHIER:LIGNE` ou `FICHIER@EMPREINTE`), refuse
+  sans trouvaille active ou dans un verbatim, vérifie le résultat.
+  `exempter --controler` vérifie qu'un diff ne fait qu'ajouter des
+  directives valides.
+- Une directive seule sur sa ligne couvre désormais la prochaine ligne qui
+  n'est pas un commentaire seul : plusieurs directives s'empilent au-dessus
+  d'une même ligne (auparavant, la seconde cassait la première).
+
 - **Empreintes** : chaque trouvaille a une identité stable, indépendante du
   numéro de ligne (règle, fichier, ligne signalée et voisines non vides,
   commentaires retirés). En JSON (`empreinte`) et en SARIF

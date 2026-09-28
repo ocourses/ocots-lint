@@ -6,12 +6,13 @@ comporte exactement comme `conventions/bin/verifier …` (parité, sprint S1).
 
 import sys
 
-from ocots_lint import __version__, couverture, nettoyer, verifier
+from ocots_lint import __version__, couverture, exempter, nettoyer, verifier
 
 COMMANDES = {
     "verifier": (verifier.main, "règles mécaniques sur des sources LaTeX"),
     "couverture": (couverture.main, "règles outillées, et avec quelle garantie"),
     "nettoyer": (nettoyer.main, "corrections mécaniques (aperçu, --appliquer)"),
+    "exempter": (exempter.main, "consigner un rejet par une directive, rien d'autre"),
 }
 
 AIDE = """\
@@ -26,6 +27,7 @@ Commandes :
   ocots-lint verifier --mesure   compte des motifs non bloquants
   ocots-lint couverture          quelles règles sont outillées
   ocots-lint nettoyer C4 poly/   aperçu des corrections (--appliquer pour écrire)
+  ocots-lint exempter f.tex:42 P2 "raison"   poser une exemption
   ocots-lint --version
 """
 

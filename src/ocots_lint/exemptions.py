@@ -5,7 +5,9 @@
     \\begin{remark}
 
 Une directive en fin de ligne couvre sa propre ligne ; une directive seule
-sur sa ligne couvre la ligne suivante. La **raison est obligatoire** : sans
+sur sa ligne couvre la prochaine ligne qui n'est pas un commentaire seul —
+on peut donc empiler plusieurs directives au-dessus d'une même ligne. La
+**raison est obligatoire** : sans
 elle, la directive est ignorée et signalée. Une directive qui n'exempte plus
 rien est signalée aussi, pour ne pas laisser d'exemption morte.
 """
@@ -30,10 +32,23 @@ class Directive:
     utilisees: set = field(default_factory=set)
 
 
+RE_COMMENTAIRE_SEUL = re.compile(r"^\s*%")
+
+
+def _ligne_couverte(lignes, no):
+    """La première ligne après `no` (1-indexé) qui n'est pas un commentaire
+    seul ; au-delà de la fin, la ligne qui suit."""
+    i = no  # index 0 de la ligne suivante
+    while i < len(lignes) and RE_COMMENTAIRE_SEUL.match(lignes[i]):
+        i += 1
+    return i + 1
+
+
 def lire_directives(texte):
     """(directives valides, [(ligne, message)] des directives invalides)."""
     valides, invalides = [], []
-    for no, ligne in enumerate(texte.split("\n"), start=1):
+    lignes = texte.split("\n")
+    for no, ligne in enumerate(lignes, start=1):
         m = RE_DIRECTIVE.search(ligne)
         if not m:
             continue
@@ -44,7 +59,7 @@ def lire_directives(texte):
             continue
         seule = not ligne[:m.start()].strip()
         valides.append(Directive(
-            no, no + 1 if seule else no,
+            no, _ligne_couverte(lignes, no) if seule else no,
             frozenset(RE_IDENT.findall(contenu.group(1))),
             contenu.group(2).strip()))
     return valides, invalides

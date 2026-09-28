@@ -73,7 +73,7 @@ est le dépôt lui-même, pas l'historique des issues.
   d'une regex sur du texte (D1, D3).
   - Critère : test qui fige le schéma ; test qui fige aussi le format texte
     et les codes de sortie, tant que l'ancien détecteur existe.
-- [ ] **S3.4** — En tant qu'*agent de tri*, je veux `ocots-lint exempter
+- [x] **S3.4** — En tant qu'*agent de tri*, je veux `ocots-lint exempter
   FICHIER:LIGNE RÈGLE "raison"`, qui n'ajoute qu'une ligne de commentaire,
   afin de consigner un rejet sans pouvoir toucher au contenu (D2).
   - Critère : `ocots-lint exempter --controler <diff>` échoue si un diff
@@ -139,6 +139,12 @@ est le dépôt lui-même, pas l'historique des issues.
   trouvailles, 21 empreintes distinctes, inchangées après insertion de trois
   lignes en tête de chaque fichier. Limite connue : une trouvaille dont une
   ligne voisine change reçoit une nouvelle empreinte.
+- 2026-09-28 — S3.4. Défaut trouvé en concevant `exempter` : deux
+  directives empilées au-dessus d'une ligne, la première couvrait la seconde.
+  Corrigé (une directive seule saute les commentaires seuls). Démo sur une
+  copie du cours de mesure : 7 exemptions P3 posées par empreinte, P3 à 0
+  (+ 7 exemptées), diff de 7 lignes ajoutées et 0 retirée accepté par
+  `--controler`, empreintes inchangées.
 
 ## Bilan
 
