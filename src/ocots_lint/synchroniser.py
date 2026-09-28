@@ -20,6 +20,13 @@ d'attente et les rôles des agents continuent de fonctionner. Ce qui change :
 - les avertissements sur les exemptions figurent dans l'issue du fichier ;
 - si l'analyse échoue, rien n'est touché (sortie 2).
 
+Deux issues possibles par fichier : `[conventions] <fichier>` pour ce qui
+demande un jugement (label `conventions-candidate`), et `[nettoyer] <fichier>`
+pour la voie mécanique (label `conventions-mecanique`), que la file des agents
+corrige par `ocots-lint nettoyer` sans modèle, sur la branche
+`ocots-lint/nettoyer/<fichier>`. Tant qu'une PR est ouverte sur cette
+branche, l'issue `[nettoyer]` n'est pas recréée.
+
 Les issues promues `conventions-style` ne sont jamais touchées ; un fichier
 exclu par `.agents-ignore` (préfixes de chemins, `#` commente) voit sa
 candidate fermée.
@@ -40,12 +47,35 @@ from ocots_lint.verifier import analyser
 
 LABEL_CANDIDAT = "conventions-candidate"
 LABEL_PROMU = "conventions-style"
+LABEL_MECANIQUE = "conventions-mecanique"
 PREFIXE_TITRE = "[conventions] "
+PREFIXE_NETTOYER = "[nettoyer] "
+BRANCHE_NETTOYER = "ocots-lint/nettoyer/"
 RE_BLOC = re.compile(r"<!-- ocots-lint (\{.*?\}) -->", re.S)
 DOC_LIMITES = "https://github.com/ocourses/ocots-lint#ce-que-loutil-garantit--et-ce-quil-ne-garantit-pas"
 
 
 # ------------------------------------------------------------------ modèle
+
+@dataclass(frozen=True)
+class Famille:
+    """Une sorte d'issue : quelles trouvailles, quel titre, quel label."""
+    nom: str
+    prefixe: str
+    label: str
+    mecanique: bool         # la famille prend-elle les trouvailles `mecanique` ?
+
+
+CONVENTIONS = Famille("conventions", PREFIXE_TITRE, LABEL_CANDIDAT, False)
+NETTOYER = Famille("nettoyer", PREFIXE_NETTOYER, LABEL_MECANIQUE, True)
+FAMILLES = (CONVENTIONS, NETTOYER)
+
+
+def branche_nettoyer(fichier):
+    """Branche de la PR de correction mécanique d'un fichier — même calcul
+    que `ocourses/agents/scripts/nettoyer-pr.sh` (contrat)."""
+    return BRANCHE_NETTOYER + re.sub(r"[^A-Za-z0-9._/-]", "-", fichier)
+
 
 @dataclass(frozen=True)
 class Issue:
@@ -70,8 +100,10 @@ class Issue:
 
 @dataclass(frozen=True)
 class Action:
-    genre: str          # creer, mettre_a_jour, fermer, inchangee, promue, rejet
+    genre: str          # creer, mettre_a_jour, fermer, inchangee, promue,
+                        # rejet, pr_en_cours
     fichier: str
+    famille: "Famille" = CONVENTIONS
     numero: int = 0
     corps: str = ""
     commentaire: str = ""
@@ -88,8 +120,8 @@ class Plan:
 
 # ------------------------------------------------------------------ plan
 
-def titre(fichier):
-    return PREFIXE_TITRE + fichier
+def titre(fichier, famille=CONVENTIONS):
+    return famille.prefixe + fichier
 
 
 def lire_ignores(chemin):
@@ -105,19 +137,36 @@ def est_ignore(fichier, ignores):
     return any(fichier.startswith(p) for p in ignores)
 
 
-def corps_issue(fichier, trouvailles, avertissements, contexte_versions):
-    """Corps d'une issue candidate : lisible par un humain, et un bloc JSON
-    pour les agents."""
-    lignes = [
-        f"**⚠️ Candidat brut, pas relu.** Sortie de `ocots-lint verifier` "
-        f"({contexte_versions}) — *un signal, pas un verdict*. L'outil rate des "
-        f"choses et signale parfois du correct ; zéro trouvaille ne veut pas "
-        f"dire règle respectée ([garanties]({DOC_LIMITES})).",
-        "",
-        "**Ne pas agir sans relecture.** Voie `mecanique` : `ocots-lint "
-        "nettoyer` sait corriger. Voie `tri` : un agent (`conventions-reviewer`) "
-        "tranche — confirmée → `conventions-style` ; rejetée → exemption posée "
-        "par `ocots-lint exempter`, pour qu'elle ne revienne pas.",
+def corps_issue(fichier, trouvailles, avertissements, contexte_versions,
+                famille=CONVENTIONS):
+    """Corps d'une issue : lisible par un humain, et un bloc JSON pour les
+    agents."""
+    if famille.mecanique:
+        entete = [
+            f"**Corrections mécaniques.** Sortie de `ocots-lint verifier` "
+            f"({contexte_versions}) : `ocots-lint nettoyer` sait corriger ces "
+            f"lignes, avec une équivalence vérifiée (voir son aide). Aucun "
+            f"modèle : la file ouvre une PR Draft sur la branche "
+            f"`{branche_nettoyer(fichier)}`, à relire avant fusion.",
+            "",
+            "Une forme voulue s'exempte dans la source "
+            "(`ocots-lint exempter`) : `nettoyer` ne touche pas une ligne "
+            "exemptée.",
+        ]
+    else:
+        entete = [
+            f"**⚠️ Candidat brut, pas relu.** Sortie de `ocots-lint verifier` "
+            f"({contexte_versions}) — *un signal, pas un verdict*. L'outil rate "
+            f"des choses et signale parfois du correct ; zéro trouvaille ne veut "
+            f"pas dire règle respectée ([garanties]({DOC_LIMITES})).",
+            "",
+            "**Ne pas agir sans relecture.** Un agent (`conventions-reviewer`) "
+            "tranche — confirmée → `conventions-style` ; rejetée → exemption "
+            "posée par `ocots-lint exempter`, pour qu'elle ne revienne pas. "
+            f"Les corrections mécaniques du fichier ont leur propre issue "
+            f"(`{titre(fichier, NETTOYER)}`).",
+        ]
+    lignes = entete + [
         "",
         "| Ligne | Règle | Garantie | Voie | Message |",
         "|---|---|---|---|---|",
@@ -152,70 +201,100 @@ class Constat:
     empreinte: str
 
 
-def planifier(constats, avertissements, issues, ignores=(), versions=""):
+def planifier(constats, avertissements, issues, ignores=(), versions="",
+              branches_ouvertes=frozenset()):
     """Le plan : fonction pure, sans accès à GitHub ni au disque.
 
-    constats       : trouvailles non exemptées (Constat)
-    avertissements : sorties.Avertissement, rattachés à leur fichier
-    issues         : Issue existantes portant l'un des deux labels
+    constats          : trouvailles non exemptées (Constat)
+    avertissements    : sorties.Avertissement, rattachés à leur fichier
+    issues            : Issue existantes portant l'un des labels suivis
+    branches_ouvertes : branches des PR ouvertes du dépôt
+
+    Deux familles d'issues par fichier : `[conventions]` (tri, correction) et
+    `[nettoyer]` (voie mécanique). Les avertissements d'exemption vont dans
+    l'issue `[conventions]` du fichier, ou dans `[nettoyer]` s'il n'y a
+    qu'elle.
     """
-    par_fichier = {}
-    for c in constats:
-        if not est_ignore(c.fichier, ignores):
-            par_fichier.setdefault(c.fichier, []).append(c)
+    retenus = [c for c in constats if not est_ignore(c.fichier, ignores)]
     avert_par_fichier = {}
     for a in avertissements:
         avert_par_fichier.setdefault(PurePath(a.fichier).as_posix(), []).append(a)
-
-    ouvertes = {i.titre: i for i in issues if i.ouverte and LABEL_CANDIDAT in i.labels}
-    promues = {i.titre for i in issues if i.ouverte and LABEL_PROMU in i.labels}
-    rejetees = {}
-    for i in issues:
-        if (not i.ouverte and i.raison_fermeture == "NOT_PLANNED"
-                and LABEL_CANDIDAT in i.labels):
-            rejetees.setdefault(i.titre, []).append(i)
+    fichiers_conventions = {c.fichier for c in retenus if c.voie != "mecanique"}
 
     plan = Plan()
+    for famille in FAMILLES:
+        par_fichier = {}
+        for c in retenus:
+            if (c.voie == "mecanique") == famille.mecanique:
+                par_fichier.setdefault(c.fichier, []).append(c)
+        _planifier_famille(plan, famille, par_fichier, avert_par_fichier,
+                           fichiers_conventions, issues, ignores, versions,
+                           branches_ouvertes)
+    return plan
+
+
+def _planifier_famille(plan, famille, par_fichier, avert_par_fichier,
+                       fichiers_conventions, issues, ignores, versions,
+                       branches_ouvertes):
+    ouvertes = {i.titre: i for i in issues
+                if i.ouverte and famille.label in i.labels}
+    promues = ({i.titre for i in issues if i.ouverte and LABEL_PROMU in i.labels}
+               if not famille.mecanique else set())
+    rejetees = {}
+    for i in issues:
+        if (not famille.mecanique and not i.ouverte
+                and i.raison_fermeture == "NOT_PLANNED" and famille.label in i.labels):
+            rejetees.setdefault(i.titre, []).append(i)
+
     for fichier in sorted(par_fichier):
-        t = titre(fichier)
+        t = titre(fichier, famille)
         if t in promues:
-            plan.actions.append(Action("promue", fichier))
+            plan.actions.append(Action("promue", fichier, famille))
             continue
-        corps = corps_issue(fichier, par_fichier[fichier],
-                            avert_par_fichier.get(fichier, []), versions)
+        avert = (avert_par_fichier.get(fichier, [])
+                 if not famille.mecanique or fichier not in fichiers_conventions
+                 else [])
+        corps = corps_issue(fichier, par_fichier[fichier], avert, versions, famille)
         if t in ouvertes:
             issue = ouvertes[t]
             genre = "inchangee" if issue.corps == corps else "mettre_a_jour"
-            plan.actions.append(Action(genre, fichier, issue.numero, corps))
+            plan.actions.append(Action(genre, fichier, famille, issue.numero, corps))
+            continue
+        if famille.mecanique and branche_nettoyer(fichier) in branches_ouvertes:
+            plan.actions.append(Action(
+                "pr_en_cours", fichier, famille,
+                commentaire=f"PR ouverte sur `{branche_nettoyer(fichier)}`"))
             continue
         actuelles = {c.empreinte for c in par_fichier[fichier]}
         deja = [i for i in rejetees.get(t, []) if actuelles <= i.empreintes]
         if deja:
             plan.actions.append(Action(
-                "rejet", fichier, deja[0].numero,
+                "rejet", fichier, famille, deja[0].numero,
                 commentaire=f"déjà rejeté en #{deja[0].numero}, sans exemption "
                             f"posée : `ocots-lint exempter` pour clore"))
             continue
-        plan.actions.append(Action("creer", fichier, corps=corps))
+        plan.actions.append(Action("creer", fichier, famille, corps=corps))
 
     for t, issue in sorted(ouvertes.items()):
-        fichier = t[len(PREFIXE_TITRE):] if t.startswith(PREFIXE_TITRE) else t
+        if not t.startswith(famille.prefixe):
+            continue
+        fichier = t[len(famille.prefixe):]
         if fichier in par_fichier:
             continue
         if est_ignore(fichier, ignores):
             plan.actions.append(Action(
-                "fermer", fichier, issue.numero, raison="not planned",
+                "fermer", fichier, famille, issue.numero, raison="not planned",
                 commentaire=f"Cible désormais exclue par `.agents-ignore` "
                             f"(`{fichier}`). Fermeture automatique : hors "
                             f"périmètre des détecteurs."))
         else:
             plan.actions.append(Action(
-                "fermer", fichier, issue.numero, raison="completed",
-                commentaire="Plus aucune trouvaille active de `ocots-lint` sur "
-                            "ce fichier (corrigée ou exemptée). Fermeture "
+                "fermer", fichier, famille, issue.numero, raison="completed",
+                commentaire="Plus aucune trouvaille active de `ocots-lint` pour "
+                            "cette issue sur ce fichier (corrigée, exemptée, ou "
+                            "passée dans l'autre issue du fichier). Fermeture "
                             "automatique — zéro trouvaille ne certifie pas la "
                             "conformité."))
-    return plan
 
 
 def constats_depuis(trouvailles):
@@ -228,20 +307,22 @@ def constats_depuis(trouvailles):
 
 def afficher(plan, depot):
     symboles = {"creer": "+", "mettre_a_jour": "~", "fermer": "x",
-                "inchangee": "=", "promue": "=", "rejet": "!"}
+                "inchangee": "=", "promue": "=", "rejet": "!", "pr_en_cours": "="}
     textes = {"creer": "créer", "mettre_a_jour": "mettre à jour",
               "fermer": "fermer", "inchangee": "inchangée",
               "promue": "déjà promue conventions-style, ignorée",
-              "rejet": "non recréée"}
+              "rejet": "non recréée", "pr_en_cours": "non recréée, PR en cours"}
     for a in plan.actions:
         numero = f" #{a.numero}" if a.numero else ""
-        detail = f" — {a.commentaire}" if a.genre == "rejet" else ""
-        print(f"  {symboles[a.genre]} {textes[a.genre]}{numero} : {a.fichier}{detail}")
+        detail = f" — {a.commentaire}" if a.genre in ("rejet", "pr_en_cours") else ""
+        print(f"  {symboles[a.genre]} {textes[a.genre]}{numero} : "
+              f"{titre(a.fichier, a.famille)}{detail}")
     print(f"\n{depot} : {plan.compte('creer')} à créer, "
           f"{plan.compte('mettre_a_jour')} à mettre à jour, "
           f"{plan.compte('fermer')} à fermer, {plan.compte('inchangee')} "
           f"inchangée(s), {plan.compte('promue')} promue(s), "
-          f"{plan.compte('rejet')} rejet(s) sans exemption.", file=sys.stderr)
+          f"{plan.compte('rejet')} rejet(s) sans exemption, "
+          f"{plan.compte('pr_en_cours')} PR mécanique(s) en cours.", file=sys.stderr)
 
 
 # ------------------------------------------------------------ GitHub (gh)
@@ -263,7 +344,7 @@ def _gh(*args, entree=None):
 
 def lire_issues(depot):
     issues = []
-    for label in (LABEL_CANDIDAT, LABEL_PROMU):
+    for label in (LABEL_CANDIDAT, LABEL_PROMU, LABEL_MECANIQUE):
         brut = _gh("issue", "list", "--repo", depot, "--label", label,
                    "--state", "all", "--limit", "1000", "--json",
                    "number,title,body,state,labels,stateReason")
@@ -275,12 +356,20 @@ def lire_issues(depot):
     return issues
 
 
+def lire_branches_ouvertes(depot):
+    brut = _gh("pr", "list", "--repo", depot, "--state", "open", "--limit",
+               "1000", "--json", "headRefName")
+    return frozenset(p["headRefName"] for p in json.loads(brut or "[]"))
+
+
 def appliquer(plan, depot):
     for label, couleur, description in (
             (LABEL_CANDIDAT, "fbca04", "Candidat brut (ocots-lint) à trier — "
                                        "pas encore un verdict"),
             (LABEL_PROMU, "d93f0b", "Infraction confirmée par un agent "
-                                    "après relecture")):
+                                    "après relecture"),
+            (LABEL_MECANIQUE, "0e8a16", "Corrections mécaniques (ocots-lint "
+                                        "nettoyer), sans modèle")):
         try:
             _gh("label", "create", label, "--repo", depot, "--color", couleur,
                 "--description", description)
@@ -288,8 +377,9 @@ def appliquer(plan, depot):
             pass    # existe déjà
     for a in plan.actions:
         if a.genre == "creer":
-            _gh("issue", "create", "--repo", depot, "--title", titre(a.fichier),
-                "--label", LABEL_CANDIDAT, "--body-file", "-", entree=a.corps)
+            _gh("issue", "create", "--repo", depot,
+                "--title", titre(a.fichier, a.famille),
+                "--label", a.famille.label, "--body-file", "-", entree=a.corps)
         elif a.genre == "mettre_a_jour":
             _gh("issue", "edit", str(a.numero), "--repo", depot,
                 "--body-file", "-", entree=a.corps)
@@ -356,7 +446,8 @@ def main(argv):
         depot = options["depot"] or depot_courant()
         issues = lire_issues(depot)
         plan = planifier(constats_depuis(trouvailles), avertissements, issues,
-                         lire_ignores(options["ignore"]), versions)
+                         lire_ignores(options["ignore"]), versions,
+                         lire_branches_ouvertes(depot))
         afficher(plan, depot)
         for a in avertissements:
             print(f"{a.fichier}:{a.ligne}: [ocots-lint] {a.message}", file=sys.stderr)

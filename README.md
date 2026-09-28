@@ -147,9 +147,12 @@ ocots-lint synchroniser --dry-run    # le plan des issues, sans rien toucher
 ocots-lint synchroniser              # l'applique (gh, dépôt courant ou --depot)
 ```
 
-Une issue `[conventions] <fichier>` par fichier en infraction, mêmes titres
-et labels que l'ancien détecteur des agents, qu'elle remplace. Chaque
-trouvaille y porte sa **voie** :
+Deux issues possibles par fichier : `[conventions] <fichier>` (label
+`conventions-candidate`, mêmes titres que l'ancien détecteur des agents)
+pour ce qui demande un jugement, et `[nettoyer] <fichier>` (label
+`conventions-mecanique`) pour ce que `nettoyer` sait corriger — la file des
+agents en fait une PR sans modèle, sur la branche
+`ocots-lint/nettoyer/<fichier>`. Chaque trouvaille porte sa **voie** :
 
 | Voie | Quand | Qui s'en occupe |
 |---|---|---|
