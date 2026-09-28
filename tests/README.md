@@ -48,6 +48,26 @@ erreur (`XPASS(strict)`). La fixture change alors de dossier, vers
 même sortie d'erreur, même code de sortie. À partir de S4, l'outil
 s'écartera volontairement de l'ancien, et ce test sera retiré.
 
+## Instantanés du corpus (sprint S4)
+
+Avant de changer la lecture des sources, on fige les trouvailles de chaque
+cours du corpus, à un commit donné, avec le code courant :
+
+```bash
+uv run python -m ocots_lint.instantane figer mesure ~/cours/mesure-integration-enseignants
+uv run python -m ocots_lint.instantane verifier
+```
+
+`figer` passe par `git archive` : la copie de travail du cours n'est ni lue
+ni touchée. Les instantanés vont dans `corpus/`, **ignoré par git** : ceux des
+cours privés citent leur texte.
+
+`verifier` rejoue chaque instantané sur son commit et compare par
+empreinte : trouvailles apparues, disparues, et modifiées (même empreinte,
+ligne ou message différents). Sortie 1 si quelque chose a bougé. Pendant S4,
+chaque écart est relu : voulu (une limite levée) et justifié dans le bilan,
+ou non voulu et corrigé.
+
 ## Contrat (`test_contrat.py`)
 
 La sortie de `verifier` est lue par d'autres : les agents (JSON) et

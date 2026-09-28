@@ -42,11 +42,12 @@ def dans(dossier):
 
 
 @contextlib.contextmanager
-def extraire(ref):
+def extraire(ref, depot=None):
     """Le dossier, dans une copie de la révision `ref`, qui correspond au
-    dossier courant. Les sous-modules ne sont pas extraits."""
-    racine = _git("rev-parse", "--show-toplevel")
-    relatif = os.path.relpath(os.getcwd(), racine)
+    dossier courant — ou à la racine de `depot` s'il est donné. Les
+    sous-modules ne sont pas extraits."""
+    racine = _git("rev-parse", "--show-toplevel", dossier=depot)
+    relatif = "." if depot else os.path.relpath(os.getcwd(), racine)
     archive = _git("archive", "--format=tar", ref, binaire=True, dossier=racine)
     with tempfile.TemporaryDirectory(prefix="ocots-lint-ref-") as tmp:
         with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
