@@ -40,7 +40,7 @@ nouveau passe par de nouvelles options ou de nouvelles commandes.
   trouvaille.
   - Critère : lit `./conventions` (ou `--conventions CHEMIN`) ; sortie texte
     et Markdown.
-- [ ] **S2.4** — En tant qu'*auteur*, je veux exempter une trouvaille
+- [x] **S2.4** — En tant qu'*auteur*, je veux exempter une trouvaille
   justifiée dans la source, afin qu'une règle `signal` puisse bloquer en CI
   sans bruit.
   - Critère : `% ocots-lint: ignore P5 — raison`, sur la ligne signalée ou
