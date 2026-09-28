@@ -10,6 +10,14 @@ au moment du tag.
 
 ## Non publié
 
+---
+
+## v0.3.0 — 2026-09-28
+
+Sprint S3, partie outil : tout ce que le processus de relecture demande
+de déterministe. La détection ne change pas : sortie texte identique à
+`bin/verifier` (conventions `v2.0.0`).
+
 - `nettoyer` ne corrige plus une ligne exemptée pour la règle
   (`% ocots-lint: ignore C4 — …`) : l'exemption dit que la forme est voulue.
 
