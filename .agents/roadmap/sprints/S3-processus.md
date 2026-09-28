@@ -15,7 +15,7 @@ cours sans raz-de-marée d'issues.
 **Contrainte** : la détection ne change pas dans ce sprint. La sortie texte
 et les codes de sortie de `verifier` restent identiques (parité).
 
-**Version livrée** : `v0.3.0`. Architecture : [décision 0003](../decisions/0003-processus.md).
+**Versions livrées** : `v0.3.0` (outil), `v0.4.0` (voie mécanique). Architecture : [décision 0003](../decisions/0003-processus.md).
 
 ## État des lieux (2026-09-28)
 
@@ -99,7 +99,7 @@ est le dépôt lui-même, pas l'historique des issues.
   `ocots-lint exempter` ; `conventions-fixer` lit le JSON.
   - [x] Étape 1 — détecteur : `synchroniser` si le cours épingle
     `ocots-conventions` ≥ v2.2.0, chemin historique sinon.
-  - [ ] Étape 2 — voie mécanique : `synchroniser` pose un label
+  - [x] Étape 2 — voie mécanique : `synchroniser` pose un label
     `voie:mecanique` ; la file (`next-task.sh`) l'envoie à un workflow sans
     modèle qui lance `./conventions/bin/ocots-lint nettoyer C4 <fichier>
     --appliquer`, compile, et ouvre une PR Draft liée à l'issue.
@@ -174,6 +174,14 @@ est le dépôt lui-même, pas l'historique des issues.
   issues. Le cours de mesure épingle `conventions v2.2.0` (#305) et
   `template v1.1.0` (#304, par l'auteur) : il est le premier sur le nouveau
   chemin. Les autres cours restent sur l'ancien.
+- 2026-09-28 — S3.7 étape 2. `synchroniser` sépare `[conventions]` et
+  `[nettoyer]` (branche déterministe `ocots-lint/nettoyer/<fichier>`, pas de
+  recréation tant qu'une PR y est ouverte). `ocourses/agents#31` : nature
+  `mecanique` dans la file, `scripts/nettoyer-pr.sh` et workflow réutilisable
+  `nettoyer.yml`, sans modèle ; testé en local (création, mise à jour sans
+  doublon, rien à corriger ; ligne exemptée intacte). Sur le cours de mesure :
+  5 issues `[conventions]`, 3 `[nettoyer]`. `v0.4.0` ; les versions visées
+  par S4 à S7 passent à `v0.5.0`–`v0.8.0`.
 
 ## Bilan
 
