@@ -17,6 +17,26 @@ parité est remplacé par `ocots-lint comparer` (S3.9) sur un corpus (cours de
 mesure, `ocourses/ocots-demo`) : chaque trouvaille qui apparaît ou disparaît
 est relue et justifiée (S4.7).
 
+## Corpus de référence
+
+Figé le 2026-09-28 avec ocots-lint `0.4.1`, à `origin/main` de chaque cours
+(`python -m ocots_lint.instantane`, voir `tests/README.md`). Les instantanés
+restent en local (`corpus/`, ignoré par git) : ceux des cours privés citent
+leur texte. Ce tableau suffit à les refaire à l'identique.
+
+| Cours | Commit | Trouvailles | dont exemptées | Par règle |
+|---|---|---|---|---|
+| `mesure-integration-enseignants` | `e96a199` | 21 | 0 | C4 14, P3 7 |
+| `automatique-enseignants` | `b6d30a0` | 24 | 0 | C4 3, C6 10, P2 9, P3 2 |
+| `calcul-differentiel-edo-enseignants` | `192ea3c` | 184 | 0 | C4 156, C6 14, P2 5, P3 9 |
+| `ocots-demo` | `0f508d6` | 2 | 2 | P3 1, P5 1 |
+| **Total** | | **231** | **2** | |
+
+Contrôles faits en figeant : `instantane verifier` rejoue les quatre
+instantanés sans écart (analyse déterministe, 1,9 s) ; toutes les empreintes
+sont distinctes dans chaque cours (231 pour 231), donc la comparaison par
+empreinte ne confond aucune trouvaille.
+
 ## Stories
 
 - [x] **S4.1** — Décision écrite : choix de l'analyseur et mode de
@@ -50,6 +70,15 @@ est relue et justifiée (S4.7).
   des trouvailles du corpus.
 - [ ] **S4.8** — Release `v0.5.0`, relais des conventions, montée des cours
   (mesure, démo), avec `comparer` dans la PR de montée.
+
+## Journal
+
+- 2026-09-28 — S4.0, étapes 1 et 2 : outil d'instantanés (#31), corpus figé
+  (4 cours, 231 trouvailles). Remarque : `verifier` lancé sur une copie de
+  travail lit aussi les copies de cours rangées dans des dossiers ignorés par
+  git (ex. `.claude/worktrees/`) — 42 trouvailles au lieu de 21 sur le cours
+  de mesure. Figer par `git archive` n'a pas ce défaut ; pour `verifier`,
+  voir le backlog.
 
 ## Bilan
 
