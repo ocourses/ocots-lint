@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "outil": "ocots-lint",
+  "version": "<version>",
+  "regles": {
+    "P2": {
+      "garantie": "heuristique",
+      "resume": "P2 — enchaînements de boîtes sans texte entre elles."
+    },
+    "P3": {
+      "garantie": "signal",
+      "resume": "P3 — amorces passe-partout et phrases qui se jettent dans la boîte."
+    },
+    "P5": {
+      "garantie": "signal",
+      "resume": "P5 — plus de trois remarques d'affilée : le contenu a quitté le fil."
+    },
+    "C4": {
+      "garantie": "heuristique",
+      "resume": "C4 — typographie : ~:, guillemets, apostrophes, renvois, mots composés."
+    },
+    "C6": {
+      "garantie": "heuristique",
+      "resume": "C6 — \\qedhere manquant en fin de liste ou d'équation ; \\vspace qui compense un \\footnotetext."
+    }
+  },
+  "trouvailles": [
+    {
+      "regle": "C4",
+      "garantie": "heuristique",
+      "fichier": "cours.tex",
+      "ligne": 7,
+      "message": "`~:` inutile — babel-french pose l'espace seul",
+      "empreinte": "550809d521415bb2:0",
+      "exemption": null
+    },
+    {
+      "regle": "C4",
+      "garantie": "heuristique",
+      "fichier": "cours.tex",
+      "ligne": 7,
+      "message": "guillemets : utiliser \\enquote{…}",
+      "empreinte": "550809d521415bb2:1",
+      "exemption": null
+    },
+    {
+      "regle": "C4",
+      "garantie": "heuristique",
+      "fichier": "cours.tex",
+      "ligne": 7,
+      "message": "mot composé — trait d'union",
+      "empreinte": "550809d521415bb2:2",
+      "exemption": null
+    },
+    {
+      "regle": "P2",
+      "garantie": "heuristique",
+      "fichier": "cours.tex",
+      "ligne": 4,
+      "message": "theorem -> proposition",
+      "empreinte": "5f81866778bf2151:0",
+      "exemption": null
+    },
+    {
+      "regle": "P2",
+      "garantie": "heuristique",
+      "fichier": "cours.tex",
+      "ligne": 8,
+      "message": "proposition -> definition",
+      "empreinte": "37d728c29ed1e345:0",
+      "exemption": "la définition précise la proposition"
+    },
+    {
+      "regle": "P3",
+      "garantie": "signal",
+      "fichier": "cours.tex",
+      "ligne": 2,
+      "message": "amorce passe-partout : « …Soit $f$ une fonction mesurable. Nous avons le théorème suivant. »",
+      "empreinte": "ab0b519f03663826:0",
+      "exemption": null
+    }
+  ],
+  "avertissements": [
+    {
+      "fichier": "cours.tex",
+      "ligne": 14,
+      "message": "exemption sans règle ou sans raison, ignorée — « % ocots-lint: ignore P5 — raison »"
+    },
+    {
+      "fichier": "cours.tex",
+      "ligne": 13,
+      "message": "exemption P5 inutile — plus rien à exempter ici"
+    }
+  ]
+}

@@ -27,21 +27,44 @@ class Trouvaille:
     ligne: int
     message: str
     exemption: Optional[str] = None    # raison, si exemptée
+    empreinte: str = ""                # identité stable (empreintes.py)
+
+
+@dataclass(frozen=True)
+class Avertissement:
+    fichier: str
+    ligne: int
+    message: str
 
 
 def _verificateurs(noms):
     return [v for v in REGISTRE if v.regle in noms]
 
 
-def json_(trouvailles, noms):
+# Contrat JSON avec les consommateurs (agents, scripts). Toute modification
+# incompatible fait monter SCHEMA_JSON ; le schéma publié est
+# `schemas/verifier-<n>.schema.json`, et tests/test_contrat.py le fige.
+SCHEMA_JSON = 1
+
+
+def json_(trouvailles, noms, avertissements=()):
     garanties = {v.regle: v.garantie for v in REGISTRE}
     return json.dumps({
+        "schema": SCHEMA_JSON,
         "outil": "ocots-lint",
         "version": __version__,
         "regles": {v.regle: {"garantie": v.garantie, "resume": v.resume}
                    for v in _verificateurs(noms)},
-        "trouvailles": [dict(asdict(t), garantie=garanties[t.regle])
-                        for t in trouvailles],
+        "trouvailles": [{
+            "regle": t.regle,
+            "garantie": garanties[t.regle],
+            "fichier": PurePath(t.fichier).as_posix(),
+            "ligne": t.ligne,
+            "message": t.message,
+            "empreinte": t.empreinte,
+            "exemption": t.exemption,
+        } for t in trouvailles],
+        "avertissements": [asdict(a) for a in avertissements],
     }, ensure_ascii=False, indent=2)
 
 
@@ -56,6 +79,7 @@ def sarif(trouvailles, noms):
             "ruleIndex": index[t.regle],
             "level": NIVEAUX[garanties[t.regle]],
             "message": {"text": t.message},
+            "partialFingerprints": {"ocotsLint/v1": t.empreinte},
             "locations": [{"physicalLocation": {
                 "artifactLocation": {"uri": PurePath(t.fichier).as_posix(),
                                      "uriBaseId": "%SRCROOT%"},

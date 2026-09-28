@@ -10,7 +10,7 @@ dependencies = []
 ocots-lint = "ocots_lint.cli:main"
 
 [dependency-groups]
-dev = ["pytest>=8"]
+dev = ["pytest>=8", "jsonschema>=4"]
 
 [build-system]
 requires = ["hatchling"]
