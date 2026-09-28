@@ -10,6 +10,15 @@ au moment du tag.
 
 ## Non publié
 
+- **Nouvelle commande `synchroniser`** : une issue par fichier en
+  infraction, à partir d'un plan calculé par une fonction pure et testée
+  (`--dry-run` pour le voir). Remplace le détecteur en bash des agents, avec
+  les mêmes titres et labels. Chaque issue porte un bloc JSON (empreintes,
+  voies) pour les agents et les avertissements d'exemption du fichier ; un
+  rejet déjà rendu n'est pas redemandé ; une analyse en échec ne touche rien.
+- **Voie de chaque trouvaille** (`mecanique`, `correction`, `tri`), en JSON
+  (champ `voie`, ajout compatible au schéma 1) et dans les issues.
+
 - **Nouvelle commande `exempter`** : pose une exemption en n'ajoutant qu'une
   ligne de commentaire (par `FICHIER:LIGNE` ou `FICHIER@EMPREINTE`), refuse
   sans trouvaille active ou dans un verbatim, vérifie le résultat.

@@ -32,6 +32,7 @@
       "ligne": 7,
       "message": "`~:` inutile — babel-french pose l'espace seul",
       "empreinte": "550809d521415bb2:0",
+      "voie": "mecanique",
       "exemption": null
     },
     {
@@ -41,6 +42,7 @@
       "ligne": 7,
       "message": "guillemets : utiliser \\enquote{…}",
       "empreinte": "550809d521415bb2:1",
+      "voie": "tri",
       "exemption": null
     },
     {
@@ -50,6 +52,7 @@
       "ligne": 7,
       "message": "mot composé — trait d'union",
       "empreinte": "550809d521415bb2:2",
+      "voie": "tri",
       "exemption": null
     },
     {
@@ -59,6 +62,7 @@
       "ligne": 4,
       "message": "theorem -> proposition",
       "empreinte": "5f81866778bf2151:0",
+      "voie": "tri",
       "exemption": null
     },
     {
@@ -68,6 +72,7 @@
       "ligne": 8,
       "message": "proposition -> definition",
       "empreinte": "37d728c29ed1e345:0",
+      "voie": "tri",
       "exemption": "la définition précise la proposition"
     },
     {
@@ -77,6 +82,7 @@
       "ligne": 2,
       "message": "amorce passe-partout : « …Soit $f$ une fonction mesurable. Nous avons le théorème suivant. »",
       "empreinte": "ab0b519f03663826:0",
+      "voie": "tri",
       "exemption": null
     }
   ],

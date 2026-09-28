@@ -79,7 +79,7 @@ est le dépôt lui-même, pas l'historique des issues.
   - Critère : `ocots-lint exempter --controler <diff>` échoue si un diff
     fait autre chose qu'ajouter des directives ; la trouvaille exemptée
     disparaît de `verifier`.
-- [ ] **S3.5** — En tant que *mainteneur*, je veux `ocots-lint
+- [x] **S3.5** — En tant que *mainteneur*, je veux `ocots-lint
   synchroniser`, qui calcule le plan des issues (créer, mettre à jour,
   fermer) à partir des trouvailles et des issues existantes, afin de
   remplacer `checkers/conventions.sh` par du code testé (D7).
@@ -88,7 +88,7 @@ est le dépôt lui-même, pas l'historique des issues.
     affiche le plan ; les empreintes sont inscrites dans l'issue, et une
     issue fermée sans exemption avec les mêmes empreintes n'est pas recréée
     mais signalée ; les avertissements d'exemption remontent dans l'issue.
-- [ ] **S3.6** — En tant que *mainteneur*, je veux que chaque trouvaille
+- [x] **S3.6** — En tant que *mainteneur*, je veux que chaque trouvaille
   porte sa **voie** (`mecanique`, `correction`, `tri`), déduite de sa
   garantie et de l'existence d'une correction dans `nettoyer`, afin de ne
   payer un modèle que pour ce qui demande un jugement (D4). Une mesure
@@ -145,6 +145,11 @@ est le dépôt lui-même, pas l'historique des issues.
   copie du cours de mesure : 7 exemptions P3 posées par empreinte, P3 à 0
   (+ 7 exemptées), diff de 7 lignes ajoutées et 0 retirée accepté par
   `--controler`, empreintes inchangées.
+- 2026-09-28 — S3.5 et S3.6. `synchroniser --dry-run` sur le vrai dépôt du
+  cours de mesure (lecture seule) : 7 issues à créer, les mêmes 7 fichiers
+  que l'ancien `conventions.sh` (simulé avec un faux `gh`). Voies : 13
+  trouvailles sur 21 sont `mecanique` (12 `~:`, 1 paire de guillemets), 8 au
+  `tri` (7 P3, 1 renvoi C4) — 13 tris de modèle évités.
 
 ## Bilan
 

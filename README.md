@@ -116,6 +116,28 @@ ci-dessous) et
 sur un dépôt public seulement). Une trouvaille exemptée figure en SARIF comme
 suppression, avec sa raison.
 
+### Les issues du cours : `synchroniser`
+
+```bash
+ocots-lint synchroniser --dry-run    # le plan des issues, sans rien toucher
+ocots-lint synchroniser              # l'applique (gh, dépôt courant ou --depot)
+```
+
+Une issue `[conventions] <fichier>` par fichier en infraction, mêmes titres
+et labels que l'ancien détecteur des agents, qu'elle remplace. Chaque
+trouvaille y porte sa **voie** :
+
+| Voie | Quand | Qui s'en occupe |
+|---|---|---|
+| `mecanique` | `nettoyer` sait la corriger à cette ligne (guillemets : si `csquotes` est chargé) | `ocots-lint nettoyer`, sans modèle |
+| `correction` | garantie `exact` | l'agent de correction, sans tri |
+| `tri` | garantie `heuristique` ou `signal` | l'agent de tri, puis correction ou exemption |
+
+Une issue fermée « not planned » qui portait déjà toutes les empreintes
+actuelles d'un fichier n'est pas recréée : le rejet n'est pas redemandé, et
+le plan rappelle de poser les exemptions. Si l'analyse échoue, rien n'est
+touché.
+
 ### Le contrat JSON
 
 `verifier --format json` est **le** format à lire pour un programme : la

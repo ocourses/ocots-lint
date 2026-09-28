@@ -18,7 +18,7 @@ Sans exemption dans les sources, arguments et sorties sont identiques à
 import os
 import sys
 
-from ocots_lint import empreintes, sorties
+from ocots_lint import empreintes, sorties, voies
 from ocots_lint.exemptions import Exemptions
 from ocots_lint.lecture import sources
 from ocots_lint.mesures import MESURES, mesurer
@@ -45,6 +45,25 @@ def extraire_format(argv):
     if fmt not in FORMATS:
         raise ValueError(f"format inconnu : {fmt} ({', '.join(FORMATS)})")
     return fmt, reste
+
+
+def analyser(racines, noms, exemptions_actives=True):
+    """(trouvailles, avertissements) : l'analyse commune à `verifier` et à
+    `synchroniser`. Les trouvailles exemptées sont incluses (exemption non
+    nulle) ; chacune porte son empreinte et sa voie."""
+    exemptions = Exemptions(actives=exemptions_actives)
+    resultats = []
+    for nom in noms:
+        for chemin, ligne, message in REGLES[nom](racines):
+            directive = exemptions.exempte(chemin, ligne, nom)
+            resultats.append(sorties.Trouvaille(
+                nom, os.path.relpath(chemin), ligne, message,
+                directive.raison if directive else None))
+    resultats = voies.attribuer(empreintes.attribuer(resultats), racines)
+    avertissements = [
+        sorties.Avertissement(os.path.relpath(chemin), ligne, message)
+        for chemin, ligne, message in exemptions.avertissements(sources(racines), noms)]
+    return resultats, avertissements
 
 
 def main(argv):
@@ -79,18 +98,8 @@ def main(argv):
     if not noms:
         noms = sorted(REGLES)
 
-    exemptions = Exemptions(actives="--sans-exemptions" not in argv)
-    resultats = []
-    for nom in noms:
-        for chemin, ligne, message in REGLES[nom](racines):
-            directive = exemptions.exempte(chemin, ligne, nom)
-            resultats.append(sorties.Trouvaille(
-                nom, os.path.relpath(chemin), ligne, message,
-                directive.raison if directive else None))
-    resultats = empreintes.attribuer(resultats)
-    avertissements = [
-        sorties.Avertissement(os.path.relpath(chemin), ligne, message)
-        for chemin, ligne, message in exemptions.avertissements(sources(racines), noms)]
+    resultats, avertissements = analyser(
+        racines, noms, exemptions_actives="--sans-exemptions" not in argv)
 
     total = 0
     for nom in noms:
