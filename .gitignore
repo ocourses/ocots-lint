@@ -6,3 +6,6 @@ __pycache__/
 dist/
 build/
 *.egg-info/
+
+# Instantanés du corpus (S4.0) : les cours privés restent en local
+corpus/

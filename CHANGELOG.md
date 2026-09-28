@@ -10,6 +10,12 @@ au moment du tag.
 
 ## Non publié
 
+- **Instantanés du corpus** (outil de mainteneur, hors CLI) :
+  `python -m ocots_lint.instantane figer|verifier` fige les trouvailles d'un
+  cours à un commit, puis vérifie qu'elles n'ont pas bougé — filet de
+  sécurité de S4. `reference.extraire` accepte un dépôt autre que le dossier
+  courant.
+
 ---
 
 ## v0.4.1 — 2026-09-28
