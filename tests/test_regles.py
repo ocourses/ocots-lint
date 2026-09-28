@@ -60,4 +60,4 @@ def test_chaque_regle_a_ses_fixtures(regle):
 def test_pas_de_dossier_de_fixtures_orphelin():
     """Un dossier de fixtures doit correspondre à une règle implémentée."""
     dossiers = {d.name for d in FIXTURES.iterdir() if d.is_dir()}
-    assert dossiers - {"mesures"} <= set(REGLES)
+    assert dossiers - {"mesures", "nettoyer"} <= set(REGLES)

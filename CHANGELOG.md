@@ -10,6 +10,10 @@ au moment du tag.
 
 ## Non publié
 
+- **Nouvelle commande `nettoyer`**, portée à l'identique de `bin/nettoyer`
+  (corrections `C4` : `~:`, guillemets en `\enquote` si `csquotes` est
+  chargé), sur la lecture commune. Parité testée en aperçu et en
+  `--appliquer`, sur des copies.
 - **Formats de sortie** : `verifier --format json|sarif|github`. `github`
   produit des annotations de workflow, affichées dans la PR même sur un dépôt
   privé ; `sarif` (2.1.0, validé contre le schéma) porte les exemptions comme

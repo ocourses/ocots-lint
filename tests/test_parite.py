@@ -9,6 +9,7 @@ corpus réel si la variable `OCOTS_LINT_CORPUS` le désigne :
 """
 
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -58,3 +59,37 @@ CORPUS = os.environ.get("OCOTS_LINT_CORPUS")
 @pytest.mark.parametrize("arguments", ARGUMENTS, ids=lambda a: " ".join(a) or "(rien)")
 def test_parite_sur_le_corpus(arguments):
     comparer(Path(CORPUS).expanduser(), arguments)
+
+
+# --------------------------------------------------------------- nettoyer
+
+ANCIEN_NETTOYER = RACINE / "conventions" / "bin" / "nettoyer"
+
+CAS_NETTOYER = ("sans-csquotes", "avec-csquotes")
+
+
+@pytest.mark.parametrize("cas", CAS_NETTOYER)
+@pytest.mark.parametrize("appliquer", [False, True], ids=["apercu", "appliquer"])
+def test_parite_nettoyer(tmp_path, cas, appliquer):
+    """Chaque outil travaille sur sa propre copie ; sorties et fichiers
+    produits doivent être identiques."""
+    argv = ["C4", "."] + (["--appliquer"] if appliquer else [])
+    copies = {}
+    for nom, commande in (
+            ("ancien", [sys.executable, str(ANCIEN_NETTOYER)]),
+            ("nouveau", [sys.executable, "-m", "ocots_lint", "nettoyer"])):
+        copie = tmp_path / nom
+        shutil.copytree(FIXTURES / "nettoyer" / cas, copie)
+        copies[nom] = (executer([*commande, *argv], copie), copie)
+    (sortie_a, dossier_a), (sortie_n, dossier_n) = copies["ancien"], copies["nouveau"]
+    assert sortie_n == sortie_a
+    for f in sorted(dossier_a.rglob("*.tex")):
+        assert (dossier_n / f.relative_to(dossier_a)).read_text() == f.read_text()
+
+
+@pytest.mark.skipif(not CORPUS, reason="OCOTS_LINT_CORPUS non défini")
+def test_parite_nettoyer_apercu_sur_le_corpus():
+    corpus = Path(CORPUS).expanduser()
+    ancien = executer([sys.executable, str(ANCIEN_NETTOYER), "C4"], corpus)
+    nouveau = executer([sys.executable, "-m", "ocots_lint", "nettoyer", "C4"], corpus)
+    assert nouveau == ancien
