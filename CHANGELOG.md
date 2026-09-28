@@ -10,6 +10,13 @@ au moment du tag.
 
 ## Non publié
 
+---
+
+## v0.4.0 — 2026-09-28
+
+Voie mécanique (sprint S3, étape 2) : ce que `nettoyer` sait corriger ne
+passe plus par un tri de modèle.
+
 - **`synchroniser` : une issue `[nettoyer] <fichier>` pour la voie
   mécanique** (label `conventions-mecanique`), à côté de `[conventions]
   <fichier>` qui ne garde que ce qui demande un jugement. La correction se

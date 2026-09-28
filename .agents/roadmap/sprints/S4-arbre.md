@@ -7,7 +7,7 @@
 nœuds — environnement, macro, maths, verbatim, commentaire, prose — avec leur
 position.
 
-**Version livrée** : `v0.4.0`.
+**Version livrée** : `v0.5.0`.
 
 **Parité** : la référence reste `conventions v2.0.0` (dernier `bin/` en
 Python). Dès que l'outil s'écarte volontairement de l'ancien, le test de
@@ -28,7 +28,7 @@ trouvaille qui apparaît ou disparaît est relue et justifiée (S4.5).
   et les environnements verbatim, afin de ne plus être signalé à tort.
 - [ ] **S4.5** — Écart de trouvailles sur le corpus de référence relu et
   justifié, une ligne par écart, dans le bilan.
-- [ ] **S4.6** — Release `v0.4.0`.
+- [ ] **S4.6** — Release `v0.5.0`.
 
 ## Bilan
 

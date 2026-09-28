@@ -6,7 +6,7 @@
 Le template publie la description de ses environnements ; l'outil la lit et
 vérifie qu'il en connaît le format.
 
-**Version livrée** : `v0.5.0` (et une version mineure du template).
+**Version livrée** : `v0.6.0` (et une version mineure du template).
 
 ## Stories (à affiner en début de sprint)
 
@@ -21,7 +21,7 @@ vérifie qu'il en connaît le format.
   zéro trouvaille.
 - [ ] **S5.4** — CI programmée contre le `main` du template et des
   conventions, pour voir une incompatibilité avant une release.
-- [ ] **S5.5** — Release `v0.5.0`.
+- [ ] **S5.5** — Release `v0.6.0`.
 
 ## Bilan
 

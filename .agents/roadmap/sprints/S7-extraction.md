@@ -6,7 +6,7 @@
 `P4`, `P7`), fournir le matériau de la décision à un relecteur ou à un agent
 `ocourses/agents`.
 
-**Version livrée** : `v0.7.0`.
+**Version livrée** : `v0.8.0`.
 
 ## Stories (à affiner en début de sprint)
 
@@ -17,7 +17,7 @@
   sections (ouverture, boîtes, fermeture), afin de juger P7.
 - [ ] **S7.3** — Un agent de `ocourses/agents` consomme l'extraction sur un
   cours réel ; retour noté dans le bilan.
-- [ ] **S7.4** — Release `v0.7.0`.
+- [ ] **S7.4** — Release `v0.8.0`.
 
 ## Bilan
 

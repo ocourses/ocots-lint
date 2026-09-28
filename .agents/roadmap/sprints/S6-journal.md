@@ -6,7 +6,7 @@
 développées, `\input` suivis, conditionnels tranchés — grâce à un `.sty`
 d'instrumentation injecté seulement à la compilation de vérification.
 
-**Version livrée** : `v0.6.0`.
+**Version livrée** : `v0.7.0`.
 
 ## Stories (à affiner en début de sprint)
 
@@ -20,7 +20,7 @@ d'instrumentation injecté seulement à la compilation de vérification.
 - [ ] **S6.4** — En tant qu'*auteur*, je veux une vérification de `P12`
   (label posé mais jamais cité) et de `C5`, afin d'outiller des règles
   aujourd'hui manuelles.
-- [ ] **S6.5** — Release `v0.6.0`.
+- [ ] **S6.5** — Release `v0.7.0`.
 
 ## Bilan
 
