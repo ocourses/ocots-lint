@@ -9,7 +9,7 @@ chaque règle est fixé par des tests.
 **Pourquoi rien d'autre** : tant que l'outil ne reproduit pas l'ancien, on ne
 peut pas savoir si un écart est un progrès ou une régression. Aucune
 amélioration de détection dans ce sprint : les défauts connus sont écrits
-comme limites (tests attendus en échec), corrigés à partir de S3.
+comme limites (tests attendus en échec), corrigés à partir de S4.
 
 **Version livrée** : `v0.1.0`.
 
@@ -65,4 +65,4 @@ Sprint clos le 2026-09-28, `v0.1.0`.
   (P3 sur une amorce finie par une équation en display). Les limites
   documentées passent de 3 (README des conventions) à 8 testées.
 - **Pour la suite** : S2 part d'une base stable. La parité cessera d'être un
-  objectif en S3, quand l'outil s'écartera volontairement de l'ancien.
+  objectif en S4, quand l'outil s'écartera volontairement de l'ancien.

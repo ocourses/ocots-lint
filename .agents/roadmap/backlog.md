@@ -25,4 +25,7 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
   l'outil.
 - Intégration `pre-commit`.
 - CI du template qui compile `examples/` (TeX Live dans GitHub Actions) :
-  prérequis des tests d'instrumentation de S5.
+  prérequis des tests d'instrumentation de S6.
+- Monter `ocots-lint` dans un cours en une étape : une release d'`ocots-lint`
+  ouvre d'elle-même la PR qui met à jour `OCOTS_LINT_VERSION` dans
+  `ocots-conventions/bin/` (reporté de S3).

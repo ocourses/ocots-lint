@@ -62,4 +62,4 @@ Sprint clos le 2026-09-28.
   qui citent `SL3` sous `v1.0.0` étaient ambiguës.
 - **Pour la suite** : les cours peuvent épingler `template v1.0.0` et
   `conventions v2.0.0` au lieu d'un commit. `ocots-lint` peut désormais
-  déclarer sa compatibilité par version (S4.3).
+  déclarer sa compatibilité par version (S5.3).

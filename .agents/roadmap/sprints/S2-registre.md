@@ -7,7 +7,7 @@ quelles règles des conventions il couvre. Un auteur peut exempter une
 trouvaille justifiée ; la CI d'un cours peut lire les résultats.
 
 **Contrainte** : la sortie texte par défaut de `verifier` reste identique à
-`bin/verifier` (le test de parité reste vert jusqu'à S3). Tout ce qui est
+`bin/verifier` (le test de parité reste vert jusqu'à S4). Tout ce qui est
 nouveau passe par de nouvelles options ou de nouvelles commandes.
 
 **Version livrée** : `v0.2.0`.
@@ -110,6 +110,6 @@ Sprint clos le 2026-09-28, `v0.2.0`.
   gratuit ; le format `github` (annotations de workflow) est celui qui sert.
   Brancher un relais a révélé un défaut latent du détecteur des agents
   (code de sortie ignoré).
-- **Pour la suite** : S3 peut s'écarter de l'ancien outil. Le test de parité
+- **Pour la suite** : S4 peut s'écarter de l'ancien outil. Le test de parité
   sera remplacé par un instantané des trouvailles sur le corpus, relu à
   chaque écart.
