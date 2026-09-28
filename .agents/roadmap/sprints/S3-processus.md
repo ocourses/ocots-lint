@@ -97,6 +97,16 @@ est le dépôt lui-même, pas l'historique des issues.
   `ocots-lint synchroniser` ; la file envoie la voie `mecanique` à
   `nettoyer` sans modèle ; `conventions-reviewer` consigne un rejet par
   `ocots-lint exempter` ; `conventions-fixer` lit le JSON.
+  - [x] Étape 1 — détecteur : `synchroniser` si le cours épingle
+    `ocots-conventions` ≥ v2.2.0, chemin historique sinon.
+  - [ ] Étape 2 — voie mécanique : `synchroniser` pose un label
+    `voie:mecanique` ; la file (`next-task.sh`) l'envoie à un workflow sans
+    modèle qui lance `./conventions/bin/ocots-lint nettoyer C4 <fichier>
+    --appliquer`, compile, et ouvre une PR Draft liée à l'issue.
+  - [ ] Étape 3 — tri : `conventions-reviewer` ignore les lignes
+    `mecanique`, consigne chaque rejet par `ocots-lint exempter` (PR
+    contrôlée par `exempter --controler`) ; `conventions-fixer` lit le bloc
+    JSON de l'issue.
 - [x] **S3.8** — En tant qu'*auteur*, je veux `verifier --nouvelles <réf>`,
   qui ne signale que les trouvailles absentes de `<réf>` (par empreinte),
   et un workflow de PR pour le cours, afin de voir un écart au moment où je
@@ -157,6 +167,13 @@ est le dépôt lui-même, pas l'historique des issues.
 - 2026-09-28 — `v0.3.0` publiée avant S3.7, comme en S2 : les agents et le
   relais des conventions ont besoin d'une version à épingler. Correctif
   préalable : `nettoyer` respecte les exemptions.
+- 2026-09-28 — S3.7 étape 1. `ocots-conventions` v2.2.0 : relais générique
+  `bin/ocots-lint`, seul endroit où la version est épinglée.
+  `ocourses/agents#30` : le détecteur délègue à `synchroniser` ; simulé sur
+  le cours de mesure avec un faux `gh`, les deux chemins créent les 7 mêmes
+  issues. Le cours de mesure épingle `conventions v2.2.0` (#305) et
+  `template v1.1.0` (#304, par l'auteur) : il est le premier sur le nouveau
+  chemin. Les autres cours restent sur l'ancien.
 
 ## Bilan
 
