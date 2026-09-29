@@ -105,7 +105,7 @@ empreinte ne confond aucune trouvaille.
     que C4 voit désormais (cas réel : mesure, `slides_chapitre_8.tex:305`)
     part au tri au lieu de la voie mécanique, parce que `nettoyer` ne le
     voit pas.
-- [ ] **S4.4** — En tant que *relecteur*, je veux que P2 signale deux boîtes
+- [x] **S4.4** — En tant que *relecteur*, je veux que P2 signale deux boîtes
   séparées par autre chose que de la prose (`\medskip`, ligne de `%`,
   figure), afin qu'une ligne de mise en page ne cache plus l'infraction.
   - Critère : les limites P2 `medskip_entre` et `figure_entre` passent en
@@ -176,6 +176,39 @@ empreinte ne confond aucune trouvaille.
   un `~:` exactement là où C4 le signale — il échoue avec l'ancien
   `nettoyer`. Parité de `nettoyer` avec l'ancien outil : toujours tenue sur
   ses fixtures.
+- 2026-09-29 — S4.4 : P2 sur l'arbre. Les trouvailles existantes sont
+  inchangées. 24 P2 nouvelles au premier passage, toutes des boîtes sœures
+  séparées seulement par un espacement ou une figure ; 8 d'entre elles
+  révélaient un oubli de l'ancien code, qui comparait les noms étoile
+  comprise : entrer dans une `remark*` n'était pas toléré. Corrigé
+  (`remark*` est une remarque, `exercise*` un exercice), avec fixtures.
+  Restent **16 écarts, tous voulus** (la cible de S4.4) :
+
+  | Cours | Fichier:ligne | Enchaînement | Séparé par |
+  |---|---|---|---|
+  | calcul-diff | `poly/mainmatter/edo-existence.tex:584` | example → example | une figure |
+  | calcul-diff | `slides/chap4/slides_chapitre_4.tex:545` | mycorollary → mycorollary | `\vspace` |
+  | calcul-diff | `slides/chap7/slides_equations_lineaires.tex:336` | mydefinition → myproposition | `\vspace` |
+  | calcul-diff | `slides/chap7/slides_equations_lineaires.tex:344` | myproposition → mycorollary | `\vspace` |
+  | mesure | `poly/mainmatter/theorems-limites.tex:1241` | example → example | `\medskip` |
+  | mesure | `slides/chapitre2/slides_chapitre_2.tex:310` | definition → example* | `\medskip` |
+  | mesure | `slides/chapitre2/slides_chapitre_2.tex:782` | example* → example* | `\bigskip` |
+  | mesure | `slides/chapitre2/slides_chapitre_2.tex:1242` | example* → example* | `\bigskip` |
+  | mesure | `slides/chapitre3/slides_chapitre_3.tex:200` | remark* → example* | `\medskip` |
+  | mesure | `slides/chapitre3/slides_chapitre_3.tex:278` | remark → example* | `\medskip` |
+  | mesure | `slides/chapitre4/slides_chapitre_4.tex:955` | theorem → example | `\bigskip` |
+  | mesure | `slides/chapitre4/slides_chapitre_4.tex:1028` | definition → example | `\medskip` |
+  | mesure | `slides/chapitre5/slides_chapitre_5.tex:1340` | example → example | `\bigskip` |
+  | mesure | `td/td3/td3.tex:101` | remark* → exercise | `\vspace*` |
+  | mesure | `td/td3/td3.tex:152` | remark* → exercise | `\vspace*` |
+  | mesure | `td/td4/td4.tex:68` | remark* → exercise | `\vspace*` |
+
+  Sur les transparents (11 des 16), le remède attendu est l'idiome SL6 —
+  `\pause` entre les deux objets d'une même idée — ou deux diapositives
+  (SL3) : le tri le dira. Choix conservateur fixé par fixtures : un titre,
+  une formule, `\pause` ou une commande inconnue rompent la chaîne.
+  `test_exempter` : le garde-fou « verbatim » d'`exempter` est désormais
+  testé avec P5, puisque P2 ne voit plus dans un verbatim.
 
 ## Bilan
 
