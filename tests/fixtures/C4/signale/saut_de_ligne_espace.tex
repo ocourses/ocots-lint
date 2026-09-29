@@ -1,0 +1,9 @@
+% `\\[0.2em]` est un saut de ligne suivi d'un espacement, pas une formule
+% hors texte. Les masques par regex y voyaient `\[` et masquaient la prose
+% jusqu'au prochain `\]` (cas réel du corpus S4.3 : 37 lignes d'un
+% transparent). L'arbre le lit juste.
+Première ligne du récapitulatif\\[0.2em]
+Pour récapituler, nous avons les inclusions suivantes~: % attendu: C4
+\[
+  R \subset L^1.
+\]

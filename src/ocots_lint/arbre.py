@@ -52,6 +52,9 @@ ENV_MATHS = ("equation", "align", "alignat", "flalign", "gather", "multline",
 ENV_VERBATIM = ("verbatim", "lstlisting", "minted", "Verbatim")
 MACROS_VERBATIM = ("verb", "url")
 MACROS_MATHS = ("ensuremath",)
+# Environnements qui ne sont pas de la prose sans être des maths : leur
+# texte est du code de dessin (`prose()` les blanchit).
+ENV_HORS_PROSE = ("tikzpicture",)
 
 
 def _etoilees(noms):
@@ -60,6 +63,7 @@ def _etoilees(noms):
 
 _MATHS = _etoilees(ENV_MATHS)
 _VERBATIM = _etoilees(ENV_VERBATIM)
+_HORS_PROSE = _etoilees(ENV_HORS_PROSE)
 
 
 # ------------------------------------------------------------ analyseur
@@ -187,6 +191,37 @@ def _convertir(n):
         genre = "maths" if nom in _MATHS else "environnement"
         return Noeud(genre, nom, debut, fin, _liste(n.nodelist), _arguments(n))
     raise TypeError(f"nœud pylatexenc inattendu : {type(n).__name__}")
+
+
+# ------------------------------------------------------------ prose
+
+def _hors_prose(noeuds):
+    """Intervalles (début, fin) des nœuds qui ne sont pas de la prose, sans
+    descendre dans ceux qu'on écarte déjà."""
+    for n in noeuds:
+        if n.genre in ("commentaire", "maths", "verbatim") or (
+                n.genre == "environnement" and n.nom in _HORS_PROSE):
+            yield n.debut, n.fin
+        else:
+            yield from _hors_prose(n.arguments)
+            yield from _hors_prose(n.enfants)
+
+
+def prose(arbre):
+    """Le texte source où ce qui n'est pas de la prose est blanchi —
+    commentaires, maths, verbatim, figures (ENV_HORS_PROSE) —, longueur et
+    retours à la ligne conservés : une position trouvée dans le résultat
+    désigne le même caractère dans la source, à la même ligne."""
+    morceaux, fin = [], 0
+    for debut, f in sorted(_hors_prose(arbre.noeuds or ())):
+        if debut < fin:          # imbriqué dans une zone déjà blanchie
+            continue
+        morceaux.append(arbre.texte[fin:debut])
+        morceaux.append("".join(c if c == "\n" else " "
+                                for c in arbre.texte[debut:f]))
+        fin = f
+    morceaux.append(arbre.texte[fin:])
+    return "".join(morceaux)
 
 
 # ------------------------------------------------------------ entrée

@@ -182,7 +182,7 @@ def corps_issue(fichier, trouvailles, avertissements, contexte_versions,
         lignes.append(f"| {t.ligne} | {t.regle} | {t.garantie} | {t.voie} "
                       f"| {message} |")
     if avertissements:
-        lignes += ["", "**Exemptions à revoir :**", ""]
+        lignes += ["", "**À revoir :**", ""]
         lignes += [f"- ligne {a.ligne} : {a.message}"
                    for a in sorted(avertissements, key=lambda a: a.ligne)]
     bloc = {"schema": SCHEMA_JSON, "fichier": fichier, "trouvailles": [
