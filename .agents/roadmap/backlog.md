@@ -40,3 +40,11 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
   ouvre d'elle-même la PR qui met à jour `OCOTS_LINT_VERSION` dans
   `ocots-conventions/bin/` (reporté de S3). Suivi :
   [#27](https://github.com/ocourses/ocots-lint/issues/27).
+- Monter automatique et calcul-diff en conventions `v2.4.0` et template
+  `v1.1.0`, avec le renvoi d'`AGENTS.md` à `methode.md` et
+  `conventions-pr.yml` (reporté de S4.9) : suivi par
+  [automatique-enseignants#322](https://github.com/ocourses/automatique-enseignants/issues/322)
+  et
+  [calcul-differentiel-edo-enseignants#83](https://github.com/ocourses/calcul-differentiel-edo-enseignants/issues/83).
+  Ensuite seulement : retirer le chemin historique en bash de
+  `agents/scripts/checkers/conventions.sh`.
