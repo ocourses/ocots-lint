@@ -11,9 +11,9 @@ name: Vérifier une PR (réutilisable)
 #       paths: ["**.tex"]
 #   jobs:
 #     conventions:
-#       uses: ocourses/ocots-lint/.github/workflows/verifier-pr.yml@v0.3.0
+#       uses: ocourses/ocots-lint/.github/workflows/verifier-pr.yml@v0.5.1
 #       with:
-#         runs-on: '["self-hosted"]'     # facultatif ; défaut : ubuntu-latest
+#         runs-on: '["self-hosted"]'     # facultatif, voir l'entrée runs-on
 #
 # La commande par défaut est ./conventions/bin/verifier : la version
 # d'ocots-lint est celle qu'épinglent les conventions du cours.
@@ -22,9 +22,13 @@ on:
   workflow_call:
     inputs:
       runs-on:
-        description: "Runner, en JSON : '\"ubuntu-latest\"' ou '[\"self-hosted\"]'"
+        description: >-
+          Runner, en JSON : '"ubuntu-latest"' ou '["self-hosted"]'. Vide
+          (défaut) : la variable OCOURSES_RUNNER du dépôt appelant si elle est
+          définie (bascule manuelle vers le runner Occidata, voir
+          ocourses/agents, bin/runner-switch), sinon ubuntu-latest.
         type: string
-        default: '"ubuntu-latest"'
+        default: ""
       commande:
         description: "Commande qui lance verifier"
         type: string
@@ -43,7 +47,7 @@ permissions:
 
 jobs:
   nouvelles:
-    runs-on: ${{ fromJSON(inputs.runs-on) }}
+    runs-on: ${{ fromJSON(inputs.runs-on || vars.OCOURSES_RUNNER || '"ubuntu-latest"') }}
     steps:
       - uses: actions/checkout@v4
         with:
