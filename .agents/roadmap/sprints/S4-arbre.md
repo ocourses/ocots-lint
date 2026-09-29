@@ -123,6 +123,68 @@ empreinte ne confond aucune trouvaille.
   des trouvailles du corpus.
 - [ ] **S4.8** — Release `v0.5.0`, relais des conventions, montée des cours
   (mesure, démo), avec `comparer` dans la PR de montée.
+- [ ] **S4.9** — En tant qu'*agent qui rédige dans un cours*, je veux une
+  seule procédure de vérification, versionnée avec les conventions, afin
+  qu'elle ne diverge pas d'un cours à l'autre et me dise de ne regarder que
+  **mes** trouvailles. Livrée avec la release des conventions de S4.8.
+  Ajoutée le 2026-09-29, à la demande de l'auteur, après un point sur les
+  workflows.
+
+  **Principe — une information, un propriétaire.** Les autres renvoient au
+  propriétaire, sans recopier :
+
+  | Information | Propriétaire unique |
+  |---|---|
+  | Les règles (quoi, pourquoi) | `ocots-conventions/*.md` |
+  | Règles outillées et garantie de chacune | registre d'`ocots-lint`, affiché par `ocots-lint couverture` |
+  | Commandes et options de l'outil | README d'`ocots-lint`, `--help` |
+  | Procédure de travail et de vérification | `ocots-conventions/methode.md` |
+  | Rôles de l'automatisation | `agents/roles/` |
+  | Liste des cours | `agents/config/course-repos.txt` |
+  | Ce qui est propre à un cours | `AGENTS.md` du cours |
+
+  **Constaté le 2026-09-29 :**
+  - la section « Vérifications » est recopiée dans l'`AGENTS.md` de chaque
+    cours, et a **déjà divergé** : mesure et la démo citent le relais vers
+    `ocots-lint` et `uv`, automatique et calcul-diff non ;
+  - elle dit « lancer `verifier` » : sur un cours à 184 trouvailles
+    (calcul-diff), un agent ne distingue pas les siennes. La commande qui
+    répond à « ai-je respecté les conventions ? » est
+    `./conventions/bin/ocots-lint verifier --nouvelles origin/main <périmètre>`
+    (depuis v0.3.0), jamais indiquée à un agent local ;
+  - le README des conventions (l. 82–102, 164–168) recopie les commandes et
+    options d'`ocots-lint` ;
+  - `communes.md` écrit dans la règle ce que l'outil vérifie (« Vérifié par
+    `verifier C6` », l. 345 et 355) : c'est le rôle de `couverture` ;
+  - `agents/scripts/checkers/conventions.sh` : l'en-tête décrit encore
+    l'ancien détecteur en bash, alors que le script appelle `synchroniser` ;
+  - `conventions-pr.yml` (annotations des trouvailles nouvelles sur chaque
+    PR) n'existe que dans la démo.
+
+  **À faire :**
+  1. `ocots-conventions` — `methode.md` reçoit la procédure de vérification
+     complète (compiler, références, `verifier --nouvelles`, relire le diff,
+     artefacts) ; le README et `communes.md` renvoient à `ocots-lint`
+     (`couverture`, README) au lieu de recopier. Même release que S4.8.
+  2. `agents` — corriger l'en-tête de `scripts/checkers/conventions.sh`.
+  3. **Chaque cours de `agents/config/course-repos.txt`** — au 2026-09-29 :
+
+     | Cours | Dépôt local | `AGENTS.md` → renvoi à `methode.md` | `conventions-pr.yml` |
+     |---|---|---|---|
+     | `ocourses/mesure-integration-enseignants` | `~/Courses/mesure_et_integration/integration/mesure-integration-enseignants` | [ ] | [ ] à ajouter |
+     | `ocourses/automatique-enseignants` | `~/Courses/automatique/automatique-enseignants` | [ ] | [ ] à ajouter |
+     | `ocourses/calcul-differentiel-edo-enseignants` | `~/Courses/calcul_differentiel_edo/calcul-differentiel-edo-enseignants` | [ ] | [ ] à ajouter |
+     | `ocourses/ocots-demo` | `~/Courses/ocourses/ocots-demo` | [ ] | déjà là |
+
+     Dans chaque cours, la section « Vérifications » d'`AGENTS.md` devient
+     un renvoi d'une ligne à `conventions/methode.md`, dans la PR qui monte
+     les conventions (la procédure n'existe qu'une fois le sous-module
+     monté). Relire `course-repos.txt` au moment de le faire : un cours
+     ajouté depuis reçoit la même modification.
+  - Critère : aucune commande d'`ocots-lint` recopiée hors de son README,
+    de `methode.md` et des rôles d'`agents` ; les `AGENTS.md` des cours
+    listés ne décrivent plus la vérification ; chaque cours listé a
+    `conventions-pr.yml`.
 
 ## Journal
 
