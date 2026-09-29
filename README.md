@@ -122,10 +122,15 @@ on:
     paths: ["**.tex"]
 jobs:
   conventions:
-    uses: ocourses/ocots-lint/.github/workflows/verifier-pr.yml@v0.3.0
+    uses: ocourses/ocots-lint/.github/workflows/verifier-pr.yml@v0.5.1
     with:
-      runs-on: '["self-hosted"]'   # facultatif ; défaut : ubuntu-latest
+      runs-on: '["self-hosted"]'   # facultatif, voir ci-dessous
 ```
+
+Runner : l'entrée `runs-on` si elle est renseignée. Sinon, la variable
+`OCOURSES_RUNNER` du dépôt appelant, qu'`ocourses/agents` (`bin/runner-switch`)
+pose pour basculer les dépôts privés sur le runner Occidata quand le quota de
+minutes GitHub est épuisé. Sinon, `ubuntu-latest`.
 
 À la main : `ocots-lint verifier --nouvelles origin/main`. Retirer une
 exemption fait réapparaître la trouvaille.
