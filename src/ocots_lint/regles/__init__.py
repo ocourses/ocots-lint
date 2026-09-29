@@ -45,7 +45,7 @@ class Verificateur:
 
 REGISTRE = (
     Verificateur("P2", regle_P2, "heuristique", lecture="arbre"),
-    Verificateur("P3", regle_P3, "signal"),
+    Verificateur("P3", regle_P3, "signal", lecture="arbre"),
     Verificateur("P5", regle_P5, "signal"),
     Verificateur("C4", regle_C4, "heuristique", lecture="arbre"),
     Verificateur("C6", regle_C6, "heuristique"),

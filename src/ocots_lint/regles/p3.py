@@ -1,8 +1,18 @@
-"""P3 — amorces passe-partout et phrases qui se jettent dans la boîte."""
+"""P3 — amorces passe-partout et phrases qui se jettent dans la boîte.
+
+Lu sur l'arbre syntaxique (S4.5) : la phrase qui précède une boîte est
+cherchée dans la prose (`arbre.prose`), maths, commentaires et verbatim
+blanchis. Une formule hors texte **ponctuée** termine la phrase qui
+l'introduit : sa ponctuation finale est reportée à sa place, et « … définie
+par \\[ f(x) = 0. \\] » n'est plus une phrase qui se jette dans la boîte.
+Une formule non ponctuée reste transparente, comme avant. Pour un fichier
+que l'analyse refuse, repli sur les masques par regex.
+"""
 
 import re
 
-from ocots_lint.lecture import BOX, est_transparent, hors_math, lire, sources
+from ocots_lint.arbre import lire_arbre, prose
+from ocots_lint.lecture import BOX, est_transparent, hors_math, sources
 
 # L'amorce est passe-partout si la phrase *s'arrête* à l'annonce. Une phrase
 # qui commence pareil mais poursuit (« … qui n'est qu'un cas particulier de
@@ -31,6 +41,58 @@ def nettoyer(ligne):
     return RE_BRUIT.sub("", ligne).strip()
 
 
+PONCTUATION = ".,;:!?"
+
+# Ce qui peut suivre la ponctuation d'une formule sans rien dire : blancs,
+# `\\`, petites espaces, `\quad`, étiquettes.
+RE_QUEUE = re.compile(
+    r"(?:\s|\\\\(?:\[[^]]*\])?|\\[,;:! ]|\\q?quad\b|\\(?:nonumber|notag)\b"
+    r"|\\label\{[^}]*\})+$")
+RE_TEXTE_PONCTUE = re.compile(r"\\(?:text|mbox|textrm)\{\s*([.,;:!?])\s*\}$")
+RE_DELIMITEURS = re.compile(r"^(?:\\\[|\$\$|\\begin\{[^}]*\})"
+                            r"|(?:\\\]|\$\$|\\end\{[^}]*\})$")
+
+
+def ponctuation_finale(source):
+    """La ponctuation qui termine une formule hors texte, ou None."""
+    corps = RE_QUEUE.sub("", RE_DELIMITEURS.sub("", source.strip()))
+    m = RE_TEXTE_PONCTUE.search(corps)
+    if m:
+        return m.group(1)
+    return corps[-1] if corps and corps[-1] in PONCTUATION else None
+
+
+def _hors_texte(noeuds):
+    """Les formules hors texte, sans descendre dans ce qui n'est pas de la
+    prose (une formule dans une formule ne termine pas de phrase)."""
+    for n in noeuds:
+        if n.genre == "maths":
+            if n.nom not in ("inline", "ensuremath"):
+                yield n
+        elif n.genre not in ("commentaire", "verbatim"):
+            yield from _hors_texte(n.arguments)
+            yield from _hors_texte(n.enfants)
+
+
+def texte_p3(arbre):
+    """La prose, où chaque formule hors texte ponctuée laisse sa
+    ponctuation à la place de son premier caractère ; le masque des maths
+    pour un fichier refusé.
+
+    Au premier caractère, et non au dernier : en remontant depuis la boîte,
+    les lignes blanchies de la formule ne coupent rien tant qu'aucune prose
+    n'est lue, et la ponctuation se lit collée à la phrase qu'elle termine,
+    sur la ligne où la formule s'ouvre."""
+    if arbre.erreur is not None:
+        return hors_math(arbre.texte)
+    texte = list(prose(arbre))
+    for n in _hors_texte(arbre.noeuds):
+        p = ponctuation_finale(arbre.texte[n.debut:n.fin])
+        if p:
+            texte[n.debut] = p
+    return "".join(texte)
+
+
 def _serrer(xs):
     return re.sub(r"\s+", " ", " ".join(xs))
 
@@ -40,8 +102,9 @@ def regle_P3(racines):
     for chemin in sources(racines):
         if est_transparent(chemin):
             continue  # slides.md#sl4 : P3 ne s'applique pas aux transparents
-        brut = lire(chemin)
-        texte = hors_math(brut)               # détection hors mode maths…
+        arbre = lire_arbre(chemin)
+        brut = arbre.texte
+        texte = texte_p3(arbre)               # détection dans la prose…
         lignes, lignes_brutes = texte.split("\n"), brut.split("\n")
         for m in RE_BOITE_OUVRANTE.finditer(texte):
             no = texte.count("\n", 0, m.start())          # index 0
