@@ -19,6 +19,11 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
 
 ## Outillage
 
+- Reconnaître un transparent à sa classe (`\documentclass{beamer}`, et les
+  fichiers qu'il inclut), pas seulement à son dossier `slides/` : un
+  transparent rangé ailleurs reçoit P3 à tort (limite
+  `P3/limites/beamer_hors_dossier_slides.tex`, cas réel en S4.0). Candidat
+  pour la fin de S4, une fois l'arbre en place.
 - `verifier` sur une copie de travail : ignorer les dossiers ignorés par git
   (ex. `.claude/worktrees/`, copies de cours entières), qui doublent
   aujourd'hui les trouvailles en local — constaté en S4.0 sur le cours de

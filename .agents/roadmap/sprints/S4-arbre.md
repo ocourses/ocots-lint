@@ -68,16 +68,17 @@ empreinte ne confond aucune trouvaille.
 
 ## Stories
 
-- [ ] **S4.0** — Préparation, avant tout code : corpus figé et outil
+- [x] **S4.0** — Préparation, avant tout code : corpus figé et outil
   d'instantanés, critères d'acceptation, règle de repli, tests des
   constructions du corpus.
   - [x] Étape 1 — outil `python -m ocots_lint.instantane` (#31).
   - [x] Étape 2 — corpus figé : 4 cours, 231 trouvailles (#32).
   - [x] Étape 3 — critères d'acceptation ; décision 0004 amendée (strict,
     avec repli).
-  - [ ] Étape 4 — fixtures des constructions relevées dans le corpus
+  - [x] Étape 4 — fixtures des constructions relevées dans le corpus
     (`longtable` et `>{$}l<{$}`, TikZ, `\%`, `align` dans une liste,
-    `\pause`), en `accepte/` ou `signale/` selon la lecture actuelle.
+    `\pause`), en `accepte/` ou `signale/` selon la lecture actuelle, et
+    une limite réelle en `limites/`.
 - [x] **S4.1** — Décision écrite : choix de l'analyseur et mode de
   distribution de la dépendance ([0004](../decisions/0004-analyseur.md)).
 - [ ] **S4.2** — Couche de lecture `arbre.py` : nœuds typés (genre, nom,
@@ -119,6 +120,21 @@ empreinte ne confond aucune trouvaille.
   git (ex. `.claude/worktrees/`) — 42 trouvailles au lieu de 21 sur le cours
   de mesure. Figer par `git archive` n'a pas ce défaut ; pour `verifier`,
   voir le backlog.
+
+- 2026-09-29 — S4.0 étape 4, inventaire des constructions dans le corpus
+  figé (occurrences) :
+  - `\pause` entre deux boîtes : **35** (surtout calcul-diff). Idiome de
+    SL6 : P2 ne le signale pas aujourd'hui, et S4.4 ne doit pas se mettre à
+    le signaler → fixture `P2/accepte/pause_entre_boites.tex`.
+  - `$` dans un nœud TikZ : 197 ; `align` dans une liste : 20 ; `\%` : 6 ;
+    `>{$}l<{$}` : 8 (un fichier, refusé par l'analyse stricte → repli).
+  - `\verb`, `\url`, `lstlisting` : **0**. Les limites C4 que S4.3 lève ne
+    touchent aucune trouvaille réelle aujourd'hui : S4.3 garde son intérêt
+    (justesse, cours à venir), mais ne fera pas bouger le corpus.
+  - Faux positif réel trouvé : un transparent beamer rangé hors d'un dossier
+    `slides/` (automatique, `td/td4/`) reçoit P3, que SL4 exclut. Écrit en
+    limite (`P3/limites/beamer_hors_dossier_slides.tex`) ; l'arbre permet de
+    reconnaître `\documentclass{beamer}` (voir backlog).
 
 ## Bilan
 
