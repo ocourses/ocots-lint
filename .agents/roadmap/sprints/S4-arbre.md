@@ -118,7 +118,7 @@ empreinte ne confond aucune trouvaille.
 - [x] **S4.6** — P5 et C6 lus sur l'arbre, si cela simplifie leur code sans
   changer leurs trouvailles. → **Non** : ils restent sur les masques (voir
   le journal) ; seul le piège `\\[…]` de C6 est corrigé.
-- [ ] **S4.7** — Écart de trouvailles sur le corpus relu et justifié, une
+- [x] **S4.7** — Écart de trouvailles sur le corpus relu et justifié, une
   ligne par écart, dans le bilan ; le test de parité devient un instantané
   des trouvailles du corpus.
 - [ ] **S4.8** — Release `v0.5.0`, relais des conventions, montée des cours
@@ -314,4 +314,60 @@ empreinte ne confond aucune trouvaille.
 
 ## Bilan
 
-*À écrire en fin de sprint.*
+### Écarts sur le corpus (S4.7, 2026-09-29)
+
+Relus sur `main` à `2e961fc` (après #40), contre les instantanés de
+`v0.4.1`. **231 → 242 trouvailles** : 23 écarts, tous justifiés dans le
+journal de l'étape qui les produit ; aucune trouvaille modifiée.
+
+| Écart | Nombre | Étape | Raison |
+|---|---|---|---|
+| P2 apparues | 16 (mesure 12, calcul-diff 4) | S4.4 | boîtes sœures séparées seulement par un espacement ou une figure ; une ligne par écart dans le journal |
+| P3 disparues | 6 (calcul-diff 4, mesure 1, démo 1 exemptée) | S4.5 | faux positifs : phrase finie par une formule terminée par un point ; une ligne par écart dans le journal |
+| C4 apparue | 1 (mesure `slides_chapitre_8.tex:305`) | S4.3 | `~:` masqué par `\\[0.2em]` lu comme `\[` |
+| Avertissement apparu | calcul-diff `notations.tex:17` | S4.3 | fichier refusé (`>{$}l<{$}`), lu par le repli (décision 0004) |
+| Avertissement apparu | démo `suites.tex:73` | S4.5 | exemption P3 devenue inutile : à retirer à la montée (S4.8) |
+
+`nettoyer` (S4.3, étape 2) : 17 corrections en moins, toutes dans du texte
+commenté ; 1 en plus, le `~:` de la ligne 305.
+
+| Cours | Commit | `v0.4.1` | S4 | Par règle (S4) |
+|---|---|---|---|---|
+| `mesure-integration-enseignants` | `e96a199` | 21 | 33 | C4 15, P2 12, P3 6 |
+| `automatique-enseignants` | `b6d30a0` | 24 | 24 | C4 3, C6 10, P2 9, P3 2 |
+| `calcul-differentiel-edo-enseignants` | `192ea3c` | 184 | 184 | C4 156, C6 14, P2 9, P3 5 |
+| `ocots-demo` | `0f508d6` | 2 | 1 | P5 1 (exemptée) |
+| **Total** | | **231** | **242** | |
+
+**Critères d'acceptation :**
+
+1. Tout écart est justifié — oui, tableau ci-dessus et journal.
+2. Empreintes stables — oui : aucune paire « disparue + apparue » sur la
+   même règle, le même fichier et la même ligne ; empreintes toujours
+   distinctes dans chaque cours (33, 24, 184, 1).
+3. Messages stables — oui : aucune trouvaille « modifiée ».
+4. Aucune erreur d'analyse silencieuse — oui : 1 fichier refusé sur 116,
+   avec avertissement et position ; fixture
+   `C4/signale/colonnes_longtable.tex`.
+5. Contrat inchangé — oui : `tests/contrat/` et le schéma sont identiques à
+   `v0.4.1` ; `test_contrat.py` passe sans régénérer.
+6. Temps — 5,2 s pour `verifier` sur les quatre cours (démarrage d'`uv`
+   compris), sous l'alarme de 30 s.
+7. Limites levées, fixtures déplacées et CHANGELOG — C4 `ensuremath`, `url`,
+   `verb` ; P2 `medskip_entre`, `figure_entre` ; P3 `amorce_en_maths`.
+   Restent en limites : P2 `boite_par_macro` (pas de développement de
+   macros), P3 `amorce_non_motivee` (jugement), P3
+   `beamer_hors_dossier_slides` (backlog).
+
+**Parité → instantané.** La parité avec l'ancien outil ne se teste plus que
+sur les fixtures, pour les règles encore lues par les masques (P5, C6),
+avec les écarts voulus déclarés. Sur un cours réel, la référence est le
+corpus figé : les variantes `OCOTS_LINT_CORPUS` de `test_parite.py` sont
+retirées. Instantanés **refigés** aux mêmes commits avec `main` à `2e961fc`
+(ils portent encore la version `0.4.1`, celle du `pyproject` avant
+release) : `instantane verifier` est muet. Anciens instantanés gardés hors
+dépôt, le temps de la release.
+
+### Fin de sprint
+
+*À écrire avec S4.8 : release, montée des cours, démo.*
