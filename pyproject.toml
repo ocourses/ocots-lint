@@ -4,7 +4,7 @@ version = "0.4.1"
 description = "Vérifie les conventions de rédaction ocots-conventions sur des sources LaTeX."
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = ["pylatexenc>=2.10,<3"]
 
 [project.scripts]
 ocots-lint = "ocots_lint.cli:main"

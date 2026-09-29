@@ -42,7 +42,11 @@ cite le résultat de `instantane verifier` sur le corpus.
    références ; le JSON reste au schéma 1 (un ajout compatible au plus) ; la
    sortie texte et les codes de sortie sont inchangés.
 6. **Pas de ralentissement sensible.** `instantane verifier` sur le corpus
-   entier reste sous 5 s (1,9 s en `v0.4.1`).
+   entier reste sous **8 s** (1,9 s en `v0.4.1`). *Amendé en S4.2* : le
+   seuil de 5 s était posé avant mesure ; construire les arbres des 120
+   fichiers (1,8 Mo) coûte 3,2 s dans `pylatexenc` lui-même (+ 8 % pour la
+   conversion en nœuds), soit 0,5 à 1,5 s de plus par cours pour
+   `verifier` — négligeable pour une PR ou le contrôle du lundi.
 7. **Une limite levée change de dossier.** Sa fixture passe de `limites/` à
    `signale/` ou `accepte/`, et le CHANGELOG le dit.
 
@@ -81,7 +85,7 @@ empreinte ne confond aucune trouvaille.
     une limite réelle en `limites/`.
 - [x] **S4.1** — Décision écrite : choix de l'analyseur et mode de
   distribution de la dépendance ([0004](../decisions/0004-analyseur.md)).
-- [ ] **S4.2** — Couche de lecture `arbre.py` : nœuds typés (genre, nom,
+- [x] **S4.2** — Couche de lecture `arbre.py` : nœuds typés (genre, nom,
   début, fin, ligne, colonne, enfants), contexte déclaré (`lstlisting`,
   `minted`, `Verbatim` en verbatim ; `\ensuremath` en maths), erreurs
   d'analyse stricte ; repli sur la lecture actuelle pour un fichier refusé,
@@ -135,6 +139,14 @@ empreinte ne confond aucune trouvaille.
     `slides/` (automatique, `td/td4/`) reçoit P3, que SL4 exclut. Écrit en
     limite (`P3/limites/beamer_hors_dossier_slides.tex`) ; l'arbre permet de
     reconnaître `\documentclass{beamer}` (voir backlog).
+- 2026-09-29 — S4.2 : `arbre.py` en place, aucune règle ne l'utilise
+  encore. `pylatexenc` 2 ne sait lire tel quel que `verbatim` et `\verb` ;
+  `lstlisting`, `minted`, `Verbatim` et `\url` passent par un lecteur
+  d'arguments propre à ocots-lint. Sur le corpus : 120 fichiers, 1 refusé
+  (`notations.tex`, attendu), aucun trou (les nœuds de premier niveau pavent
+  chaque fichier). Coût mesuré : 3,2 s pour tout le corpus, dans
+  `pylatexenc` → critère 6 amendé (8 s). `instantane verifier` : aucun
+  écart.
 
 ## Bilan
 
