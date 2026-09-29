@@ -5,7 +5,7 @@
 ```bash
 uv run pytest                    # tout
 uv run pytest -k P2              # une règle
-OCOTS_LINT_CORPUS=<cours> uv run pytest tests/test_parite.py   # parité sur un cours
+uv run python -m ocots_lint.instantane verifier                # corpus réel (local)
 ```
 
 ## Écrire une fixture
@@ -68,9 +68,14 @@ cours privés citent leur texte.
 
 `verifier` rejoue chaque instantané sur son commit et compare par
 empreinte : trouvailles apparues, disparues, et modifiées (même empreinte,
-ligne ou message différents). Sortie 1 si quelque chose a bougé. Pendant S4,
-chaque écart est relu : voulu (une limite levée) et justifié dans le bilan,
-ou non voulu et corrigé.
+ligne ou message différents). Sortie 1 si quelque chose a bougé. Chaque
+écart est relu : voulu (une limite levée, un défaut corrigé) et justifié
+dans le journal du sprint, ou non voulu et corrigé.
+
+Depuis S4.7, c'est **la** référence sur un cours réel : la parité avec
+l'ancien outil ne se teste plus que sur les fixtures. Une fois les écarts
+d'un changement justifiés, on refige (`figer`, même nom, même commit) : le
+nouvel instantané devient la base du changement suivant.
 
 ## Contrat (`test_contrat.py`)
 

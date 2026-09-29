@@ -1,22 +1,19 @@
-"""Parité avec `ocots-conventions/bin/verifier` (sprint S1).
+"""Parité avec `ocots-conventions/bin/verifier` (sprint S1), sur les fixtures.
 
 Les deux outils doivent produire la même sortie standard, la même sortie
-d'erreur et le même code de sortie. Comparé sur les fixtures, et sur un
-corpus réel si la variable `OCOTS_LINT_CORPUS` le désigne :
-
-    OCOTS_LINT_CORPUS=~/cours/mesure-integration-enseignants \
-        uv run pytest tests/test_parite.py
+d'erreur et le même code de sortie.
 
 Depuis S4, seulement pour les règles encore lues par les masques : une règle
 qui passe sur l'arbre syntaxique (`SUR_ARBRE`) s'écarte volontairement de
-l'ancien outil, et sa référence devient le corpus figé
-(`python -m ocots_lint.instantane`). Une règle encore sur les masques peut
-aussi s'écarter de l'ancien outil pour un défaut corrigé : chaque fixture en
-écart est déclarée dans `ECARTS_VOULUS`, avec sa raison, et un test vérifie
-que l'écart existe bien.
+l'ancien outil. Une règle encore sur les masques peut aussi s'écarter de
+l'ancien outil pour un défaut corrigé : chaque fixture en écart est déclarée
+dans `ECARTS_VOULUS`, avec sa raison, et un test vérifie que l'écart existe
+bien.
+
+Sur un cours réel, la référence n'est plus l'ancien outil mais le corpus
+figé (S4.7) : `python -m ocots_lint.instantane verifier` (tests/README.md).
 """
 
-import os
 import shutil
 import subprocess
 import sys
@@ -83,14 +80,6 @@ def test_ecart_voulu_bien_reel(fixture):
     assert nouveau != ancien
 
 
-CORPUS = os.environ.get("OCOTS_LINT_CORPUS")
-
-
-@pytest.mark.skipif(not CORPUS, reason="OCOTS_LINT_CORPUS non défini")
-@pytest.mark.parametrize("arguments", ARGUMENTS, ids=lambda a: " ".join(a) or "(rien)")
-def test_parite_sur_le_corpus(arguments):
-    comparer(Path(CORPUS).expanduser(), arguments)
-
 
 # --------------------------------------------------------------- nettoyer
 
@@ -117,10 +106,3 @@ def test_parite_nettoyer(tmp_path, cas, appliquer):
     for f in sorted(dossier_a.rglob("*.tex")):
         assert (dossier_n / f.relative_to(dossier_a)).read_text() == f.read_text()
 
-
-@pytest.mark.skipif(not CORPUS, reason="OCOTS_LINT_CORPUS non défini")
-def test_parite_nettoyer_apercu_sur_le_corpus():
-    corpus = Path(CORPUS).expanduser()
-    ancien = executer([sys.executable, str(ANCIEN_NETTOYER), "C4"], corpus)
-    nouveau = executer([sys.executable, "-m", "ocots_lint", "nettoyer", "C4"], corpus)
-    assert nouveau == ancien

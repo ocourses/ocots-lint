@@ -48,7 +48,9 @@ au moment du tag.
   de l'erreur), en texte comme en JSON.
 - Issues de `synchroniser` : la rubrique « Exemptions à revoir » devient
   « À revoir », puisqu'elle reçoit aussi ces avertissements.
-- Test de parité restreint aux règles encore lues par les masques.
+- Test de parité restreint aux règles encore lues par les masques, et aux
+  fixtures : sur un cours réel, la référence est désormais le corpus figé
+  (`instantane`) ; `OCOTS_LINT_CORPUS` n'est plus lu.
 - **`nettoyer` lu sur l'arbre**, avec le même texte que C4 (repli compris) :
   il ne corrige plus que la prose. Il ne touche plus aux commentaires (17
   corrections en moins dans le corpus, toutes dans du texte commenté, que C4
