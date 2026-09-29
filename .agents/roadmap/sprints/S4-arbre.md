@@ -111,7 +111,7 @@ empreinte ne confond aucune trouvaille.
   - Critère : les limites P2 `medskip_entre` et `figure_entre` passent en
     `signale/` ; `boite_par_macro` reste une limite (pas de développement
     de macros).
-- [ ] **S4.5** — En tant qu'*auteur*, je veux que P3 reconnaisse une phrase
+- [x] **S4.5** — En tant qu'*auteur*, je veux que P3 reconnaisse une phrase
   finie par une formule hors texte, afin de ne plus avoir à l'exempter.
   - Critère : la limite P3 `amorce_en_maths` passe en `accepte/` ;
     `amorce_non_motivee` reste une limite (jugement).
@@ -209,6 +209,31 @@ empreinte ne confond aucune trouvaille.
   une formule, `\pause` ou une commande inconnue rompent la chaîne.
   `test_exempter` : le garde-fou « verbatim » d'`exempter` est désormais
   testé avec P5, puisque P2 ne voit plus dans un verbatim.
+- 2026-09-29 — S4.5 : P3 sur l'arbre. La phrase avant une boîte est lue
+  dans la prose ; une formule hors texte **ponctuée** termine la phrase qui
+  l'introduit (sa ponctuation finale, `\text{.}` et `\\` final compris,
+  est reportée à l'ouverture de la formule). Une formule non ponctuée reste
+  transparente, comme avant : choix conservateur, pour ne pas créer de
+  trouvailles sur la ponctuation des formules, qui n'est pas l'objet de P3.
+  Limite levée : `amorce_en_maths` (`limites/` → `accepte/`). Le piège
+  `\\[0.2em]` ne touche plus P3 (fixture `signale/saut_de_ligne_espace.tex`,
+  que l'ancien code manquait). Aucune P3 nouvelle sur le corpus ; **6 en
+  moins, toutes des faux positifs** — la phrase finit par une formule
+  terminée par un point :
+
+  | Cours | Fichier:ligne | Phrase avant la formule |
+  |---|---|---|
+  | calcul-diff | `poly/mainmatter/cd-application-differentiable.tex:1534` | « Sur les variables, cela donne » |
+  | calcul-diff | `poly/mainmatter/edo-linear.tex:37` | « l'équation différentielle s'écrit » |
+  | calcul-diff | `poly/mainmatter/edo-numerique.tex:277` | « sous la forme $E_i(x_i, x_{i+1}) = 0$ avec » |
+  | calcul-diff | `poly/mainmatter/edo-numerique.tex:357` | « de noter simplement » |
+  | mesure | `poly/mainmatter/theorems-limites.tex:498` | « d'une fonction $f$ […] s'écrit » |
+  | demo | `poly/mainmatter/suites.tex:74` | « Considérons la suite définie par » (exemptée) |
+
+  L'exemption de la démo devient inutile (avertissement) : à retirer à la
+  montée de version (S4.8). L'avertissement de refus de calcul-diff
+  `notations.tex:17` cite désormais P3. `test_repli` : le cas « aucune
+  règle ne lit l'arbre » passe à P5.
 
 ## Bilan
 

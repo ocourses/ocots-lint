@@ -10,6 +10,15 @@ au moment du tag.
 
 ## Non publié
 
+- **P3 lu sur l'arbre syntaxique** (S4.5) : une formule hors texte
+  **ponctuée** termine la phrase qui l'introduit — « … définie par
+  `\[ f(x) = 0. \]` » suivi d'une boîte n'est plus une phrase qui se jette
+  dans la boîte. Ponctuation lue en fin de formule, après `\\`, `\quad`,
+  `\label`… ou dans un `\text{.}`. Une formule non ponctuée reste
+  transparente, comme avant. Limite levée : `amorce_en_maths` (`limites/` →
+  `accepte/`). Le saut de ligne espacé `\\[0.2em]` n'est plus pris pour une
+  formule. Sur le corpus : aucune trouvaille nouvelle, 6 faux positifs en
+  moins. Repli sur les masques pour un fichier refusé.
 - **P2 lu sur l'arbre syntaxique** (S4.4) : deux boîtes sœures
   s'enchaînent aussi quand seule une **mise en page** les sépare —
   espacement (`\medskip`, `\bigskip`, `\vspace`…), figure (`figure`,
