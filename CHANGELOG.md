@@ -10,6 +10,13 @@ au moment du tag.
 
 ## Non publié
 
+- **Lecture par arbre syntaxique** (S4.2), pas encore utilisée par les
+  règles : `ocots_lint.arbre`, sur `pylatexenc` 2 (nouvelle dépendance,
+  `>=2.10,<3`), en mode strict. Nœuds typés (texte, commentaire, macro,
+  environnement, maths, verbatim, groupe, special) avec leur position ;
+  `lstlisting`, `minted`, `Verbatim` et `\url` lus tel quel ; un fichier
+  refusé porte l'erreur et sa position (décision 0004). Sorties de
+  `verifier` inchangées.
 - **Instantanés du corpus** (outil de mainteneur, hors CLI) :
   `python -m ocots_lint.instantane figer|verifier` fige les trouvailles d'un
   cours à un commit, puis vérifie qu'elles n'ont pas bougé — filet de
