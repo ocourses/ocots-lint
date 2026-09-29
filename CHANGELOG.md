@@ -12,6 +12,19 @@ au moment du tag.
 
 ---
 
+## v0.5.1 — 2026-09-30
+
+- **`verifier-pr.yml` suit la bascule de runner d'`ocourses`** : l'entrée
+  `runs-on` est désormais vide par défaut. Le job tourne alors sur le runner
+  de la variable `OCOURSES_RUNNER` du dépôt appelant si elle est définie,
+  sinon sur `ubuntu-latest`, comme avant. Une entrée `runs-on` renseignée
+  garde la priorité. Avant, un cours privé basculé sur Occidata par
+  `ocourses/agents` (`bin/runner-switch`) gardait ce job sur `ubuntu-latest`,
+  où il ne démarrait plus une fois le quota épuisé
+  (mesure-integration-enseignants#325). Outil inchangé.
+
+---
+
 ## v0.5.0 — 2026-09-29
 
 Lecture par arbre syntaxique (sprint S4). C4, P2 et P3 ne regardent plus que
