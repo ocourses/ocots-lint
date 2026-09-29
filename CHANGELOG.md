@@ -10,6 +10,19 @@ au moment du tag.
 
 ## Non publié
 
+---
+
+## v0.5.0 — 2026-09-29
+
+Lecture par arbre syntaxique (sprint S4). C4, P2 et P3 ne regardent plus que
+la prose ; les fichiers que l'analyse refuse sont lus comme avant, avec un
+avertissement. Contrat inchangé (JSON au schéma 1, sortie texte, codes de
+sortie). Sur les quatre cours du corpus : 231 → 242 trouvailles — 16 P2 et
+1 C4 apparues, 6 faux positifs P3 disparus ; aucune trouvaille existante ne
+change d'empreinte ni de message (bilan dans
+`.agents/roadmap/sprints/S4-arbre.md`). Nouvelle dépendance : `pylatexenc`
+2.
+
 - **C6 : `\qedhere` avant un saut de ligne espacé** (S4.6) : pour une
   preuve finie par une formule `\[…\]`, un `\\[1em]` dans la formule
   n'est plus pris pour son ouverture ; un `\qedhere` placé avant lui n'est

@@ -14,8 +14,9 @@ de [`ocots-conventions`](https://github.com/ocourses/ocots-conventions)
 | `ocots-conventions` | quel texte autour, dans quel ordre, avec quelles notations ? |
 | `ocots-lint` (ici) | le document respecte-t-il ces règles, et avec quelle garantie ? |
 
-> **État : `v0.4.1`.** Garanties, exemptions, empreintes, contrat JSON,
-> `synchroniser`, `comparer`, vérification des PR. Voir la [roadmap](.agents/roadmap/README.md).
+> **État : `v0.5.0`.** Garanties, exemptions, empreintes, contrat JSON,
+> `synchroniser`, `comparer`, vérification des PR, lecture par arbre
+> syntaxique. Voir la [roadmap](.agents/roadmap/README.md).
 
 ---
 
@@ -38,7 +39,7 @@ corrections dont l'équivalence est vérifiée (`~:`, guillemets si `csquotes`
 est chargé). Après `--appliquer` : recompiler, relire le diff, commiter à
 part.
 
-Épingler une version : `git+https://github.com/ocourses/ocots-lint@v0.4.1`.
+Épingler une version : `git+https://github.com/ocourses/ocots-lint@v0.5.0`.
 
 Sortie `1` s'il y a au moins une infraction, `2` pour un argument inconnu,
 `0` sinon — utilisable en CI.
@@ -63,10 +64,18 @@ déclare sa **garantie** :
 `ocots-lint couverture` liste chaque règle des conventions du cours
 (`./conventions`) avec sa garantie, ou « non outillée ». Il sort `2` si
 l'outil cite une règle que ces conventions ne connaissent pas.
- Chaque limite connue
+
+Chaque limite connue
 d'un vérificateur est écrite comme un **test attendu en échec**
 ([`tests/fixtures/*/limites/`](tests/fixtures/)) : la liste de ce que l'outil
 rate est lisible, et le jour où il ne le rate plus, le test le signale.
+
+**Lecture des sources.** C4, P2 et P3 lisent un arbre syntaxique
+(`pylatexenc`) : ils ne regardent que la prose, jamais les commentaires, les
+formules ou les verbatims. Un fichier que l'analyse refuse (du LaTeX qu'elle
+ne sait pas lire) est lu par des masques de secours, et `verifier` le dit par
+un avertissement avec la position de l'erreur. P5 et C6 lisent le texte par
+masques.
 
 ### Exempter une trouvaille justifiée
 
@@ -131,8 +140,8 @@ suppression, avec sa raison.
 
 ```bash
 OL=git+https://github.com/ocourses/ocots-lint
-uvx --from $OL@v0.3.0 ocots-lint verifier --format json > avant.json
-uvx --from $OL@v0.4.0 ocots-lint verifier --format json > apres.json
+uvx --from $OL@v0.4.1 ocots-lint verifier --format json > avant.json
+uvx --from $OL@v0.5.0 ocots-lint verifier --format json > apres.json
 ocots-lint comparer avant.json apres.json
 ```
 
