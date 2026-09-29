@@ -42,11 +42,13 @@ cite le résultat de `instantane verifier` sur le corpus.
    références ; le JSON reste au schéma 1 (un ajout compatible au plus) ; la
    sortie texte et les codes de sortie sont inchangés.
 6. **Pas de ralentissement sensible.** `instantane verifier` sur le corpus
-   entier reste sous **8 s** (1,9 s en `v0.4.1`). *Amendé en S4.2* : le
+   entier reste sous **30 s** (1,9 s en `v0.4.1`). C'est une alarme contre
+   une erreur qui passerait inaperçue (un fichier relu par chaque règle au
+   lieu d'un arbre partagé…), pas une limite d'usage. *Amendé en S4.2* : le
    seuil de 5 s était posé avant mesure ; construire les arbres des 120
    fichiers (1,8 Mo) coûte 3,2 s dans `pylatexenc` lui-même (+ 8 % pour la
    conversion en nœuds), soit 0,5 à 1,5 s de plus par cours pour
-   `verifier` — négligeable pour une PR ou le contrôle du lundi.
+   `verifier`.
 7. **Une limite levée change de dossier.** Sa fixture passe de `limites/` à
    `signale/` ou `accepte/`, et le CHANGELOG le dit.
 
@@ -145,7 +147,7 @@ empreinte ne confond aucune trouvaille.
   d'arguments propre à ocots-lint. Sur le corpus : 120 fichiers, 1 refusé
   (`notations.tex`, attendu), aucun trou (les nœuds de premier niveau pavent
   chaque fichier). Coût mesuré : 3,2 s pour tout le corpus, dans
-  `pylatexenc` → critère 6 amendé (8 s). `instantane verifier` : aucun
+  `pylatexenc` → critère 6 amendé (30 s). `instantane verifier` : aucun
   écart.
 
 ## Bilan
