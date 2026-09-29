@@ -47,7 +47,10 @@ erreur (`XPASS(strict)`). La fixture change alors de dossier, vers
 `conventions/bin/verifier` (sous-module épinglé) : même sortie standard,
 même sortie d'erreur, même code de sortie. En S4, chaque règle qui passe
 sur l'arbre syntaxique sort de ce test, dans la même PR, et sa référence
-devient le corpus figé (ci-dessous).
+devient le corpus figé (ci-dessous). Une fixture où une règle encore sur
+les masques s'écarte volontairement (défaut corrigé) est déclarée dans
+`ECARTS_VOULUS`, avec sa raison ; `test_ecart_voulu_bien_reel` vérifie que
+l'écart existe.
 
 ## Instantanés du corpus (sprint S4)
 

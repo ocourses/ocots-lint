@@ -10,6 +10,11 @@ au moment du tag.
 
 ## Non publié
 
+- **C6 : `\qedhere` avant un saut de ligne espacé** (S4.6) : pour une
+  preuve finie par une formule `\[…\]`, un `\\[1em]` dans la formule
+  n'est plus pris pour son ouverture ; un `\qedhere` placé avant lui n'est
+  plus ignoré. Trouvailles du corpus inchangées. P5 et C6 restent lus par
+  les masques : l'arbre n'y changerait aucune trouvaille du corpus.
 - **P3 lu sur l'arbre syntaxique** (S4.5) : une formule hors texte
   **ponctuée** termine la phrase qui l'introduit — « … définie par
   `\[ f(x) = 0. \]` » suivi d'une boîte n'est plus une phrase qui se jette

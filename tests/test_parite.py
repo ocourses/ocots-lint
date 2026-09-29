@@ -10,7 +10,10 @@ corpus réel si la variable `OCOTS_LINT_CORPUS` le désigne :
 Depuis S4, seulement pour les règles encore lues par les masques : une règle
 qui passe sur l'arbre syntaxique (`SUR_ARBRE`) s'écarte volontairement de
 l'ancien outil, et sa référence devient le corpus figé
-(`python -m ocots_lint.instantane`).
+(`python -m ocots_lint.instantane`). Une règle encore sur les masques peut
+aussi s'écarter de l'ancien outil pour un défaut corrigé : chaque fixture en
+écart est déclarée dans `ECARTS_VOULUS`, avec sa raison, et un test vérifie
+que l'écart existe bien.
 """
 
 import os
@@ -33,6 +36,12 @@ pytestmark = pytest.mark.skipif(
     reason="sous-module conventions absent (git submodule update --init)")
 
 MASQUES = sorted(set(REGLES) - SUR_ARBRE)
+
+# Fixtures où l'outil s'écarte volontairement de l'ancien : défaut corrigé.
+ECARTS_VOULUS = {
+    "C6/accepte/qedhere_avant_un_saut_espace.tex":
+        "S4.6 : `\\\\[1em]` n'est pas l'ouverture de la formule",
+}
 
 ARGUMENTS = (
     MASQUES,
@@ -57,8 +66,21 @@ def comparer(cwd, arguments):
 
 
 @pytest.mark.parametrize("arguments", ARGUMENTS, ids=lambda a: " ".join(a) or "(rien)")
-def test_parite_sur_les_fixtures(arguments):
-    comparer(FIXTURES, arguments)
+def test_parite_sur_les_fixtures(tmp_path, arguments):
+    copie = tmp_path / "fixtures"
+    shutil.copytree(FIXTURES, copie)
+    for fixture in ECARTS_VOULUS:
+        (copie / fixture).unlink()
+    comparer(copie, arguments)
+
+
+@pytest.mark.parametrize("fixture", sorted(ECARTS_VOULUS))
+def test_ecart_voulu_bien_reel(fixture):
+    regle = fixture.split("/")[0]
+    ancien = executer([sys.executable, str(ANCIEN), regle, fixture], FIXTURES)
+    nouveau = executer([sys.executable, "-m", "ocots_lint", "verifier", regle,
+                        fixture], FIXTURES)
+    assert nouveau != ancien
 
 
 CORPUS = os.environ.get("OCOTS_LINT_CORPUS")
