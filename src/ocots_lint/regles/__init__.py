@@ -5,7 +5,11 @@ trouvailles `(chemin, ligne, message)`. La première ligne de sa docstring
 est son résumé dans `--list`.
 
 Ajouter un vérificateur : écrire le module, l'inscrire dans `REGISTRE` avec
-sa garantie, et ses fixtures dans `tests/fixtures/<règle>/`.
+sa garantie et sa lecture, et ses fixtures dans `tests/fixtures/<règle>/`.
+
+Lecture (S4) : `masques` — le texte par expressions régulières
+(`lecture.py`) ; `arbre` — l'arbre syntaxique (`arbre.py`), avec repli sur
+les masques pour un fichier que l'analyse refuse (décision 0004).
 """
 
 from dataclasses import dataclass
@@ -32,6 +36,7 @@ class Verificateur:
     regle: str
     fonction: Callable
     garantie: str
+    lecture: str = "masques"
 
     @property
     def resume(self):
@@ -42,8 +47,9 @@ REGISTRE = (
     Verificateur("P2", regle_P2, "heuristique"),
     Verificateur("P3", regle_P3, "signal"),
     Verificateur("P5", regle_P5, "signal"),
-    Verificateur("C4", regle_C4, "heuristique"),
+    Verificateur("C4", regle_C4, "heuristique", lecture="arbre"),
     Verificateur("C6", regle_C6, "heuristique"),
 )
 
 REGLES = {v.regle: v.fonction for v in REGISTRE}
+SUR_ARBRE = frozenset(v.regle for v in REGISTRE if v.lecture == "arbre")

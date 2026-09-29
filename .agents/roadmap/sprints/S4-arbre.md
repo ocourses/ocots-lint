@@ -100,6 +100,11 @@ empreinte ne confond aucune trouvaille.
   signalé à tort.
   - Critère : les limites C4 `url`, `verb`, `ensuremath` passent en
     `accepte/`.
+  - [x] Étape 1 — C4 sur l'arbre, avec repli et avertissement.
+  - [ ] Étape 2 — `nettoyer` sur l'arbre, avec le même repli : sinon un `~:`
+    que C4 voit désormais (cas réel : mesure, `slides_chapitre_8.tex:305`)
+    part au tri au lieu de la voie mécanique, parce que `nettoyer` ne le
+    voit pas.
 - [ ] **S4.4** — En tant que *relecteur*, je veux que P2 signale deux boîtes
   séparées par autre chose que de la prose (`\medskip`, ligne de `%`,
   figure), afin qu'une ligne de mise en page ne cache plus l'infraction.
@@ -149,6 +154,18 @@ empreinte ne confond aucune trouvaille.
   chaque fichier). Coût mesuré : 3,2 s pour tout le corpus, dans
   `pylatexenc` → critère 6 amendé (30 s). `instantane verifier` : aucun
   écart.
+- 2026-09-29 — S4.3 : C4 sur l'arbre. `instantane verifier` sur le corpus
+  (4 cours) — les 231 trouvailles existantes sont inchangées (empreintes et
+  messages : critères 2 et 3) ; deux écarts, justifiés :
+
+  | Cours | Écart | Justification |
+  |---|---|---|
+  | calcul-diff | + avertissement, `poly/frontmatter/notations.tex:17` | fichier refusé par l'analyse (`>{$}l<{$}`), C4 lu par le repli : critère 4, voulu |
+  | mesure | + C4 `~:`, `slides/chapitre8/slides_chapitre_8.tex:305` | vrai `~:`, jusqu'ici masqué : un `\\[0.2em]` à la ligne 273 était pris pour `\[` par les masques, qui cachaient 37 lignes de prose ; fixture `C4/signale/saut_de_ligne_espace.tex` |
+
+  Temps : 6,1 s pour le corpus entier (critère 6 : 30 s). Le même défaut de
+  `\\[…]` touche encore P3 (S4.5) et `nettoyer`, qui lisent par les masques
+  de maths.
 
 ## Bilan
 

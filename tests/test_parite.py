@@ -6,6 +6,11 @@ corpus réel si la variable `OCOTS_LINT_CORPUS` le désigne :
 
     OCOTS_LINT_CORPUS=~/cours/mesure-integration-enseignants \
         uv run pytest tests/test_parite.py
+
+Depuis S4, seulement pour les règles encore lues par les masques : une règle
+qui passe sur l'arbre syntaxique (`SUR_ARBRE`) s'écarte volontairement de
+l'ancien outil, et sa référence devient le corpus figé
+(`python -m ocots_lint.instantane`).
 """
 
 import os
@@ -16,6 +21,8 @@ from pathlib import Path
 
 import pytest
 
+from ocots_lint.regles import REGLES, SUR_ARBRE
+
 from outils import FIXTURES
 
 RACINE = Path(__file__).parent.parent
@@ -25,10 +32,12 @@ pytestmark = pytest.mark.skipif(
     not ANCIEN.exists(),
     reason="sous-module conventions absent (git submodule update --init)")
 
+MASQUES = sorted(set(REGLES) - SUR_ARBRE)
+
 ARGUMENTS = (
-    [],
-    ["P2"], ["P3"], ["P5"], ["C4"], ["C6"],
-    ["P2", "C4"],
+    MASQUES,
+    *([r] for r in MASQUES),
+    MASQUES[:2],
     ["--mesure"],
     ["--list"],
     ["X"],

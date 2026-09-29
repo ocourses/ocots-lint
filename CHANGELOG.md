@@ -10,6 +10,18 @@ au moment du tag.
 
 ## Non publié
 
+- **C4 lu sur l'arbre syntaxique** (S4.3) : les contrôles de typographie ne
+  portent plus que sur la prose. Limites levées (fixtures passées de
+  `limites/` à `accepte/`) : `~:` dans `\ensuremath`, `\url` et `\verb` ;
+  `minted` et `Verbatim` sont aussi écartés. Défaut de l'ancienne lecture
+  corrigé : `\\[0.2em]` (saut de ligne espacé) n'est plus pris pour le début
+  d'une formule hors texte, qui masquait la prose jusqu'au `\]` suivant.
+- **Repli** : pour un fichier que l'analyse syntaxique refuse, C4 garde les
+  masques par regex, et `verifier` le signale par un avertissement (position
+  de l'erreur), en texte comme en JSON.
+- Issues de `synchroniser` : la rubrique « Exemptions à revoir » devient
+  « À revoir », puisqu'elle reçoit aussi ces avertissements.
+- Test de parité restreint aux règles encore lues par les masques.
 - **Lecture par arbre syntaxique** (S4.2), pas encore utilisée par les
   règles : `ocots_lint.arbre`, sur `pylatexenc` 2 (nouvelle dépendance,
   `>=2.10,<3`), en mode strict. Nœuds typés (texte, commentaire, macro,

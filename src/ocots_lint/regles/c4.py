@@ -1,8 +1,15 @@
-"""C4 — typographie."""
+"""C4 — typographie.
+
+Lu sur l'arbre syntaxique (S4.3) : les contrôles portent sur la prose seule
+— commentaires, maths (`\\ensuremath` compris), verbatim (`\\verb`, `\\url`,
+`lstlisting`, `minted`…) et figures TikZ blanchis. Pour un fichier que
+l'analyse refuse, repli sur les masques par regex (`lecture.py`).
+"""
 
 import re
 
-from ocots_lint.lecture import hors_math, ligne_de, lire, sans_commentaires, sources
+from ocots_lint.arbre import lire_arbre, prose
+from ocots_lint.lecture import hors_math, ligne_de, sans_commentaires, sources
 
 RE_TILDE_DEUX_POINTS = re.compile(r"~:")
 RE_GUILLEMETS = re.compile(r"``|\\og\b")
@@ -24,10 +31,14 @@ CONTROLES = (
 def regle_C4(racines):
     """C4 — typographie : ~:, guillemets, apostrophes, renvois, mots composés."""
     for chemin in sources(racines):
-        # Commentaires retirés avant le masque maths : un `$` seul dans un
-        # commentaire (ex. « % coût : $5 ») déparierait sinon tout le
-        # masquage des vraies formules qui suivent dans le fichier.
-        texte = hors_math(sans_commentaires(lire(chemin)))
+        arbre = lire_arbre(chemin)
+        if arbre.erreur is None:
+            texte = prose(arbre)
+        else:
+            # Repli. Commentaires retirés avant le masque maths : un `$` seul
+            # dans un commentaire (ex. « % coût : $5 ») déparierait sinon
+            # tout le masquage des vraies formules qui suivent.
+            texte = hors_math(sans_commentaires(arbre.texte))
         for motif, message in CONTROLES:
             for m in motif.finditer(texte):
                 yield chemin, ligne_de(texte, m.start()), message

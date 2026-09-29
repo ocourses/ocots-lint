@@ -20,10 +20,11 @@ import os
 import sys
 
 from ocots_lint import empreintes, reference, sorties, voies
+from ocots_lint.arbre import lire_arbre
 from ocots_lint.exemptions import Exemptions
 from ocots_lint.lecture import sources
 from ocots_lint.mesures import MESURES, mesurer
-from ocots_lint.regles import REGLES
+from ocots_lint.regles import REGLES, SUR_ARBRE
 
 FORMATS = ("texte", "json", "sarif", "github")
 
@@ -71,7 +72,28 @@ def analyser(racines, noms, exemptions_actives=True):
     avertissements = [
         sorties.Avertissement(os.path.relpath(chemin), ligne, message)
         for chemin, ligne, message in exemptions.avertissements(sources(racines), noms)]
+    avertissements += refus_d_analyse(racines, noms)
     return resultats, avertissements
+
+
+def refus_d_analyse(racines, noms):
+    """Un avertissement par fichier que l'analyse syntaxique refuse, si une
+    des règles demandées lit l'arbre : ces règles s'y replient sur les
+    masques, ce qui doit se voir (décision 0004)."""
+    sur_arbre = sorted(SUR_ARBRE.intersection(noms))
+    if not sur_arbre:
+        return []
+    refus = []
+    for chemin in sources(racines):
+        a = lire_arbre(chemin)
+        if a.erreur is not None:
+            ligne, colonne = a.position(a.erreur.debut)
+            refus.append(sorties.Avertissement(
+                os.path.relpath(chemin), ligne,
+                f"analyse syntaxique refusée (colonne {colonne} : "
+                f"{a.erreur.message}) — {', '.join(sur_arbre)} lu par les "
+                f"masques de secours, avec leurs limites"))
+    return refus
 
 
 def main(argv):
