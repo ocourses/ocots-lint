@@ -41,7 +41,7 @@ les règles qui s'y prêtent, *qu'il n'y a rien à trouver*.
 | [S1](sprints/S1-parite.md) | l'outil reproduit `bin/verifier` à l'identique, avec des tests | `v0.1.0` | fini |
 | [S2](sprints/S2-registre.md) | registre des vérificateurs, garanties, couverture, exemptions | `v0.2.0` | fini |
 | [S3](sprints/S3-processus.md) | le processus hebdomadaire repose sur `ocots-lint` : empreintes, exemptions dans la boucle, aiguillage par garantie | `v0.3.0`, `v0.4.0`, `v0.4.1` | fini |
-| [S4](sprints/S4-arbre.md) | lecture par arbre syntaxique ; les limites de P2 et C4 tombent | `v0.5.0` | **en cours** |
+| [S4](sprints/S4-arbre.md) | lecture par arbre syntaxique ; les limites de P2 et C4 tombent | `v0.5.0` | fini |
 | [S5](sprints/S5-vocabulaire.md) | le vocabulaire des boîtes vient du template | `v0.6.0` | à faire |
 | [S6](sprints/S6-journal.md) | journal de compilation instrumenté ; règles sur les labels | `v0.7.0` | à faire |
 | [S7](sprints/S7-extraction.md) | extraction pour les règles de jugement | `v0.8.0` | à faire |

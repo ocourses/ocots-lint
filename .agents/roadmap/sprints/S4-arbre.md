@@ -121,9 +121,9 @@ empreinte ne confond aucune trouvaille.
 - [x] **S4.7** — Écart de trouvailles sur le corpus relu et justifié, une
   ligne par écart, dans le bilan ; le test de parité devient un instantané
   des trouvailles du corpus.
-- [ ] **S4.8** — Release `v0.5.0`, relais des conventions, montée des cours
+- [x] **S4.8** — Release `v0.5.0`, relais des conventions, montée des cours
   (mesure, démo), avec `comparer` dans la PR de montée.
-- [ ] **S4.9** — En tant qu'*agent qui rédige dans un cours*, je veux une
+- [x] **S4.9** — En tant qu'*agent qui rédige dans un cours*, je veux une
   seule procédure de vérification, versionnée avec les conventions, afin
   qu'elle ne diverge pas d'un cours à l'autre et me dise de ne regarder que
   **mes** trouvailles. Livrée avec la release des conventions de S4.8.
@@ -171,16 +171,25 @@ empreinte ne confond aucune trouvaille.
 
      | Cours | Dépôt local | `AGENTS.md` → renvoi à `methode.md` | `conventions-pr.yml` |
      |---|---|---|---|
-     | `ocourses/mesure-integration-enseignants` | `~/Courses/mesure_et_integration/integration/mesure-integration-enseignants` | [ ] | [ ] à ajouter |
-     | `ocourses/automatique-enseignants` | `~/Courses/automatique/automatique-enseignants` | [ ] | [ ] à ajouter |
-     | `ocourses/calcul-differentiel-edo-enseignants` | `~/Courses/calcul_differentiel_edo/calcul-differentiel-edo-enseignants` | [ ] | [ ] à ajouter |
-     | `ocourses/ocots-demo` | `~/Courses/ocourses/ocots-demo` | [ ] | déjà là |
+     | `ocourses/mesure-integration-enseignants` | `~/Courses/mesure_et_integration/integration/mesure-integration-enseignants` | [x] #343 | [x] #343 |
+     | `ocourses/automatique-enseignants` | `~/Courses/automatique/automatique-enseignants` | [ ] reporté, #322 | [ ] reporté, #322 |
+     | `ocourses/calcul-differentiel-edo-enseignants` | `~/Courses/calcul_differentiel_edo/calcul-differentiel-edo-enseignants` | [ ] reporté, #83 | [ ] reporté, #83 |
+     | `ocourses/ocots-demo` | `~/Courses/ocourses/ocots-demo` | [x] #14 | déjà là (`@v0.5.0`, #14) |
 
      Dans chaque cours, la section « Vérifications » d'`AGENTS.md` devient
      un renvoi d'une ligne à `conventions/methode.md`, dans la PR qui monte
      les conventions (la procédure n'existe qu'une fois le sous-module
      monté). Relire `course-repos.txt` au moment de le faire : un cours
      ajouté depuis reçoit la même modification.
+
+     **Reporté pour automatique et calcul-diff** : ces deux cours épinglent
+     des conventions antérieures à `v2.0.0` et un template antérieur à
+     `v1.0.0` ; la montée complète (template compris) est suivie par
+     [automatique-enseignants#322](https://github.com/ocourses/automatique-enseignants/issues/322)
+     et
+     [calcul-differentiel-edo-enseignants#83](https://github.com/ocourses/calcul-differentiel-edo-enseignants/issues/83),
+     mises à jour pour viser `v2.4.0` et porter ces deux points. Repris au
+     backlog.
   - Critère : aucune commande d'`ocots-lint` recopiée hors de son README,
     de `methode.md` et des rôles d'`agents` ; les `AGENTS.md` des cours
     listés ne décrivent plus la vérification ; chaque cours listé a
@@ -368,6 +377,40 @@ retirées. Instantanés **refigés** aux mêmes commits avec `main` à `2e961fc`
 release) : `instantane verifier` est muet. Anciens instantanés gardés hors
 dépôt, le temps de la release.
 
-### Fin de sprint
+### Fin de sprint (2026-09-29)
 
-*À écrire avec S4.8 : release, montée des cours, démo.*
+**Livré.**
+
+- [`ocots-lint` v0.5.0](https://github.com/ocourses/ocots-lint/releases/tag/v0.5.0) :
+  C4, P2 et P3 lus sur l'arbre syntaxique, avec repli et avertissement ;
+  six limites levées ; défaut `\\[…]` de C6 corrigé. Contrat inchangé.
+- [`ocots-conventions` v2.4.0](https://github.com/ocourses/ocots-conventions/releases/tag/v2.4.0) :
+  relais sur v0.5.0 ; procédure de vérification unique dans `methode.md`
+  (`verifier --nouvelles`) ; le README ne recopie plus l'outil.
+- Cours montés : mesure (#343, avec `conventions-pr.yml`) et démo (#14,
+  exemption P3 devenue inutile retirée). `comparer` dans chaque PR de
+  montée ; `synchroniser --dry-run` sur mesure : 5 issues à créer (les
+  fichiers aux P2 nouvelles), 6 mises à jour, 0 fermée.
+- `agents#39` : en-tête de `conventions.sh` à jour (les deux chemins).
+
+**Démo.** `check.yml` lancé à la main sur `ocots-demo` après la montée :
+`conventions v2.4.0 — ocots-lint synchroniser`, 0 à créer, 0 à mettre à
+jour, 0 à fermer — ce qu'annonçaient `comparer` et `verifier`. Sur mesure,
+le passage du lundi doit créer exactement les 5 issues du `--dry-run` : à
+vérifier au premier lundi suivant.
+
+**Ce qui a bien marché.** Figer le corpus avant de toucher la lecture
+(S4.0), puis exiger une ligne de justification par écart : chaque étape a
+livré une liste finie et relue, et deux défauts de l'ancien code sont
+apparus en route (tolérance P2 des boîtes étoilées, `\\[` pris pour une
+formule par les masques). Le mode strict avec repli (décision 0004) : un
+seul fichier refusé sur 116, visible.
+
+**Ce qui a coûté.** Le seuil de temps posé avant mesure (5 s, amendé à
+30 s) ; les premières mesures de 0004 sur un corpus partiel ; un
+`--dry-run` faussé par un sous-module `template` non initialisé (piège
+écrit dans les issues des deux cours restants).
+
+**Reporté au backlog.** La montée d'automatique et de calcul-diff (S4.9,
+suivie par #322 et #83) ; le retrait du chemin historique de
+`conventions.sh` quand elle sera faite.
