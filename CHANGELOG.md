@@ -22,6 +22,13 @@ au moment du tag.
 - Issues de `synchroniser` : la rubrique « Exemptions à revoir » devient
   « À revoir », puisqu'elle reçoit aussi ces avertissements.
 - Test de parité restreint aux règles encore lues par les masques.
+- **`nettoyer` lu sur l'arbre**, avec le même texte que C4 (repli compris) :
+  il ne corrige plus que la prose. Il ne touche plus aux commentaires (17
+  corrections en moins dans le corpus, toutes dans du texte commenté, que C4
+  n'a jamais signalé), ni à `\url`, `\verb` et aux environnements verbatim
+  (une URL « nettoyée » ne mène plus nulle part). Un `~:` que C4 signale est
+  désormais toujours corrigeable par `nettoyer` : la voie `mecanique` suit
+  C4, ce qu'un test vérifie sur toutes les fixtures.
 - **Lecture par arbre syntaxique** (S4.2), pas encore utilisée par les
   règles : `ocots_lint.arbre`, sur `pylatexenc` 2 (nouvelle dépendance,
   `>=2.10,<3`), en mode strict. Nœuds typés (texte, commentaire, macro,

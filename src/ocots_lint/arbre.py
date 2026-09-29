@@ -44,7 +44,7 @@ from pylatexenc.macrospec import (
     ParsedVerbatimArgs,
 )
 
-from ocots_lint.lecture import lire
+from ocots_lint.lecture import hors_math, lire, sans_commentaires
 
 ENV_MATHS = ("equation", "align", "alignat", "flalign", "gather", "multline",
              "eqnarray", "displaymath", "math", "aligned", "array", "cases",
@@ -222,6 +222,19 @@ def prose(arbre):
         fin = f
     morceaux.append(arbre.texte[fin:])
     return "".join(morceaux)
+
+
+def prose_ou_repli(arbre):
+    """Le texte où une règle cherche dans la prose : `prose(arbre)` ; pour
+    un fichier refusé par l'analyse, les masques de secours (commentaires,
+    puis maths). Partagé par C4 et `nettoyer`, pour qu'ils voient exactement
+    le même texte — la voie mécanique en dépend."""
+    if arbre.erreur is None:
+        return prose(arbre)
+    # Commentaires retirés avant le masque maths : un `$` seul dans un
+    # commentaire (ex. « % coût : $5 ») déparierait sinon tout le masquage
+    # des vraies formules qui suivent.
+    return hors_math(sans_commentaires(arbre.texte))
 
 
 # ------------------------------------------------------------ entrée

@@ -8,8 +8,8 @@ l'analyse refuse, repli sur les masques par regex (`lecture.py`).
 
 import re
 
-from ocots_lint.arbre import lire_arbre, prose
-from ocots_lint.lecture import hors_math, ligne_de, sans_commentaires, sources
+from ocots_lint.arbre import lire_arbre, prose_ou_repli
+from ocots_lint.lecture import ligne_de, sources
 
 RE_TILDE_DEUX_POINTS = re.compile(r"~:")
 RE_GUILLEMETS = re.compile(r"``|\\og\b")
@@ -31,14 +31,7 @@ CONTROLES = (
 def regle_C4(racines):
     """C4 — typographie : ~:, guillemets, apostrophes, renvois, mots composés."""
     for chemin in sources(racines):
-        arbre = lire_arbre(chemin)
-        if arbre.erreur is None:
-            texte = prose(arbre)
-        else:
-            # Repli. Commentaires retirés avant le masque maths : un `$` seul
-            # dans un commentaire (ex. « % coût : $5 ») déparierait sinon
-            # tout le masquage des vraies formules qui suivent.
-            texte = hors_math(sans_commentaires(arbre.texte))
+        texte = prose_ou_repli(lire_arbre(chemin))
         for motif, message in CONTROLES:
             for m in motif.finditer(texte):
                 yield chemin, ligne_de(texte, m.start()), message
