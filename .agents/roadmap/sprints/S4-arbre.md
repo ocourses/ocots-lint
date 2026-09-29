@@ -115,8 +115,9 @@ empreinte ne confond aucune trouvaille.
   finie par une formule hors texte, afin de ne plus avoir à l'exempter.
   - Critère : la limite P3 `amorce_en_maths` passe en `accepte/` ;
     `amorce_non_motivee` reste une limite (jugement).
-- [ ] **S4.6** — P5 et C6 lus sur l'arbre, si cela simplifie leur code sans
-  changer leurs trouvailles.
+- [x] **S4.6** — P5 et C6 lus sur l'arbre, si cela simplifie leur code sans
+  changer leurs trouvailles. → **Non** : ils restent sur les masques (voir
+  le journal) ; seul le piège `\\[…]` de C6 est corrigé.
 - [ ] **S4.7** — Écart de trouvailles sur le corpus relu et justifié, une
   ligne par écart, dans le bilan ; le test de parité devient un instantané
   des trouvailles du corpus.
@@ -234,6 +235,20 @@ empreinte ne confond aucune trouvaille.
   montée de version (S4.8). L'avertissement de refus de calcul-diff
   `notations.tex:17` cite désormais P3. `test_repli` : le cas « aucune
   règle ne lit l'arbre » passe à P5.
+- 2026-09-29 — S4.6 : P5 et C6 **restent sur les masques**. Sonde sur le
+  corpus (116 fichiers) : aucune boîte dans un verbatim, aucune boîte
+  imbriquée dans une boîte de même nom — les deux cas où l'arbre changerait
+  P5 ou la détection des preuves de C6. Et le repli garde l'ancien code :
+  passer sur l'arbre ajouterait du code sans en retirer, ce qui n'est pas
+  une simplification. Un seul piège réel, dans le masque de C6 : pour une
+  preuve finie par `\]`, l'ouverture cherchée était le dernier `\[`, et un
+  saut de ligne espacé `\\[1em]` dans la formule le captait — un `\qedhere`
+  placé avant lui était ignoré (faux positif). Corrigé par `(?<!\\)`, avec
+  la fixture `C6/accepte/qedhere_avant_un_saut_espace.tex`. Un cas au
+  corpus (calcul-diff `edo-linear.tex:300`) ; sans `\qedhere` du tout, il
+  reste signalé à raison. Trouvailles du corpus inchangées. Test de parité :
+  les fixtures en écart voulu avec l'ancien outil sont déclarées
+  (`ECARTS_VOULUS`), et l'écart est vérifié.
 
 ## Bilan
 

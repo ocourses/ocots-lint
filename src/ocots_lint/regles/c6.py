@@ -16,7 +16,9 @@ RE_BOITE_QED = re.compile(
 FINS_QED = (
     (re.compile(r"\\end\{(?:itemize|enumerate|description)\}\s*$"),
      re.compile(r"\\item\b"), "liste"),
-    (re.compile(r"\\\]\s*$"), re.compile(r"\\\["), "équation hors texte"),
+    # `(?<!\\)` : un saut de ligne espacé `\\[1em]` dans la formule n'est
+    # pas son ouverture.
+    (re.compile(r"\\\]\s*$"), re.compile(r"(?<!\\)\\\["), "équation hors texte"),
     (re.compile(r"\\end\{(align|gather|multline|equation|flalign)\*?\}\s*$"),
      re.compile(r"\\begin\{(?:align|gather|multline|equation|flalign)\*?\}"),
      "équation hors texte"),
