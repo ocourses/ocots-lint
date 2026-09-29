@@ -95,13 +95,13 @@ empreinte ne confond aucune trouvaille.
   intacte, corpus sans écart.
   - Critère : tout le corpus s'analyse ; positions vérifiées contre la
     source sur les fixtures.
-- [ ] **S4.3** — En tant qu'*auteur*, je veux que C4 ignore `\verb`, `\url`,
+- [x] **S4.3** — En tant qu'*auteur*, je veux que C4 ignore `\verb`, `\url`,
   `\ensuremath` et les environnements verbatim, afin de ne plus être
   signalé à tort.
   - Critère : les limites C4 `url`, `verb`, `ensuremath` passent en
     `accepte/`.
   - [x] Étape 1 — C4 sur l'arbre, avec repli et avertissement.
-  - [ ] Étape 2 — `nettoyer` sur l'arbre, avec le même repli : sinon un `~:`
+  - [x] Étape 2 — `nettoyer` sur l'arbre, avec le même repli : sinon un `~:`
     que C4 voit désormais (cas réel : mesure, `slides_chapitre_8.tex:305`)
     part au tri au lieu de la voie mécanique, parce que `nettoyer` ne le
     voit pas.
@@ -166,6 +166,16 @@ empreinte ne confond aucune trouvaille.
   Temps : 6,1 s pour le corpus entier (critère 6 : 30 s). Le même défaut de
   `\\[…]` touche encore P3 (S4.5) et `nettoyer`, qui lisent par les masques
   de maths.
+- 2026-09-29 — S4.3, étape 2 : `nettoyer` lit le même texte que C4
+  (`arbre.prose_ou_repli`, partagé). Le `~:` de mesure
+  `slides_chapitre_8.tex:305` passe de la voie `tri` à `mecanique`. Écarts
+  de `nettoyer` sur le corpus, tous justifiés : 17 corrections en moins, **toutes
+  dans du texte commenté** (automatique 5, calcul-diff 8 dont une paire de
+  guillemets, mesure 4), que C4 n'a jamais signalé ; 1 en plus, le `~:` de
+  la ligne 305. Test ajouté : sur toutes les fixtures, `nettoyer` corrige
+  un `~:` exactement là où C4 le signale — il échoue avec l'ancien
+  `nettoyer`. Parité de `nettoyer` avec l'ancien outil : toujours tenue sur
+  ses fixtures.
 
 ## Bilan
 

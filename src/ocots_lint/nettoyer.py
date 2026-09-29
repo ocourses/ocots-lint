@@ -12,24 +12,30 @@ n'automatise que les corrections dont l'équivalence a été vérifiée :
   ``…''  ->  \\enquote{…}   les guillemets anglais deviennent français, et
                    suivent lang= (csquotes, autostyle)
 
-**Le mode mathématique est masqué avant toute substitution** : `~` y est une
-espace, et un remplacement aveugle dans `\\forall h \\in E ~:~ J'(x) \\cdot h = 0`
-casserait la formule.
+**Seule la prose est corrigée** : le texte est lu sur l'arbre syntaxique,
+comme par `verifier` pour C4 (S4.3). Maths, commentaires, verbatim (`\\url`,
+`\\verb`, `lstlisting`…) et figures TikZ ne sont jamais touchés : `~` est une
+espace en mode mathématique, et un remplacement aveugle dans
+`\\forall h \\in E ~:~ J'(x) \\cdot h = 0` casserait la formule, comme dans
+une URL. Un fichier que l'analyse refuse est lu par les masques de secours,
+comme par C4, et l'aperçu le signale.
 
 Par défaut rien n'est écrit : l'aperçu montre chaque remplacement, en contexte.
 
 **Une ligne exemptée pour la règle (`% ocots-lint: ignore C4 — …`) n'est pas
 corrigée** : l'exemption dit que la forme est voulue.
 
-Porté tel quel de `ocots-conventions/bin/nettoyer` (sprint S2, parité).
+Porté de `ocots-conventions/bin/nettoyer` (sprint S2, parité), puis passé
+sur l'arbre (S4.3).
 """
 
 import os
 import re
 import sys
 
+from ocots_lint.arbre import analyser, prose_ou_repli
 from ocots_lint.exemptions import Exemptions
-from ocots_lint.lecture import hors_math, sources
+from ocots_lint.lecture import sources
 
 RE_TILDE = re.compile(r"~(?=:)")
 RE_GUILLEMETS = re.compile(r"``(?!`)(.+?)''", re.S)
@@ -61,7 +67,7 @@ def csquotes_disponible(racines):
 
 def corrections_C4(brut, guillemets=True):
     """typographie : ~: inutiles, guillemets anglais -> \\enquote{…}"""
-    masque = hors_math(brut)
+    masque = prose_ou_repli(analyser(brut))
     trouvailles = []
 
     for m in RE_TILDE.finditer(masque):
@@ -125,6 +131,14 @@ def main(argv):
     for chemin in sources(racines):
         with open(chemin, encoding="utf-8") as fh:
             brut = fh.read()
+
+        arbre = analyser(brut)
+        if arbre.erreur is not None:
+            ligne, colonne = arbre.position(arbre.erreur.debut)
+            print(f"{os.path.relpath(chemin)}:{ligne}: analyse syntaxique "
+                  f"refusée (colonne {colonne} : {arbre.erreur.message}) — "
+                  f"lu par les masques de secours, avec leurs limites",
+                  file=sys.stderr)
 
         trouvailles = []
         for nom in noms:
