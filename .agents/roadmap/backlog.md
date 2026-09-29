@@ -19,6 +19,11 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
 
 ## Outillage
 
+- `verifier` sur une copie de travail : ignorer les dossiers ignorés par git
+  (ex. `.claude/worktrees/`, copies de cours entières), qui doublent
+  aujourd'hui les trouvailles en local — constaté en S4.0 sur le cours de
+  mesure (42 au lieu de 21). La CI et `synchroniser` partent d'un clone
+  propre et ne sont pas touchés.
 - Prose française (`C1`, orthographe) : brancher LTeX/LanguageTool plutôt
   que de réécrire des règles de langue.
 - Cohérence terminologique (`C2`) : table de variantes par cours, comptée par
