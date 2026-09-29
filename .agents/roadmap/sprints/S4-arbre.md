@@ -6,16 +6,45 @@
 derrière la même interface. Les règles voient des nœuds — environnement,
 macro, maths, verbatim, commentaire, prose — avec leur position.
 
-**Analyseur** : `pylatexenc` 2, en mode tolérant — [décision
+**Analyseur** : `pylatexenc` 2, strict, avec repli sur la lecture actuelle
+pour un fichier que l'analyse refuse — [décision
 0004](../decisions/0004-analyseur.md), mesurée sur le corpus réel.
 
 **Version livrée** : `v0.5.0`.
 
-**Parité** : la référence reste `conventions v2.0.0` (dernier `bin/` en
-Python) tant qu'aucune règle migrée ne s'en écarte. Ensuite, le test de
-parité est remplacé par `ocots-lint comparer` (S3.9) sur un corpus (cours de
-mesure, `ocourses/ocots-demo`) : chaque trouvaille qui apparaît ou disparaît
-est relue et justifiée (S4.7).
+**Parité** : le test de parité avec `conventions v2.0.0` (dernier `bin/` en
+Python) reste en place, **restreint aux règles pas encore migrées** : chaque
+règle qui passe sur l'arbre en sort, dans la même PR. Pour les règles
+migrées, la référence est le corpus figé (ci-dessous), comparé par
+`instantane verifier`.
+
+## Critères d'acceptation
+
+Valables pour chaque PR de S4 qui touche la lecture ou une règle ; la PR
+cite le résultat de `instantane verifier` sur le corpus.
+
+1. **Tout écart est justifié.** Chaque trouvaille apparue, disparue ou
+   modifiée sur le corpus figé est listée dans la PR, avec sa raison
+   (limite levée, défaut de l'ancienne lecture…) ; l'ensemble est repris
+   dans le bilan (S4.7). Un écart qu'on ne sait pas justifier est un bogue.
+2. **Une trouvaille inchangée garde son empreinte.** Sinon, la montée en
+   `v0.5.0` fermerait et rouvrirait des issues dans tous les cours. Pas de
+   paire « disparue + apparue » sur la même règle, le même fichier et la
+   même ligne.
+3. **Une trouvaille inchangée garde son message.** Sinon, chaque issue
+   `[conventions]` serait réécrite au lundi suivant. Aucune « modifiée »
+   non justifiée.
+4. **Aucune erreur d'analyse silencieuse.** Un fichier refusé par l'analyse
+   stricte est lu par le repli et produit un avertissement avec la position
+   de l'erreur. Critère testé par une fixture : la spécification de colonnes
+   `>{$}l<{$}` trouvée dans le corpus.
+5. **Le contrat ne bouge pas.** `test_contrat.py` passe sans régénérer les
+   références ; le JSON reste au schéma 1 (un ajout compatible au plus) ; la
+   sortie texte et les codes de sortie sont inchangés.
+6. **Pas de ralentissement sensible.** `instantane verifier` sur le corpus
+   entier reste sous 5 s (1,9 s en `v0.4.1`).
+7. **Une limite levée change de dossier.** Sa fixture passe de `limites/` à
+   `signale/` ou `accepte/`, et le CHANGELOG le dit.
 
 ## Corpus de référence
 
@@ -39,13 +68,24 @@ empreinte ne confond aucune trouvaille.
 
 ## Stories
 
+- [ ] **S4.0** — Préparation, avant tout code : corpus figé et outil
+  d'instantanés, critères d'acceptation, règle de repli, tests des
+  constructions du corpus.
+  - [x] Étape 1 — outil `python -m ocots_lint.instantane` (#31).
+  - [x] Étape 2 — corpus figé : 4 cours, 231 trouvailles (#32).
+  - [x] Étape 3 — critères d'acceptation ; décision 0004 amendée (strict,
+    avec repli).
+  - [ ] Étape 4 — fixtures des constructions relevées dans le corpus
+    (`longtable` et `>{$}l<{$}`, TikZ, `\%`, `align` dans une liste,
+    `\pause`), en `accepte/` ou `signale/` selon la lecture actuelle.
 - [x] **S4.1** — Décision écrite : choix de l'analyseur et mode de
   distribution de la dépendance ([0004](../decisions/0004-analyseur.md)).
 - [ ] **S4.2** — Couche de lecture `arbre.py` : nœuds typés (genre, nom,
   début, fin, ligne, colonne, enfants), contexte déclaré (`lstlisting`,
   `minted`, `Verbatim` en verbatim ; `\ensuremath` en maths), erreurs
-  d'analyse en avertissements. Aucune règle migrée : sorties inchangées,
-  parité intacte.
+  d'analyse stricte ; repli sur la lecture actuelle pour un fichier refusé,
+  avec un avertissement. Aucune règle migrée : sorties inchangées, parité
+  intacte, corpus sans écart.
   - Critère : tout le corpus s'analyse ; positions vérifiées contre la
     source sur les fixtures.
 - [ ] **S4.3** — En tant qu'*auteur*, je veux que C4 ignore `\verb`, `\url`,

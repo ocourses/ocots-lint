@@ -45,8 +45,9 @@ erreur (`XPASS(strict)`). La fixture change alors de dossier, vers
 
 `test_parite.py` compare `ocots-lint verifier` à
 `conventions/bin/verifier` (sous-module épinglé) : même sortie standard,
-même sortie d'erreur, même code de sortie. À partir de S4, l'outil
-s'écartera volontairement de l'ancien, et ce test sera retiré.
+même sortie d'erreur, même code de sortie. En S4, chaque règle qui passe
+sur l'arbre syntaxique sort de ce test, dans la même PR, et sa référence
+devient le corpus figé (ci-dessous).
 
 ## Instantanés du corpus (sprint S4)
 
