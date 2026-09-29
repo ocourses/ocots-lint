@@ -1,8 +1,8 @@
 <!-- LTeX: language=fr-FR -->
 
-# 0004 — Analyseur LaTeX : `pylatexenc` 2, en mode tolérant
+# 0004 — Analyseur LaTeX : `pylatexenc` 2, strict, avec repli
 
-**Date** : 2026-09-28 — **État** : proposée (S4.1)
+**Date** : 2026-09-28, amendée le 2026-09-29 (S4.0) — **État** : acceptée
 
 ## Contexte
 
@@ -24,16 +24,27 @@ Sur le corpus réel — les 40 fichiers `.tex` du cours de mesure et de
 | | `pylatexenc` 2.11 | tree-sitter (`tree-sitter-language-pack`) |
 |---|---|---|
 | Corpus, mode strict | 0 fichier en erreur, 1,0 s | 6 fichiers avec un nœud `ERROR` (transparents du chapitre 8, cinq examens), 0,08 s |
-| Fixtures, mode strict | 53 / 54 (refuse `\newcommand{\x}{\begin{theorem}}`, accepté en mode tolérant) | — |
+| Fixtures, mode strict | 53 / 54 (refuse `\newcommand{\x}{\begin{theorem}}` : ce fichier est lu par le repli) | — |
 | `\verb\|a~:b\|` | un nœud macro qui englobe l'argument | une commande suivie de mots : l'argument est lu comme du texte |
 | `\url{…}`, `verbatim` | nœuds distincts, contenu non analysé | reconnus |
 | `lstlisting`, `minted` | analysés comme du LaTeX ordinaire : à déclarer | — |
 | Installation | Python pur, 0,8 Mo, sans dépendance, MIT | binaires compilés, 5 Mo ; le paquet `tree-sitter-latex` n'est pas publié sur PyPI |
 | Positions | décalage exact dans la source | décalage exact dans la source |
 
+### Complément sur le corpus complet (S4.0, 2026-09-29)
+
+La mesure ci-dessus ne couvrait que deux cours. Sur les trois cours
+enseignants et la démo — 120 fichiers sources —, `pylatexenc` en mode strict
+en refuse **un**, du LaTeX pourtant valide : une spécification de colonnes
+`>{$}l<{$}` dans un `longtable` (`calcul-differentiel-edo-enseignants`,
+`poly/frontmatter/notations.tex`). Le `$` y est pris pour une entrée en mode
+mathématique. En mode tolérant, cette seule erreur en produit **32** en
+cascade : passé la première erreur, l'arbre n'est plus fiable, et rien ne le
+signale.
+
 ## Décision
 
-**`pylatexenc` 2**, épinglé `>=2.10,<3`, en **mode tolérant** :
+**`pylatexenc` 2**, épinglé `>=2.10,<3`, en **mode strict, avec repli** :
 
 - l'arbre est construit une fois par fichier, dans une couche de lecture
   commune (`arbre.py`), derrière une interface propre à `ocots-lint` — les
@@ -42,13 +53,23 @@ Sur le corpus réel — les 40 fichiers `.tex` du cours de mesure et de
 - le contexte d'analyse déclare ce que les valeurs par défaut ignorent :
   `lstlisting`, `minted`, `Verbatim` comme verbatim ; `\ensuremath` comme
   mode mathématique ;
-- une erreur d'analyse (accolade orpheline…) ne fait pas échouer
-  `verifier` : l'arbre tolérant est utilisé, et l'erreur remonte en
-  **avertissement**, avec sa position, comme les exemptions invalides.
+- **repli** : si l'analyse stricte d'un fichier échoue, ce fichier garde
+  la lecture actuelle (masques par regex) pour toutes les règles, et un
+  **avertissement** donne la position de la première erreur, comme pour une
+  exemption invalide. Jamais d'arbre partiel : un fichier est lu en entier
+  par l'arbre, ou en entier comme aujourd'hui. Aucune trouvaille ne
+  disparaît en silence, et `verifier` n'échoue pas pour autant ;
+- la lecture actuelle reste donc dans le code, comme lecture de secours.
+  Elle n'évolue plus : les limites levées en S4 ne le sont que pour les
+  fichiers lus par l'arbre, ce que dit l'avertissement.
 
 **Distribution** : une dépendance ordinaire du paquet. `uvx` l'installe avec
 `ocots-lint` ; rien ne change pour les cours ni pour le relais des
 conventions.
+
+**Pourquoi pas le mode tolérant** (première version de cette décision) : un
+arbre partiellement faux, sans signal, est pire que la lecture actuelle —
+32 erreurs en cascade pour un seul `$` (voir le complément ci-dessus).
 
 **Pourquoi pas tree-sitter** : plus rapide, mais le gain ne sert pas (1 s
 pour tout un cours), il se trompe sur `\verb` — l'une des limites visées — et
