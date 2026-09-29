@@ -92,12 +92,27 @@ def test_deja_exemptee_est_refusee(depot, capsys):
     assert exempter.main(["a.tex:4", "P2", "encore"]) == 2
 
 
+REMARQUES_EN_VERBATIM = ("\\begin{verbatim}\n"
+                         + "\\begin{remark}\nx\n\\end{remark}\n" * 4
+                         + "\\end{verbatim}\n")
+
+
 def test_refus_dans_un_verbatim(depot, capsys):
+    """Garde-fou pour les règles encore lues par masques (P5 ici), qui
+    voient dans un verbatim : un commentaire y serait imprimé."""
+    (depot / "a.tex").write_text(REMARQUES_EN_VERBATIM, encoding="utf-8")
+    assert exempter.main(["a.tex:2", "P5", "voulu"]) == 2
+    assert "verbatim" in capsys.readouterr().err
+
+
+def test_p2_ne_voit_plus_dans_un_verbatim(depot, capsys):
+    """Lu sur l'arbre (S4.4), P2 ne signale plus deux boîtes écrites dans un
+    verbatim : il n'y a rien à exempter."""
     (depot / "a.tex").write_text(
         "\\begin{verbatim}\n\\end{theorem}\n\n\\begin{lemma}\n\\end{verbatim}\n",
         encoding="utf-8")
     assert exempter.main(["a.tex:2", "P2", "voulu"]) == 2
-    assert "verbatim" in capsys.readouterr().err
+    assert "aucune trouvaille P2 active" in capsys.readouterr().err
 
 
 # ------------------------------------------------------------ --controler

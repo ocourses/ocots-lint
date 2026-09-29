@@ -33,7 +33,7 @@ def test_avertissement_dans_le_json(capsys):
 
 
 def test_pas_d_avertissement_si_aucune_regle_ne_lit_l_arbre(capsys):
-    _, _, err = lancer(capsys, "P2", REFUSE)
+    _, _, err = lancer(capsys, "P3", REFUSE)
     assert "[ocots-lint]" not in err
 
 

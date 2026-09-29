@@ -10,6 +10,19 @@ au moment du tag.
 
 ## Non publié
 
+- **P2 lu sur l'arbre syntaxique** (S4.4) : deux boîtes sœures
+  s'enchaînent aussi quand seule une **mise en page** les sépare —
+  espacement (`\medskip`, `\bigskip`, `\vspace`…), figure (`figure`,
+  `center`, `tikzpicture`), `\label`. Limites levées (`limites/` →
+  `signale/`) : `medskip_entre`, `figure_entre`. Choix conservateur : tout le
+  reste rompt la chaîne — prose, `\pause` (idiome SL6), titre, formule,
+  commande inconnue. Deux boîtes écrites dans un verbatim ne sont plus
+  signalées. Sur le corpus : 16 trouvailles de plus, toutes des boîtes
+  séparées seulement par un espacement ou une figure.
+- **Tolérances de P2 pour les boîtes étoilées** : `remark*` est une
+  remarque, `exercise*` un exercice — entrer dans une remarque étoilée et
+  enchaîner des exercices étoilés sont tolérés comme leurs versions
+  numérotées. L'ancien code comparait les noms étoile comprise.
 - **C4 lu sur l'arbre syntaxique** (S4.3) : les contrôles de typographie ne
   portent plus que sur la prose. Limites levées (fixtures passées de
   `limites/` à `accepte/`) : `~:` dans `\ensuremath`, `\url` et `\verb` ;
