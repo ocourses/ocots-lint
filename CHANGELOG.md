@@ -10,6 +10,21 @@ au moment du tag.
 
 ## Non publié
 
+---
+
+## v0.6.0 — 2026-09-30
+
+Le vocabulaire vient du template (sprint S5) : plus aucun nom
+d'environnement du template dans l'outil. Il lit `template/vocabulaire.json`
+du cours (`ocots-latex-template` ≥ `v1.2.0`), par familles, avec repli sur
+une copie embarquée. Contrat inchangé (JSON au schéma 1, sortie texte,
+codes de sortie ; une nouvelle cause de sortie `2` : vocabulaire illisible).
+Sur les quatre cours du corpus : 242 → 252 trouvailles — 11 C6 apparues
+(des `myexample` finis sans `\qedhere`, que l'ancienne liste ignorait), 1
+faux positif P3 disparu (transparent rangé hors de `slides/`) ; aucune
+autre trouvaille ne change d'empreinte ni de message (bilan dans
+`.agents/roadmap/sprints/S5-vocabulaire.md`).
+
 - CI **Amont**, chaque lundi (et à la demande) : la suite de tests contre le
   `main` du template, `couverture` contre le `main` des conventions. En
   échec, une issue `[amont] …` est ouverte. Outil inchangé.
