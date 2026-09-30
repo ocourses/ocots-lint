@@ -139,7 +139,7 @@ cite le résultat de `instantane verifier`.
     vocabulaire ne permet pas de les reconnaître proprement.
 - [x] **S5.5** — CI programmée d'`ocots-lint` contre le `main` du template
   et des conventions, pour voir une incompatibilité avant leur release.
-- [ ] **S5.6** — Releases `v0.6.0` et conventions `v2.5.0` ; montée de
+- [x] **S5.6** — Releases `v0.6.0` et conventions `v2.5.0` ; montée de
   mesure et de la démo (template `v1.2.0` et conventions `v2.5.0`), avec
   `comparer` et `synchroniser --dry-run` (sous-modules initialisés) dans
   chaque PR. Automatique et calcul-diff : ajouter la cible à #322 et #83.
@@ -231,6 +231,59 @@ cite le résultat de `instantane verifier`.
   template `main` ; `couverture` rend 2 quand `C4` est renommée dans une
   copie des conventions.
 
-## Bilan
+## Bilan (2026-09-30)
 
-*À écrire en fin de sprint.*
+**Livré.**
+
+- [`ocots-latex-template` v1.2.0](https://github.com/ocourses/ocots-latex-template/releases/tag/v1.2.0) :
+  `vocabulaire.json` (72 environnements, 13 familles dont 7 boîtes, 28
+  alias dépréciés, supports par classe), vérifié contre `tex/` dans les
+  deux sens à chaque PR.
+- [`ocots-lint` v0.6.0](https://github.com/ocourses/ocots-lint/releases/tag/v0.6.0) :
+  plus aucun nom d'environnement du template dans le code (test du critère
+  2) ; P2, P3, P5, C6 et la mesure C3 lisent des familles ; repli sur une
+  copie embarquée, avertissement si le `template/` du cours n'a pas de
+  vocabulaire, arrêt (sortie 2) sur un vocabulaire illisible ; transparents
+  reconnus à leur classe ; révisions extraites avec leurs sous-modules
+  (instantanés et `--nouvelles`) ; CI **Amont** chaque lundi.
+- [`ocots-conventions` v2.5.0](https://github.com/ocourses/ocots-conventions/releases/tag/v2.5.0) :
+  relais sur v0.6.0.
+- Cours montés : mesure (mesure-integration-enseignants#360, conventions
+  seules : le template était déjà en v1.2.0) et démo (ocots-demo#15,
+  template et conventions). `comparer` : aucun écart dans les deux ;
+  `synchroniser --dry-run` identique avant et après la montée.
+
+**Critères d'acceptation.**
+
+1. Trouvailles du corpus : 242 → 252, écarts tous justifiés dans le
+   journal — 11 C6 (`myexample`, alias que l'ancienne liste ignorait), 1
+   faux positif P3 en moins (transparent hors de `slides/`) ; 4 voies
+   corrigées dans les instantanés (S5.0, le template enfin extrait).
+2. Aucun nom du template en dur dans `src/` : testé, sans exception de
+   module (seuls les homographes français et les noms de famille).
+3. Jamais de silence : refus testés (6 cas), repli averti une fois.
+4. Vocabulaire testé contre les `.sty` : dans le template, éprouvé par 10
+   mutations.
+5. Contrat inchangé : JSON au schéma 1, `test_contrat.py` sans régénérer ;
+   une cause de sortie `2` en plus, documentée.
+6. Temps : inchangé à la seconde près (lecture du vocabulaire en cache).
+
+**Démo.** `check.yml` lancé à la main sur `ocots-demo` après la montée :
+`conventions : v2.5.0 — ocots-lint synchroniser`, 0 à créer, 0 à mettre à
+jour, 0 à fermer, et aucun avertissement de repli dans le journal du run —
+le vocabulaire du template du cours est lu. CI Amont lancée une fois :
+verte.
+
+**Ce qui a bien marché.** Mesurer avant de construire : l'inventaire du
+template (six mécanismes de définition) a évité un analyseur de `.sty` ;
+celui du corpus a fixé le critère principal (aucune boîte ignorée n'y est
+employée). Le test du critère 2 a trouvé seul le dernier nom en dur (la
+mesure C3).
+
+**Ce qui a coûté.** Le sous-module du template d'abord posé à la racine,
+pris pour celui d'un cours (`csquotes`) ; la montée de mesure faite en
+parallèle, à constater avant de préparer la PR.
+
+**Reporté au backlog.** La montée d'automatique et de calcul-diff (#322,
+#83, cibles mises à jour) ; un fichier sans classe inclus par un
+transparent rangé hors de `slides/` (non constaté au corpus).

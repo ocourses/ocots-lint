@@ -9,3 +9,4 @@ build/
 
 # Instantanés du corpus (S4.0) : les cours privés restent en local
 corpus/
+.DS_Store

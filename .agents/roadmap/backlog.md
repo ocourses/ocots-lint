@@ -42,4 +42,8 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
   et
   [calcul-differentiel-edo-enseignants#83](https://github.com/ocourses/calcul-differentiel-edo-enseignants/issues/83).
   Ensuite seulement : retirer le chemin historique en bash de
-  `agents/scripts/checkers/conventions.sh`.
+  `agents/scripts/checkers/conventions.sh`. Cibles portées à template
+  `v1.2.0` et conventions `v2.5.0` le 2026-09-30 (S5.6).
+- Transparents : un fichier **sans classe**, inclus par un transparent rangé
+  hors de `slides/`, reçoit P3 (reconnaître un fichier par le document qui
+  l'inclut). Non constaté au corpus (S5.4).
