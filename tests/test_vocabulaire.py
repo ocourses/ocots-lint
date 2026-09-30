@@ -1,6 +1,8 @@
 """Vocabulaire du template (S5.2, S5.3) : lecture, repli, refus."""
 
+import ast
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -124,3 +126,57 @@ def test_vocabulaire_illisible_arrete_verifier(cours, capsys, doc, attendu):
     err = capsys.readouterr().err
     assert attendu in err
     assert err.startswith("ocots-lint : vocabulaire illisible")
+
+
+# ------------------------------------------------------------ règles (S5.2)
+
+def test_une_boite_ajoutee_au_template_du_cours_est_vue(cours, capsys):
+    """Le but de S5 : un environnement ajouté au template est vu par les
+    règles sans toucher à l'outil."""
+    doc = embarque()
+    doc["environnements"]["lemmeinedit"] = {"famille": "resultat"}
+    poser(cours, doc)
+    (cours / "a.tex").write_text(
+        "\\begin{theorem}\nx\n\\end{theorem}\n\n"
+        "\\begin{lemmeinedit}\ny\n\\end{lemmeinedit}\n", encoding="utf-8")
+    assert cli.main(["verifier", "P2", "a.tex"]) == 1
+    assert "[P2] theorem -> lemmeinedit" in capsys.readouterr().out
+
+
+# Règles pas encore passées au vocabulaire (S5.2, étape suivante).
+EN_ATTENTE = {"regles/c6.py"}
+
+# Mots français homographes d'un environnement : « proposition » dans les
+# motifs de P3 et C4 (prose française), « correction » (voie de correction,
+# messages de `nettoyer`). Ce ne sont pas des noms d'environnement.
+FRANCAIS = {"proposition", "correction"}
+
+
+def chaines_du_code(chemin):
+    """Les chaînes littérales d'un module, sans ses docstrings."""
+    arbre = ast.parse(chemin.read_text(encoding="utf-8"))
+    docstrings = {id(n.body[0].value) for n in ast.walk(arbre)
+                  if isinstance(n, (ast.Module, ast.ClassDef, ast.FunctionDef))
+                  and n.body and isinstance(n.body[0], ast.Expr)
+                  and isinstance(n.body[0].value, ast.Constant)}
+    for n in ast.walk(arbre):
+        if (isinstance(n, ast.Constant) and isinstance(n.value, str)
+                and id(n) not in docstrings):
+            yield n.lineno, n.value
+
+
+def test_aucun_nom_du_template_en_dur_dans_le_code():
+    """Critère 2 de S5 : les noms d'environnements du template viennent du
+    vocabulaire, jamais d'une chaîne du code."""
+    # Un nom de famille (« definition ») est le contrat du schéma, pas un nom
+    # d'environnement : les règles le citent à dessein.
+    noms = set(embarque()["environnements"]) - FRANCAIS - set(embarque()["familles"])
+    motif = re.compile(r"(?<![\w@])(" + "|".join(
+        re.escape(n) for n in sorted(noms, key=len, reverse=True)) + r")(?![\w*])")
+    src = RACINE / "src" / "ocots_lint"
+    trouves = [f"{p.relative_to(src)}:{ligne}: {m.group(1)!r}"
+               for p in sorted(src.rglob("*.py"))
+               if p.relative_to(src).as_posix() not in EN_ATTENTE
+               for ligne, chaine in chaines_du_code(p)
+               for m in motif.finditer(chaine)]
+    assert trouves == []

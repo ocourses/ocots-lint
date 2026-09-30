@@ -11,8 +11,9 @@ que l'analyse refuse, repli sur les masques par regex.
 
 import re
 
+from ocots_lint import vocabulaire
 from ocots_lint.arbre import lire_arbre, prose
-from ocots_lint.lecture import BOX, est_transparent, hors_math, sources
+from ocots_lint.lecture import est_transparent, hors_math, motif, sources
 
 # L'amorce est passe-partout si la phrase *s'arrête* à l'annonce. Une phrase
 # qui commence pareil mais poursuit (« … qui n'est qu'un cas particulier de
@@ -26,7 +27,6 @@ RE_PASSE_PARTOUT = re.compile(
     r"s?\s+suivante?s?\s*[.:]\s*$",
     re.I)
 
-RE_BOITE_OUVRANTE = re.compile(r"^[^\S\n]*\\begin\{(" + BOX + r")\}", re.M)
 
 # Commandes de mise en page ou d'indexation : ce ne sont pas des phrases.
 RE_BRUIT = re.compile(
@@ -99,6 +99,9 @@ def _serrer(xs):
 
 def regle_P3(racines):
     """P3 — amorces passe-partout et phrases qui se jettent dans la boîte."""
+    v = vocabulaire.charger()
+    re_boite_ouvrante = re.compile(
+        r"^[^\S\n]*\\begin\{(" + motif(v.boites) + r")\}", re.M)
     for chemin in sources(racines):
         if est_transparent(chemin):
             continue  # slides.md#sl4 : P3 ne s'applique pas aux transparents
@@ -106,7 +109,7 @@ def regle_P3(racines):
         brut = arbre.texte
         texte = texte_p3(arbre)               # détection dans la prose…
         lignes, lignes_brutes = texte.split("\n"), brut.split("\n")
-        for m in RE_BOITE_OUVRANTE.finditer(texte):
+        for m in re_boite_ouvrante.finditer(texte):
             no = texte.count("\n", 0, m.start())          # index 0
             # dernières lignes utiles avant la boîte
             masquees, reelles = [], []
