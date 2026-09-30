@@ -14,9 +14,9 @@ de [`ocots-conventions`](https://github.com/ocourses/ocots-conventions)
 | `ocots-conventions` | quel texte autour, dans quel ordre, avec quelles notations ? |
 | `ocots-lint` (ici) | le document respecte-t-il ces règles, et avec quelle garantie ? |
 
-> **État : `v0.5.0`.** Garanties, exemptions, empreintes, contrat JSON,
+> **État : `v0.6.0`.** Garanties, exemptions, empreintes, contrat JSON,
 > `synchroniser`, `comparer`, vérification des PR, lecture par arbre
-> syntaxique. Voir la [roadmap](.agents/roadmap/README.md).
+> syntaxique, vocabulaire lu dans le template. Voir la [roadmap](.agents/roadmap/README.md).
 
 ---
 
@@ -39,7 +39,7 @@ corrections dont l'équivalence est vérifiée (`~:`, guillemets si `csquotes`
 est chargé). Après `--appliquer` : recompiler, relire le diff, commiter à
 part.
 
-Épingler une version : `git+https://github.com/ocourses/ocots-lint@v0.5.0`.
+Épingler une version : `git+https://github.com/ocourses/ocots-lint@v0.6.0`.
 
 Sortie `1` s'il y a au moins une infraction, `2` pour un argument inconnu,
 `0` sinon — utilisable en CI.
@@ -76,6 +76,17 @@ formules ou les verbatims. Un fichier que l'analyse refuse (du LaTeX qu'elle
 ne sait pas lire) est lu par des masques de secours, et `verifier` le dit par
 un avertissement avec la position de l'erreur. P5 et C6 lisent le texte par
 masques.
+
+**Vocabulaire du template.** L'outil ne connaît aucun nom d'environnement :
+il lit `template/vocabulaire.json` dans le dossier courant — le template que
+le cours épingle (`ocots-latex-template` ≥ `v1.2.0`) — et chaque règle
+désigne des *familles* (une boîte, une remarque, un exemple…). Un
+environnement ajouté au template est vu dès que le cours monte de version.
+À défaut, l'outil lit sa copie embarquée ; il le dit sur la sortie d'erreur
+si le cours a un `template/` sans vocabulaire (template plus ancien, ou
+sous-module non initialisé). Un vocabulaire illisible arrête la commande
+(sortie `2`). Un transparent se reconnaît à sa classe (`beamer`), ou à son
+dossier `slides/` s'il n'en déclare pas.
 
 ### Exempter une trouvaille justifiée
 
@@ -147,8 +158,8 @@ suppression, avec sa raison.
 
 ```bash
 OL=git+https://github.com/ocourses/ocots-lint
-uvx --from $OL@v0.4.1 ocots-lint verifier --format json > avant.json
-uvx --from $OL@v0.5.0 ocots-lint verifier --format json > apres.json
+uvx --from $OL@v0.5.1 ocots-lint verifier --format json > avant.json
+uvx --from $OL@v0.6.0 ocots-lint verifier --format json > apres.json
 ocots-lint comparer avant.json apres.json
 ```
 
