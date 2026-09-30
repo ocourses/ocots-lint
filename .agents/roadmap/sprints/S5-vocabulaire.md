@@ -137,7 +137,7 @@ cite le résultat de `instantane verifier`.
     en `accepte/`. *À confirmer en S5.1* : les transparents ne sont pas
     une classe du template (`beamer` + thème) ; la story tombe si le
     vocabulaire ne permet pas de les reconnaître proprement.
-- [ ] **S5.5** — CI programmée d'`ocots-lint` contre le `main` du template
+- [x] **S5.5** — CI programmée d'`ocots-lint` contre le `main` du template
   et des conventions, pour voir une incompatibilité avant leur release.
 - [ ] **S5.6** — Releases `v0.6.0` et conventions `v2.5.0` ; montée de
   mesure et de la démo (template `v1.2.0` et conventions `v2.5.0`), avec
@@ -222,6 +222,14 @@ cite le résultat de `instantane verifier`.
   `signale/slides/classe_polycopie.tex`. Limite restante, non constatée au
   corpus : un fichier sans classe, inclus par un transparent rangé hors de
   `slides/`, reçoit P3.
+- 2026-09-30 — S5.5 : workflow `amont.yml`, chaque lundi et à la demande.
+  Template : sous-module à `main`, toute la suite (vocabulaire illisible,
+  schéma inconnu, copie embarquée périmée). Conventions : `couverture` sur
+  leur `main` (sortie 2 si une règle outillée disparaît), le sous-module
+  `conventions` restant à v2.0.0 pour la parité. En échec, une issue
+  `[amont] …`, une seule à la fois. Éprouvé en local : suite verte contre le
+  template `main` ; `couverture` rend 2 quand `C4` est renommée dans une
+  copie des conventions.
 
 ## Bilan
 

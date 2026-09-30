@@ -51,6 +51,20 @@ erreur (`XPASS(strict)`). La fixture change alors de dossier, vers
 mais aussi `csquotes`, y seraient lus). Monter ce sous-module, c'est
 recopier son `vocabulaire.json` dans `donnees/`.
 
+### Contre le `main` des dépôts amont
+
+Le workflow `amont.yml` (chaque lundi, ou à la demande) fait passer le
+sous-module du template à `main` et relance toute la suite, puis lance
+`couverture` sur le `main` des conventions. Il ouvre une issue
+`[amont] …` en cas d'échec. Pour le reproduire en local :
+
+```bash
+git -C tests/amont/ocots-latex-template fetch origin main
+git -C tests/amont/ocots-latex-template checkout FETCH_HEAD
+uv run pytest
+git -C tests/amont/ocots-latex-template checkout -   # revenir au tag épinglé
+```
+
 ## Parité (sprint S1)
 
 `test_parite.py` compare `ocots-lint verifier` à

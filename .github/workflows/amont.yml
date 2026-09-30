@@ -1,0 +1,58 @@
+name: Amont
+
+# Chaque semaine, ocots-lint contre le `main` de ce qu'il lit — pour voir
+# une incompatibilité avant la release du template ou des conventions, pas
+# après (S5.5).
+#
+# - template : le sous-module tests/amont/ocots-latex-template passe à
+#   `main`, et toute la suite tourne. Échoue si le vocabulaire y est
+#   illisible, d'un schéma inconnu, ou différent de la copie embarquée
+#   (src/ocots_lint/donnees/vocabulaire.json à recopier avant la prochaine
+#   release d'ocots-lint).
+# - conventions : `ocots-lint couverture` sur le `main` des conventions.
+#   Échoue (sortie 2) si l'outil vérifie une règle qu'elles n'ont plus. Le
+#   sous-module `conventions` reste à v2.0.0 : c'est la référence du test
+#   de parité (dernier bin/verifier en Python), pas l'état courant.
+#
+# En échec : une issue « [amont] … » est ouverte (une seule à la fois).
+
+on:
+  schedule:
+    - cron: "41 5 * * 1"   # lundi, décalé des valeurs rondes
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: astral-sh/setup-uv@v6
+      - name: Template à main
+        run: |
+          git -C tests/amont/ocots-latex-template fetch --quiet origin main
+          git -C tests/amont/ocots-latex-template checkout --quiet FETCH_HEAD
+          git -C tests/amont/ocots-latex-template log --oneline -1
+      - run: uv run pytest -ra
+      - if: failure()
+        uses: ./.github/actions/signaler
+        with:
+          titre: "[amont] template main incompatible"
+
+  conventions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Conventions à main
+        run: git clone --quiet --depth 1 https://github.com/ocourses/ocots-conventions amont-conventions
+      - run: uv run ocots-lint couverture --conventions amont-conventions
+      - if: failure()
+        uses: ./.github/actions/signaler
+        with:
+          titre: "[amont] conventions main incompatibles"

@@ -1,0 +1,25 @@
+name: Signaler un échec amont
+description: Ouvre une issue pour l'échec, sauf si une issue ouverte porte déjà ce titre.
+
+inputs:
+  titre:
+    description: Titre de l'issue
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TITRE: ${{ inputs.titre }}
+        RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      run: |
+        if gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "in:title \"$TITRE\"" \
+             --json title --jq '.[].title' | grep -qxF "$TITRE"; then
+          echo "issue déjà ouverte : $TITRE"
+          exit 0
+        fi
+        gh issue create --repo "$GITHUB_REPOSITORY" --title "$TITRE" --body "$(printf '%s\n\n%s\n' \
+          "Le workflow Amont a échoué : ocots-lint ne suit plus le \`main\` de ce qu'il lit. Voir le run : $RUN" \
+          "À corriger avant la prochaine release de ce dépôt amont (ou d'ocots-lint). Fermer l'issue une fois corrigé.")"
