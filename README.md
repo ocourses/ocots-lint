@@ -70,12 +70,18 @@ d'un vérificateur est écrite comme un **test attendu en échec**
 ([`tests/fixtures/*/limites/`](tests/fixtures/)) : la liste de ce que l'outil
 rate est lisible, et le jour où il ne le rate plus, le test le signale.
 
-**Lecture des sources.** C4, P2 et P3 lisent un arbre syntaxique
+**Lecture des sources.** C4, C5, P2 et P3 lisent un arbre syntaxique
 (`pylatexenc`) : ils ne regardent que la prose, jamais les commentaires, les
 formules ou les verbatims. Un fichier que l'analyse refuse (du LaTeX qu'elle
 ne sait pas lire) est lu par des masques de secours, et `verifier` le dit par
 un avertissement avec la position de l'erreur. P5 et C6 lisent le texte par
 masques.
+
+**Tout le cours pour C5.** Un label ne se pose que si l'objet est cité
+(C5, P12) : C5 lit les renvois (`\ref`, `\eqref`, `\cref`…) dans **tout
+le dossier courant** — polycopié, TD, transparents, examens —, quel que soit
+le périmètre donné ; seuls les labels signalés s'y limitent. Lancer
+`verifier` depuis la racine du cours.
 
 **Vocabulaire du template.** L'outil ne connaît aucun nom d'environnement :
 il lit `template/vocabulaire.json` dans le dossier courant — le template que

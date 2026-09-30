@@ -56,7 +56,7 @@ faute de cas réel que la source manque.
 
 ## Stories
 
-- [ ] **S6.1** — Lecture des labels et des renvois (`labels.py`) : sur
+- [x] **S6.1** — Lecture des labels et des renvois (`labels.py`) : sur
   l'arbre, pour chaque fichier du cours — `\label{…}`, `label=…` des boîtes,
   ancienne syntaxe `{titre}{clé}` avec le préfixe du vocabulaire ; renvois
   `\ref`, `\eqref`, `\cref`, `\Cref`, `\autoref`, `\pageref`, `\nameref`,
@@ -66,7 +66,7 @@ faute de cas réel que la source manque.
     labels lus = labels du `.aux`.
   - Dans le template : `prefixe` dans `vocabulaire.json` pour les
     environnements à ancienne syntaxe (ajout compatible au schéma 1).
-- [ ] **S6.2** — En tant qu'*auteur*, je veux que l'outil signale un label
+- [x] **S6.2** — En tant qu'*auteur*, je veux que l'outil signale un label
   jamais cité dans le cours (P12, C5), afin de ne pas maintenir des clés
   pour rien.
 - [ ] **S6.3** — En tant qu'*auteur*, je veux que l'outil signale un
@@ -97,6 +97,28 @@ faute de cas réel que la source manque.
   et 10 sur 10 (transparents, chapitre 5), sans les faux `label=\alph*)`
   des listes. Tout le cours de mesure : 308 labels, 534 renvois, lus en
   2 s. Le template est passé en v1.4.0 entre-temps, vocabulaire inchangé.
+- 2026-09-30 — S6.2 : règle C5 (`regles/c5.py`), label jamais cité dans
+  le cours. Les fixtures sont vérifiées depuis leur dossier, comme un cours
+  depuis sa racine ; la parité avec l'ancien outil retire de `--list` les
+  règles qu'il ne connaît pas. **Critère 1 tenu** : `instantane verifier` —
+  252 inchangées, 109 C5 apparues (et le nom C5 ajouté à l'avertissement du
+  fichier refusé de calcul-diff). **Relecture** (critère 2) :
+
+  | Cours | C5 | Sections, chapitres, parties | Boîtes | Figures, tableaux, équations |
+  |---|---|---|---|---|
+  | mesure | 42 | 34 (dont 17 recopiées dans les transparents) | 8 (6 exercices d'examen) | 0 |
+  | automatique | 22 | 5 | 6 | 11 (dont 7 dans les transparents du TD 4) |
+  | calcul-diff | 34 | 16 | 18 | 0 |
+  | démo | 11 | 4 | 7 | 0 |
+
+  Clés cherchées au `grep` dans tout le dépôt (tous fichiers) : aucune
+  citée ailleurs. Aucun cours ne définit de macro de renvoi ni n'utilise
+  `xr` : **aucun faux positif**. Limite écrite
+  (`C5/limites/renvoi_par_macro.tex`). Le vocabulaire des cours n'a pas
+  encore `ancienne_syntaxe` (template > v1.4.0) : les labels de
+  l'ancienne syntaxe ne sont pas lus — 6 de plus (4 calcul-diff, 2 mesure)
+  quand les cours monteront le template. 2,3 s sur le cours de mesure
+  actuel ; 8 s pour les quatre cours du corpus.
 
 ## Bilan
 
