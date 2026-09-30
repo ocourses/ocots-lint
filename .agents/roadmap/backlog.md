@@ -29,6 +29,12 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
 - Cohérence terminologique (`C2`) : table de variantes par cours, comptée par
   l'outil.
 - Intégration `pre-commit`.
+- Journal de compilation instrumenté (ébauche initiale de S6) : un `.sty`
+  injecté à une compilation de vérification, qui voit le document tel que
+  LaTeX l'a composé. Écarté par la décision 0006 (la source donne tous les
+  labels mesurés). Critère de retour : un cas réel que la source ne peut pas
+  lire — par exemple une boîte ouverte par une macro
+  (`P2/limites/boite_par_macro.tex`) trouvée dans un cours.
 - CI du template qui compile `examples/` (TeX Live dans GitHub Actions) :
   prérequis des tests d'instrumentation de S6.
 - Monter `ocots-lint` dans un cours en une étape : une release d'`ocots-lint`

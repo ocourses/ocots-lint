@@ -43,7 +43,7 @@ les règles qui s'y prêtent, *qu'il n'y a rien à trouver*.
 | [S3](sprints/S3-processus.md) | le processus hebdomadaire repose sur `ocots-lint` : empreintes, exemptions dans la boucle, aiguillage par garantie | `v0.3.0`, `v0.4.0`, `v0.4.1` | fini |
 | [S4](sprints/S4-arbre.md) | lecture par arbre syntaxique ; les limites de P2 et C4 tombent | `v0.5.0` | fini |
 | [S5](sprints/S5-vocabulaire.md) | le vocabulaire des boîtes vient du template | `v0.6.0` | fini |
-| [S6](sprints/S6-journal.md) | journal de compilation instrumenté ; règles sur les labels | `v0.7.0` | à faire |
+| [S6](sprints/S6-journal.md) | labels et renvois (C5, P12), croisés sur tout le cours | `v0.7.0` | **en préparation** |
 | [S7](sprints/S7-extraction.md) | extraction pour les règles de jugement | `v0.8.0` | à faire |
 
 Les stories non planifiées vivent dans [`backlog.md`](backlog.md). Les choix
