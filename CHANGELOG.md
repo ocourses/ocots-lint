@@ -10,6 +10,10 @@ au moment du tag.
 
 ## Non publié
 
+- **C5 : hypothèse citée par `\ref`** (S6.4) — une hypothèse (famille
+  `hypothese` du vocabulaire, alias compris) se cite avec `\eqref`, qui la
+  rend « (H1) ». Signalé à l'endroit du renvoi. Aucun cas au corpus : la
+  règle verrouille l'usage.
 - **Vocabulaire embarqué à jour du template `v1.5.0`** (`ancienne_syntaxe`) :
   pour un cours dont le template n'a pas encore `vocabulaire.json`, les
   labels de l'ancienne syntaxe (`\begin{theorem}{Titre}{clé}` → `thm:clé`)

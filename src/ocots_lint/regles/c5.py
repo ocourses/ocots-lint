@@ -15,6 +15,12 @@ from ocots_lint.lecture import sources
 # théorème) : la table est celle de C5, lue dans les conventions
 # (`prefixes.py`). Un alias du template suit sa cible (`mytheorem` →
 # `theorem`) ; un objet absent de la table n'est pas vérifié.
+#
+# Une hypothèse se cite avec `\eqref`, pas `\ref` : le template la numérote
+# H1, H2…, et `\eqref` la rend entre parenthèses. Une hypothèse est un label
+# posé dans la famille `hypothese` du vocabulaire, alias compris.
+
+HYPOTHESE = "hypothese"
 
 
 def objet_de_table(objet, v):
@@ -32,7 +38,7 @@ def prefixe_de(cle):
 
 
 def regle_C5(racines):
-    """C5 — label jamais cité dans le cours (P12), ou dont le préfixe ne nomme pas l'objet."""  # noqa: E501
+    """C5 — label jamais cité dans le cours (P12), préfixe qui ne nomme pas l'objet, hypothèse citée par \\ref."""  # noqa: E501
     v = vocabulaire.charger()
     table = prefixes.charger()
     tous, renvois = labels.index_du_cours(v)
@@ -52,3 +58,11 @@ def regle_C5(racines):
             yield label.fichier, label.ligne, (
                 f"label {label.cle} ({etat}) sur un {label.objet} — "
                 f"C5 veut {attendu}")
+    hypotheses = {l.cle for l in tous
+                  if l.objet and v.famille(l.objet) == HYPOTHESE}
+    for r in renvois:
+        if (r.commande == "ref" and r.cle in hypotheses
+                and os.path.normpath(r.fichier) in perimetre):
+            yield r.fichier, r.ligne, (
+                f"hypothèse {r.cle} citée par \\ref — \\eqref la rend "
+                f"entre parenthèses, « (H1) »")
