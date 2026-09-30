@@ -82,6 +82,10 @@ masques.
 le dossier courant** — polycopié, TD, transparents, examens —, quel que soit
 le périmètre donné ; seuls les labels signalés s'y limitent. Lancer
 `verifier` depuis la racine du cours.
+C5 vérifie aussi que le préfixe d'un label nomme son objet (`thm:` pour
+un théorème) : la table est celle de C5, lue dans `conventions/communes.md`
+du cours, sinon dans une copie embarquée (conventions antérieures, avec un
+avertissement).
 
 **Vocabulaire du template.** L'outil ne connaît aucun nom d'environnement :
 il lit `template/vocabulaire.json` dans le dossier courant — le template que

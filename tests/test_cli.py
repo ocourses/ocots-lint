@@ -43,7 +43,8 @@ def test_sortie_0_sans_infraction(capsys):
     assert capsys.readouterr().out == ""
 
 
-def test_toutes_les_regles_par_defaut(capsys):
+def test_toutes_les_regles_par_defaut(capsys, monkeypatch):
+    monkeypatch.chdir(ACCEPTE.parent)    # comme depuis la racine d'un cours
     cli.main(["verifier", str(ACCEPTE)])
     bilan = capsys.readouterr().err.splitlines()
     assert [ligne.split(" : ")[0] for ligne in bilan] == sorted(REGLES)

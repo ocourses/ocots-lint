@@ -69,7 +69,7 @@ faute de cas réel que la source manque.
 - [x] **S6.2** — En tant qu'*auteur*, je veux que l'outil signale un label
   jamais cité dans le cours (P12, C5), afin de ne pas maintenir des clés
   pour rien.
-- [ ] **S6.3** — En tant qu'*auteur*, je veux que l'outil signale un
+- [x] **S6.3** — En tant qu'*auteur*, je veux que l'outil signale un
   préfixe qui ne correspond pas à l'objet étiqueté (C5 : `thm:` pour un
   théorème…), la table étant lue dans les conventions.
 - [ ] **S6.4** — En tant qu'*auteur*, je veux qu'une hypothèse citée par
@@ -119,6 +119,31 @@ faute de cas réel que la source manque.
   l'ancienne syntaxe ne sont pas lus — 6 de plus (4 calcul-diff, 2 mesure)
   quand les cours monteront le template. 2,3 s sur le cours de mesure
   actuel ; 8 s pour les quatre cours du corpus.
+- 2026-09-30 — **Tranché par l'auteur** : C5 reste tel quel pour les
+  sections — un label de section jamais cité est signalé comme les autres
+  (les 17 clés de section recopiées dans les transparents de mesure
+  comprises). Template `v1.5.0` (ocots-latex-template#73) : publie
+  `ancienne_syntaxe`.
+- 2026-09-30 — S6.3 : préfixe ≠ objet, dans C5. La table vient des
+  conventions (ocots-conventions#28 : nom LaTeX de chaque objet, et
+  conjecture → `conj:`, que le template posait déjà), lue par
+  `prefixes.py`, avec copie embarquée comparée au `main` des conventions
+  par `amont`. Une table sans nom LaTeX pour chaque objet est illisible :
+  celle des conventions ≤ v2.5.0 n'en avait que pour l'hypothèse (piège
+  vu sur mesure : table d'une ligne, aucune trouvaille). **Critère 1
+  tenu** : 252 inchangées, 90 apparues. **Relecture** :
+
+  | Cours | Préfixe ≠ objet | Sans préfixe | Principaux cas |
+  |---|---|---|---|
+  | mesure | 44 | 10 | 38 `exo:` (exercices d'examen), `sec:` sur 3 sous-sections, `ex:` sur un exemple |
+  | automatique | 11 | 13 | `table:` (→ `tab:`), `ex:`/`exem:` sur des exemples, `fig1:`, `ivp:` sur des équations |
+  | calcul-diff | 12 | 0 | `exe:` (exercices), `rmk:`/`rmq:` (remarques), `ex:` sur des exemples |
+  | démo | 0 | 0 | |
+
+  Toutes conformes à la lettre de la table ; aucun objet mal attribué.
+  Confusion récurrente : `ex:` pour un exemple (C5 : `exa:`, `ex:` étant
+  l'exercice). Un label à la fois jamais cité et mal préfixé donne deux
+  trouvailles sur la même ligne.
 
 ## Bilan
 

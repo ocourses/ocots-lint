@@ -10,6 +10,15 @@ au moment du tag.
 
 ## Non publié
 
+- **C5 : préfixe qui ne nomme pas l'objet** (S6.3) — `exo:` sur un
+  exercice (C5 veut `ex:`), `ex:` sur un exemple (`exa:`), label sans
+  préfixe… La table est celle de C5, lue dans `conventions/communes.md`
+  (qui donne désormais le nom LaTeX de chaque objet,
+  ocots-conventions#28), sinon dans la copie embarquée
+  `donnees/prefixes.json`, comparée chaque semaine au `main` des
+  conventions (workflow `amont`). Un alias du template suit sa cible ; un
+  objet absent de la table n'est pas vérifié. Sur le corpus : 90
+  trouvailles nouvelles, relues ; les existantes ne bougent pas.
 - **Nouvelle règle C5 : label jamais cité dans le cours** (S6.2 ; P12 pour
   le polycopié). Les renvois sont lus dans tout le dossier courant, quel que
   soit le périmètre vérifié ; seuls les labels du périmètre sont signalés.

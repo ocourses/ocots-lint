@@ -1,0 +1,22 @@
+{
+  "align": "eq:",
+  "assumption": "hyp:",
+  "chapter": "chap:",
+  "conjecture": "conj:",
+  "corollary": "cor:",
+  "definition": "def:",
+  "equation": "eq:",
+  "example": "exa:",
+  "exercise": "ex:",
+  "figure": "fig:",
+  "gather": "eq:",
+  "lemma": "lem:",
+  "multline": "eq:",
+  "part": "part:",
+  "proposition": "prop:",
+  "remark": "rem:",
+  "section": "sec:",
+  "subsection": "ssec:",
+  "table": "tab:",
+  "theorem": "thm:"
+}
