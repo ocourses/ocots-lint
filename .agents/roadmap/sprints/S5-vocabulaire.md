@@ -162,6 +162,24 @@ cite le résultat de `instantane verifier`.
   `td/td1/td1.tex:129`) : avec le template, `csquotes` est vu, comme en CI
   — c'est le piège du `--dry-run` de S4.8. Corpus refigé (8 sous-modules
   extraits sur 8), `verifier` muet.
+- 2026-09-30 — S5.1 : `vocabulaire.json` dans le template
+  (ocots-latex-template#62) : 72 environnements, 13 familles dont 7 boîtes,
+  28 alias dépréciés, supports par classe ; vérifié contre `tex/` dans les
+  deux sens, éprouvé par 10 mutations. Familles validées par l'auteur
+  (`web` n'est pas une boîte ; `hypothesis` avec `assumption`). Release du
+  template : par l'auteur, avec d'autres changements en cours.
+- 2026-09-30 — S5.2, étape 1, et S5.3 : `vocabulaire.py` lit
+  `template/vocabulaire.json` du dossier courant (comme `./conventions`),
+  sinon la copie embarquée. Précision sur la décision 0005 : l'avertissement
+  de repli n'est émis que si un dossier `template/` existe sans vocabulaire
+  — sans `template/` (fichier isolé, fixtures), le repli est silencieux, et
+  les sorties comparées par les tests de parité et de contrat ne bougent
+  pas. Refus testés (S5.3) : JSON invalide, pas un objet, schéma 2, famille
+  inconnue, alias vers rien, famille sans `boite`. Sous-module du template
+  dans `tests/amont/` (à la racine, il était pris pour le template d'un
+  cours : deux tests de `nettoyer` ont vu `csquotes`). Corpus : trouvailles
+  inchangées ; un avertissement par cours, aucun des commits figés n'ayant
+  encore un template `v1.2.0`.
 
 ## Bilan
 
