@@ -72,7 +72,7 @@ faute de cas réel que la source manque.
 - [x] **S6.3** — En tant qu'*auteur*, je veux que l'outil signale un
   préfixe qui ne correspond pas à l'objet étiqueté (C5 : `thm:` pour un
   théorème…), la table étant lue dans les conventions.
-- [ ] **S6.4** — En tant qu'*auteur*, je veux qu'une hypothèse citée par
+- [x] **S6.4** — En tant qu'*auteur*, je veux qu'une hypothèse citée par
   `\ref` au lieu de `\eqref` soit signalée (C5) — aucune au corpus
   aujourd'hui : la règle verrouille l'usage.
 - [ ] **S6.5** — Dans `ocourses/agents`, `latex-pr.yml` : les références
@@ -148,6 +148,10 @@ faute de cas réel que la source manque.
   et sous-module `tests/amont` montés. Corpus : 6 C5 « jamais cité » de
   plus, les labels de l'ancienne syntaxe annoncés en S6.2 (4 calcul-diff,
   2 mesure), rien d'autre ne bouge.
+- 2026-09-30 — S6.4 : C5 signale `\ref` sur une hypothèse (label posé
+  dans la famille `hypothese`, `myassumption` compris) ; `\eqref`,
+  `\pageref` passent. Corpus inchangé, aucun `\ref{hyp:…}` dans les cours
+  (`git grep` sur les quatre `HEAD`).
 
 ## Bilan
 
