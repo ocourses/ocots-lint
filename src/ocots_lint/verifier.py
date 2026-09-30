@@ -19,7 +19,7 @@ Sans exemption dans les sources, arguments et sorties sont identiques à
 import os
 import sys
 
-from ocots_lint import empreintes, reference, sorties, voies
+from ocots_lint import empreintes, reference, sorties, vocabulaire, voies
 from ocots_lint.arbre import lire_arbre
 from ocots_lint.exemptions import Exemptions
 from ocots_lint.lecture import sources
@@ -60,6 +60,7 @@ def analyser(racines, noms, exemptions_actives=True):
     """(trouvailles, avertissements) : l'analyse commune à `verifier` et à
     `synchroniser`. Les trouvailles exemptées sont incluses (exemption non
     nulle) ; chacune porte son empreinte et sa voie."""
+    vocabulaire.charger()       # illisible : arrêt ; absent du template : averti
     exemptions = Exemptions(actives=exemptions_actives)
     resultats = []
     for nom in noms:

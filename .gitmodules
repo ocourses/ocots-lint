@@ -1,3 +1,6 @@
 [submodule "conventions"]
 	path = conventions
 	url = https://github.com/ocourses/ocots-conventions.git
+[submodule "template"]
+	path = tests/amont/ocots-latex-template
+	url = https://github.com/ocourses/ocots-latex-template.git

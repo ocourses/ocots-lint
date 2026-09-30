@@ -14,6 +14,7 @@ from ocots_lint import (
     nettoyer,
     synchroniser,
     verifier,
+    vocabulaire,
 )
 
 COMMANDES = {
@@ -62,4 +63,8 @@ def main(argv=None):
         print(f"commande inconnue : {argv[0]}\n", file=sys.stderr)
         print(aide(), file=sys.stderr)
         return 2
-    return commande[0](argv[1:])
+    try:
+        return commande[0](argv[1:])
+    except vocabulaire.VocabulaireIllisible as e:
+        print(f"ocots-lint : {e}", file=sys.stderr)
+        return 2

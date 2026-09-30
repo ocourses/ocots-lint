@@ -35,7 +35,7 @@ import os
 import sys
 from pathlib import Path
 
-from ocots_lint import __version__, comparer, sorties
+from ocots_lint import __version__, comparer, sorties, vocabulaire
 from ocots_lint.reference import ErreurReference, _git, dans, extraire, sous_modules
 from ocots_lint.regles import REGLES
 from ocots_lint.verifier import analyser
@@ -178,7 +178,7 @@ def main(argv):
             for nom, meta, e in resultats:
                 _afficher(nom, meta, e)
             return code
-    except ErreurReference as e:
+    except (ErreurReference, vocabulaire.VocabulaireIllisible) as e:
         print(e, file=sys.stderr)
         return 2
     print(USAGE, file=sys.stderr)

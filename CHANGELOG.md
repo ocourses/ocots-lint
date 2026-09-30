@@ -10,6 +10,16 @@ au moment du tag.
 
 ## Non publié
 
+- **Vocabulaire du template** (S5.2, étape 1 ; S5.3) : `ocots-lint` lit
+  `template/vocabulaire.json` dans le dossier courant — les environnements du
+  template du cours, par famille. À défaut, sa copie embarquée (celle du
+  template `main` à cette version) : en silence sans dossier `template/`,
+  avec **un** avertissement par exécution sur la sortie d'erreur si le
+  `template/` n'a pas de vocabulaire (template antérieur à `v1.2.0`, ou
+  sous-module non initialisé). Un vocabulaire illisible ou d'un schéma
+  inconnu arrête la commande (sortie `2`, message qui dit quoi faire),
+  plutôt que de rendre zéro trouvaille. Les règles n'en dépendent pas
+  encore : trouvailles inchangées.
 - **`verifier --nouvelles` lit la révision de base avec ses sous-modules**
   (`template/`, `conventions/`), à leur commit épinglé, quand ce commit est
   présent localement. Avant, la base était lue sans template : la voie des
