@@ -8,8 +8,8 @@
 remarque, preuve…), et vérifie qu'il en connaît le schéma.
 
 **Source du vocabulaire** : [décision 0005](../decisions/0005-vocabulaire.md)
-— *proposée*, à trancher avant S5.2. Recommandation : le template du cours,
-avec repli sur une copie embarquée.
+— **acceptée** (option B) : le template du cours, avec repli sur une copie
+embarquée.
 
 **Versions livrées** : `ocots-lint` `v0.6.0`, `ocots-latex-template`
 `v1.2.0`, `ocots-conventions` `v2.5.0` (relais).
@@ -112,8 +112,11 @@ cite le résultat de `instantane verifier`.
     }
     ```
 
-  - Question ouverte pour l'auteur : `openquestion` et `difficulty`
-    (blocs étiquetés Q1, D1) sont-ils des boîtes au sens de P2 ?
+  - Tranché par l'auteur (2026-09-30) : `openquestion` et `difficulty`
+    (blocs étiquetés Q1, D1) **sont des boîtes** au sens de P2 et P3 — elles
+    mettent quelque chose en avant, et se préparent comme toute autre
+    boîte. Même famille que `assumption` (bloc étiqueté H1), à nommer dans
+    la PR.
 - [ ] **S5.2** — En tant que *mainteneur*, je veux qu'`ocots-lint` lise ce
   vocabulaire (décision 0005), et que chaque règle désigne des familles et
   non des noms, afin qu'un environnement ajouté au template soit vu sans
@@ -144,7 +147,9 @@ cite le résultat de `instantane verifier`.
 ## Journal
 
 - 2026-09-30 — Préparation : état des lieux mesuré sur le corpus et le
-  template `v1.1.0`, décision 0005 proposée, critères écrits.
+  template `v1.1.0`, critères écrits. Décision 0005 : option B acceptée.
+  `openquestion` et `difficulty` sont des boîtes (aucun emploi dans le
+  corpus : critère 1 inchangé).
 
 ## Bilan
 

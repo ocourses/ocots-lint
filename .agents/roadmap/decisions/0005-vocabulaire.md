@@ -2,7 +2,7 @@
 
 # 0005 — Vocabulaire des boîtes : publié par le template, lu dans le cours
 
-**Date** : 2026-09-30 — **État** : proposée
+**Date** : 2026-09-30 — **État** : acceptée
 
 ## Contexte
 
@@ -68,4 +68,7 @@ Dans les deux cas :
 
 ## Décision
 
-*À prendre par l'auteur avant S5.2.*
+**B**, acceptée par l'auteur le 2026-09-30 : le vocabulaire est lu dans le
+`template/` du cours, à la version qu'il épingle ; à défaut, dans la copie
+embarquée par `ocots-lint`, avec un avertissement par exécution sur la
+sortie d'erreur.
