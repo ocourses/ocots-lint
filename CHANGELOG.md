@@ -10,6 +10,15 @@ au moment du tag.
 
 ## Non publié
 
+- **Lecture des labels et des renvois** (S6.1, décision 0006), pas encore
+  utilisée par une règle : `labels.lire` sur l'arbre — `\label{…}`,
+  `label=…` des boîtes du template, ancienne syntaxe (`{titre}{clé}`,
+  `<clé>`) avec le préfixe que publie le vocabulaire (`ancienne_syntaxe`) ;
+  `\ref`, `\eqref`, `\cref` (listes comprises), `\autoref`,
+  `\hyperref[…]`… Chaque label porte l'objet qu'il désigne (boîte,
+  équation, figure, section…). `labels.index_du_cours` croise tout le cours.
+  Rien dans les commentaires ni les verbatims ; repli pour un fichier
+  refusé.
 ---
 
 ## v0.6.0 — 2026-09-30
