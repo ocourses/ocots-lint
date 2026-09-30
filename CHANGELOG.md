@@ -10,6 +10,9 @@ au moment du tag.
 
 ## Non publié
 
+- CI **Amont**, chaque lundi (et à la demande) : la suite de tests contre le
+  `main` du template, `couverture` contre le `main` des conventions. En
+  échec, une issue `[amont] …` est ouverte. Outil inchangé.
 - **Un transparent se reconnaît à sa classe** (S5.4) : P3 ne s'applique
   pas à un fichier qui déclare `\documentclass{beamer}` (support
   « slides » du vocabulaire du template), où qu'il soit rangé ; un fichier
