@@ -7,12 +7,11 @@ référence ») et P12 (un label ne se pose que si l'objet est cité), en
 croisant les labels et les renvois de **tout le cours** — polycopié, TD,
 transparents, examens.
 
-**Lecture** : [décision 0006](../decisions/0006-labels.md) — *proposée*,
-à trancher avant S6.1. Recommandation : lire labels et renvois dans la
-source (arbre, fichiers inclus suivis), et les `??` et labels dupliqués
-dans le `.log` que la CI des cours produit déjà ; pas de `.sty`
-d'instrumentation (l'ébauche de ce sprint), faute de cas réel que la source
-manque.
+**Lecture** : [décision 0006](../decisions/0006-labels.md) — **acceptée**
+(option B) : labels et renvois lus dans la source (arbre, fichiers inclus
+suivis), `??` et labels dupliqués dans le `.log` que la CI des cours
+produit déjà ; pas de `.sty` d'instrumentation (l'ébauche de ce sprint),
+faute de cas réel que la source manque.
 
 **Version livrée** : `v0.7.0`.
 
@@ -34,8 +33,8 @@ manque.
   | démo | 14 | 10 | 7 | 0 | 0 |
 
   Les 38 de mesure sont des exercices étiquetés `exo:` quand C5 écrit
-  `ex:` — **à trancher par l'auteur** : corriger 38 labels (et leurs
-  renvois), ou admettre `exo:` dans C5.
+  `ex:`. **Tranché par l'auteur** : C5 ne change pas, les 38 labels (et
+  leurs renvois) seront signalés puis corrigés.
 
 ## Critères d'acceptation
 
@@ -77,9 +76,9 @@ manque.
   `\ref` au lieu de `\eqref` soit signalée (C5) — aucune au corpus
   aujourd'hui : la règle verrouille l'usage.
 - [ ] **S6.5** — Dans `ocourses/agents`, `latex-pr.yml` : les références
-  non résolues et labels multiplement définis du `.log` sont signalés dans
-  le rapport de la PR — **à trancher** : en échec (C5 : « un `??` est un
-  bug ») ou en avertissement.
+  non résolues et labels multiplement définis du `.log` **font échouer la
+  PR** (tranché par l'auteur ; C5 : « un `??` est un bug »), avec la liste
+  dans le rapport.
 - [ ] **S6.6** — Release `v0.7.0`, relais des conventions, montée des
   cours, avec `comparer` et `synchroniser --dry-run`.
 
@@ -87,8 +86,9 @@ manque.
 
 - 2026-09-30 — Préparation : mesures (labels du `.aux` contre la source,
   coût de compilation, prototype C5/P12 sur le corpus), décision 0006
-  proposée, sprint réécrit (l'ébauche « journal instrumenté » passe au
-  backlog si 0006 est acceptée).
+  proposée, sprint réécrit. Tranché par l'auteur : 0006 option B (le
+  journal instrumenté passe au backlog) ; C5 garde `ex:` ; `??` en échec de
+  PR.
 
 ## Bilan
 

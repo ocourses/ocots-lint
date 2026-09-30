@@ -2,7 +2,7 @@
 
 # 0006 — Labels et renvois : lus dans la source, pas par un journal instrumenté
 
-**Date** : 2026-09-30 — **État** : proposée
+**Date** : 2026-09-30 — **État** : acceptée
 
 ## Contexte
 
@@ -65,4 +65,8 @@ retour : un cas réel que la source ne peut pas lire.
 
 ## Décision
 
-*À prendre par l'auteur avant S6.1.*
+**B**, acceptée par l'auteur le 2026-09-30 : labels et renvois lus dans la
+source, croisés sur tout le cours ; références non résolues et labels
+multiplement définis lus dans le `.log` que la CI des cours produit déjà, et
+**en échec** de la PR. Le journal instrumenté passe au backlog, avec son
+critère de retour : un cas réel que la source ne peut pas lire.
