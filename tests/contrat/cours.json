@@ -21,7 +21,7 @@
     },
     "C5": {
       "garantie": "heuristique",
-      "resume": "C5 — label jamais cité dans le cours (P12 : ne poser un label que si l'objet est cité)."
+      "resume": "C5 — label jamais cité dans le cours (P12), ou dont le préfixe ne nomme pas l'objet."
     },
     "C6": {
       "garantie": "heuristique",
