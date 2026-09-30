@@ -2,14 +2,20 @@
 
 import re
 
-from ocots_lint.lecture import ligne_de, lire, sans_commentaires, sources
+from ocots_lint import vocabulaire
+from ocots_lint.lecture import ligne_de, lire, motif, sans_commentaires, sources
 
 # Le symbole de fin d'une preuve ou d'un exemple est posé à \end{…}. Si la
 # boîte se termine par une liste ou une équation hors texte, il passe seul sur
 # une nouvelle ligne, sauf \qedhere à l'endroit voulu. Le défaut est silencieux
-# (compilation sans avertissement) : il se lit dans la source.
-RE_BOITE_QED = re.compile(
-    r"\\begin\{(proof|proofend|example\*?)\}(.*?)\\end\{\1\}", re.S)
+# (compilation sans avertissement) : il se lit dans la source. Les
+# environnements qui posent ce symbole viennent du vocabulaire du template
+# (`symbole_de_fin`) : preuves, exemples, et leurs alias.
+
+
+def re_boite_qed(v):
+    return re.compile(r"\\begin\{(" + motif(v.symbole_de_fin) + r")\}(.*?)\\end\{\1\}",
+                      re.S)
 
 # Fins de boîte qui rejettent le symbole, et l'ouverture correspondante : le
 # \qedhere doit se trouver entre la dernière ouverture et la fin.
@@ -60,9 +66,10 @@ def accolades(texte, i):
 
 def regle_C6(racines):
     """C6 — \\qedhere manquant en fin de liste ou d'équation ; \\vspace qui compense un \\footnotetext."""  # noqa: E501
+    boite_qed = re_boite_qed(vocabulaire.charger())
     for chemin in sources(racines):
         texte = sans_commentaires(lire(chemin))
-        for m in RE_BOITE_QED.finditer(texte):
+        for m in boite_qed.finditer(texte):
             genre = fin_sans_qedhere(m.group(2))
             if genre:
                 yield chemin, ligne_de(texte, m.end()), (

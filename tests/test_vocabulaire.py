@@ -143,8 +143,8 @@ def test_une_boite_ajoutee_au_template_du_cours_est_vue(cours, capsys):
     assert "[P2] theorem -> lemmeinedit" in capsys.readouterr().out
 
 
-# Règles pas encore passées au vocabulaire (S5.2, étape suivante).
-EN_ATTENTE = {"regles/c6.py"}
+# Modules pas encore passés au vocabulaire : aucun depuis S5.2, étape 3.
+EN_ATTENTE = set()
 
 # Mots français homographes d'un environnement : « proposition » dans les
 # motifs de P3 et C4 (prose française), « correction » (voie de correction,

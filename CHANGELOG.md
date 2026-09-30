@@ -10,6 +10,14 @@ au moment du tag.
 
 ## Non publié
 
+- **C6 lit le vocabulaire** (S5.2, étape 3) : les environnements qui posent
+  un symbole de fin sont ceux que le template marque `symbole_de_fin` —
+  preuves, exemples, **et leurs alias** (`myexample`, `prooffin`…), que
+  l'ancienne liste ignorait. Sur le corpus : 11 trouvailles C6 nouvelles,
+  toutes des `myexample` finis par une équation hors texte ou une liste sans
+  `\qedhere` (transparents de calcul-diff) — le même défaut que C6 signale
+  déjà pour `example`. Plus aucun nom d'environnement du template dans le
+  code de l'outil.
 - **P2, P3, P5 lus par familles** (S5.2, étape 2) : une boîte est un
   environnement d'une famille marquée boîte dans le vocabulaire du template,
   plus une liste de noms codée en dur. Sont désormais vues : `conjecture`,
