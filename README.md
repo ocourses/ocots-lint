@@ -133,7 +133,9 @@ pose pour basculer les dépôts privés sur le runner Occidata quand le quota de
 minutes GitHub est épuisé. Sinon, `ubuntu-latest`.
 
 À la main : `ocots-lint verifier --nouvelles origin/main`. Retirer une
-exemption fait réapparaître la trouvaille.
+exemption fait réapparaître la trouvaille. La révision de base est lue avec
+ses sous-modules (`template/`…) à leur commit épinglé, quand ce commit est
+présent dans le sous-module local.
 
 Formats : `--format github` (annotations de workflow), `--format json`
 (pour un script ou un agent — voir ci-dessous) et `--format sarif`

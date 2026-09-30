@@ -19,9 +19,13 @@ inutiles ou invalides…) sont comparés aussi.
 `corpus/` est ignoré par git : les instantanés des cours privés citent leur
 texte (messages de P3) et restent sur la machine du mainteneur.
 
-Limite connue : les sous-modules ne sont pas extraits, donc le template non
-plus ; la voie des guillemets (C4) peut y différer de celle du cours. La
-comparaison ne porte pas sur la voie.
+Les sous-modules du cours (`template/`, `conventions/`) sont extraits à leur
+commit épinglé, s'ils sont initialisés dans le dépôt (S5.0) : l'analyse voit
+le même template que le cours — la voie des guillemets (C4) en dépend, et le
+vocabulaire des boîtes en dépendra. L'instantané note, pour chaque
+sous-module, le commit extrait ou son absence ; `verifier` signale un
+sous-module qui n'est plus extrait comme au figeage. La voie de chaque
+trouvaille est comparée.
 
 Sorties : 0 si rien n'a bougé, 1 sinon, 2 pour une demande invalide.
 """
@@ -32,11 +36,17 @@ import sys
 from pathlib import Path
 
 from ocots_lint import __version__, comparer, sorties
-from ocots_lint.reference import ErreurReference, _git, dans, extraire
+from ocots_lint.reference import ErreurReference, _git, dans, extraire, sous_modules
 from ocots_lint.regles import REGLES
 from ocots_lint.verifier import analyser
 
 DOSSIER = "corpus"
+
+
+def extraits(depot, commit):
+    """{chemin: commit extrait, ou None s'il ne l'est pas} des sous-modules."""
+    return {chemin: sha if dispo else None
+            for chemin, sha, dispo in sous_modules(commit, depot=depot)}
 
 
 def analyser_revision(depot, commit):
@@ -53,7 +63,8 @@ def figer(nom, depot, ref="HEAD", dossier=DOSSIER):
     commit = _git("rev-parse", "--verify", f"{ref}^{{commit}}", dossier=depot)
     doc = analyser_revision(depot, commit)
     doc["corpus"] = {"nom": nom, "depot": depot, "commit": commit,
-                     "ocots_lint": __version__}
+                     "ocots_lint": __version__,
+                     "sous_modules": extraits(depot, commit)}
     os.makedirs(dossier, exist_ok=True)
     chemin = Path(dossier) / f"{nom}.json"
     chemin.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n",
@@ -62,7 +73,7 @@ def figer(nom, depot, ref="HEAD", dossier=DOSSIER):
 
 
 def _identite(t):
-    return t["ligne"], t["message"], t.get("exemption")
+    return t["ligne"], t["message"], t.get("exemption"), t.get("voie")
 
 
 def _avertissements(doc):
@@ -89,7 +100,8 @@ def ecart(avant, apres):
 
 def bouge(e):
     return bool(e["apparues"] or e["disparues"] or e["modifiees"]
-                or e["avertissements"]["apparus"] or e["avertissements"]["disparus"])
+                or e["avertissements"]["apparus"] or e["avertissements"]["disparus"]
+                or e.get("sous_modules"))
 
 
 def verifier(dossier=DOSSIER):
@@ -103,7 +115,12 @@ def verifier(dossier=DOSSIER):
         fige = json.loads(f.read_text(encoding="utf-8"))
         meta = fige["corpus"]
         actuel = analyser_revision(meta["depot"], meta["commit"])
-        resultats.append((meta["nom"], meta, ecart(fige, actuel)))
+        e = ecart(fige, actuel)
+        avant, maintenant = meta.get("sous_modules", {}), extraits(meta["depot"],
+                                                                   meta["commit"])
+        if avant != maintenant:
+            e["sous_modules"] = {"avant": avant, "apres": maintenant}
+        resultats.append((meta["nom"], meta, e))
     return (1 if any(bouge(e) for _, _, e in resultats) else 0), resultats
 
 
@@ -123,6 +140,17 @@ def _afficher(nom, meta, e):
     for signe, cle in (("+", "apparus"), ("-", "disparus")):
         for fichier, ligne, message in e["avertissements"][cle]:
             print(f"  {signe} {fichier}:{ligne}: [avertissement] {message}")
+    if "sous_modules" in e:
+        avant, apres = e["sous_modules"]["avant"], e["sous_modules"]["apres"]
+        for chemin in sorted(avant.keys() | apres.keys()):
+            a, b = avant.get(chemin), apres.get(chemin)
+            if a != b:
+                print(f"  ! sous-module {chemin} : {_court(a)} au figeage, "
+                      f"{_court(b)} maintenant — refiger, ou l'initialiser")
+
+
+def _court(sha):
+    return sha[:7] if sha else "non extrait"
 
 
 USAGE = ("usage : python -m ocots_lint.instantane figer NOM DÉPÔT [RÉF] "
