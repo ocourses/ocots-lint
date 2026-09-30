@@ -13,8 +13,13 @@ import re
 
 SKIP = ("/template/", "/build/", "/conventions/", "/.git/")
 
-BOX = (r"(?:my)?(?:definition|theorem|proposition|corollary|lemma|example"
-       r"|remark|assumption|exercisecb|exercise)\*?")
+
+
+def motif(noms):
+    """Une alternative regex qui reconnaît exactement ces noms
+    d'environnement (les plus longs d'abord : `remark*` avant `remark`)."""
+    return "(?:" + "|".join(re.escape(n) for n in
+                            sorted(noms, key=lambda n: (-len(n), n))) + ")"
 
 
 def sources(racines):

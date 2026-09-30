@@ -10,6 +10,16 @@ au moment du tag.
 
 ## Non publié
 
+- **P2, P3, P5 lus par familles** (S5.2, étape 2) : une boîte est un
+  environnement d'une famille marquée boîte dans le vocabulaire du template,
+  plus une liste de noms codée en dur. Sont désormais vues : `conjecture`,
+  `citedtheorem`, `hypothesis`, `openquestion`, `difficulty` (et variantes) ;
+  un environnement ajouté au template du cours l'est sans modifier l'outil.
+  Tolérances de P2 par famille : une série d'exercices, alias compris
+  (`exercise` puis `myexercisecb`), et l'entrée dans une remarque. P5 compte
+  `remark*` comme une remarque (l'ancien code ne comptait que `remark`).
+  Mesure C3 « ancienne syntaxe » : résultats et définitions du vocabulaire,
+  sans leurs alias. Sur le corpus : aucune trouvaille ni mesure ne change.
 - **Vocabulaire du template** (S5.2, étape 1 ; S5.3) : `ocots-lint` lit
   `template/vocabulaire.json` dans le dossier courant — les environnements du
   template du cours, par famille. À défaut, sa copie embarquée (celle du

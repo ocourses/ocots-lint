@@ -180,6 +180,21 @@ cite le résultat de `instantane verifier`.
   cours : deux tests de `nettoyer` ont vu `csquotes`). Corpus : trouvailles
   inchangées ; un avertissement par cours, aucun des commits figés n'ayant
   encore un template `v1.2.0`.
+- 2026-09-30 — S5.2, étape 2 : P2, P3, P5 et la mesure C3 lisent les
+  familles (`lecture.BOX` supprimé ; motifs construits à chaque exécution
+  depuis le vocabulaire). Écart avec l'ancienne liste : 12 noms ajoutés
+  (`conjecture`, `citedtheorem`, `hypothesis`, `openquestion`, `difficulty`,
+  variantes et alias), aucun employé dans le corpus ; retirés, des noms
+  absents du template (`exercisecb`, `mytheorem*`…). Changements voulus,
+  fixés par fixtures : P5 compte `remark*` (écart déclaré avec l'ancien
+  outil dans `test_parite`), P2 tolère une série `exercise` →
+  `myexercisecb`, `openquestion` et `conjecture` sont des boîtes. Test du
+  critère 2 : aucune chaîne du code (hors docstrings) ne cite un nom
+  d'environnement du template ; exceptions écrites — les homographes
+  français `proposition` et `correction`, les noms de famille, et C6 en
+  attente de l'étape 3. Corpus : trouvailles inchangées ; `--mesure`
+  inchangé (mesure C3 : 110, 0, 0, 0). Sous-module du template monté à
+  `v1.2.0` (vocabulaire identique à la copie embarquée).
 
 ## Bilan
 

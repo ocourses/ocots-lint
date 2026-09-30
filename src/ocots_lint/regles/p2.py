@@ -12,16 +12,21 @@ lecture par masques.
 
 import re
 
+from ocots_lint import vocabulaire
 from ocots_lint.arbre import lire_arbre
-from ocots_lint.lecture import BOX, ligne_de, sans_commentaires, sources
+from ocots_lint.lecture import ligne_de, motif, sans_commentaires, sources
+
+# Familles du vocabulaire du template (template/vocabulaire.json) : un alias
+# (`myexercisecb`) ou une variante étoilée (`remark*`) a la famille de sa
+# cible.
 
 # Une série d'exercices est une liste, pas une narration (P2).
-CHAINE_TOLEREE = {("exercise", "exercise"), ("exercisecb", "exercisecb")}
+SERIE_TOLEREE = "exercice"
 
 # Entrer dans une remarque ne demande pas de phrase de liaison : elle se
 # rattache à ce qui précède (P5). Ce qui en *sort* reste soumis à P2 — une
 # boîte collée après une remarque perd son amorce dès qu'on saute la remarque.
-ENTREE_TOLEREE = "remark"
+ENTREE_TOLEREE = "remarque"
 
 # Ni prose ni contenu : ce qui ne sépare pas deux boîtes.
 MISE_EN_PAGE = frozenset({
@@ -30,27 +35,25 @@ MISE_EN_PAGE = frozenset({
     "smallbreak", "medbreak", "bigbreak", "label", "index"})
 FIGURES = frozenset({"figure", "figure*", "center", "wrapfigure", "tikzpicture"})
 
-RE_BOITE = re.compile(BOX)
-
-RE_CHAINE = re.compile(
-    r"\\end\{(" + BOX + r")\}"
-    r"((?:[^\S\n]*\n|[^\S\n]*%[^\n]*\n)*)"
-    r"[^\S\n]*\\begin\{(" + BOX + r")\}")
 
 
-def _nu(nom):
-    """Le type de boîte, sans préfixe `my` ni étoile : `myremark*` est une
-    remarque (non numérotée), la tolérance s'y applique pareil."""
-    return nom.replace("my", "").rstrip("*")
+def re_chaine(v):
+    """Le repli par masques : `\\end{boîte}` suivi, à des blancs et
+    commentaires près, de `\\begin{boîte}`."""
+    boite = motif(v.boites)
+    return re.compile(
+        r"\\end\{(" + boite + r")\}"
+        r"((?:[^\S\n]*\n|[^\S\n]*%[^\n]*\n)*)"
+        r"[^\S\n]*\\begin\{(" + boite + r")\}")
 
 
-def tolere(avant, apres):
-    nus = (_nu(avant), _nu(apres))
-    return nus in CHAINE_TOLEREE or nus[1] == ENTREE_TOLEREE
+def tolere(v, avant, apres):
+    fa, fb = v.famille(avant), v.famille(apres)
+    return fa == fb == SERIE_TOLEREE or fb == ENTREE_TOLEREE
 
 
-def _est_boite(n):
-    return n.genre == "environnement" and RE_BOITE.fullmatch(n.nom)
+def _est_boite(n, v):
+    return n.genre == "environnement" and n.nom in v.boites
 
 
 def _transparent(n, texte):
@@ -73,14 +76,14 @@ def _freres(arbre):
             yield n.enfants
 
 
-def chaines_arbre(arbre):
+def chaines_arbre(arbre, v):
     """(boîte, boîte suivante) séparées seulement par de la mise en page,
     dans l'ordre du texte."""
     paires = []
     for freres in _freres(arbre):
         precedente = None
         for n in freres:
-            if _est_boite(n):
+            if _est_boite(n, v):
                 if precedente is not None:
                     paires.append((precedente, n))
                 precedente = n
@@ -91,17 +94,19 @@ def chaines_arbre(arbre):
 
 def regle_P2(racines):
     """P2 — enchaînements de boîtes sans texte entre elles."""
+    v = vocabulaire.charger()
+    chaine = re_chaine(v)
     for chemin in sources(racines):
         arbre = lire_arbre(chemin)
         if arbre.erreur is None:
-            for avant, apres in chaines_arbre(arbre):
-                if not tolere(avant.nom, apres.nom):
+            for avant, apres in chaines_arbre(arbre, v):
+                if not tolere(v, avant.nom, apres.nom):
                     # la ligne du \end{…} de la première boîte
                     ligne = arbre.position(avant.fin - 1)[0]
                     yield chemin, ligne, f"{avant.nom} -> {apres.nom}"
             continue
         texte = sans_commentaires(arbre.texte)            # repli
-        for m in RE_CHAINE.finditer(texte):
-            if not tolere(m.group(1), m.group(3)):
+        for m in chaine.finditer(texte):
+            if not tolere(v, m.group(1), m.group(3)):
                 yield (chemin, ligne_de(texte, m.start()),
                        f"{m.group(1)} -> {m.group(3)}")
