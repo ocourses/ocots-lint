@@ -84,7 +84,7 @@ def test_verifier_voit_une_trouvaille_modifiee(depot, capsys):
     assert (m["avant"]["message"], m["apres"]["message"]) == (
         "ancien message", "theorem -> lemma")
     instantane.main(["verifier"])
-    assert "('ancien message', None) → ('theorem -> lemma', None)" in (
+    assert "('ancien message', None, 'tri') → ('theorem -> lemma', None, 'tri')" in (
         capsys.readouterr().out)
 
 
@@ -152,3 +152,62 @@ def test_avertissement_apparu(depot):
     code, [(_, _, e)] = instantane.verifier()
     assert code == 1
     assert e["avertissements"]["disparus"] == [("poly/a.tex", 1, "ancien")]
+
+
+# ------------------------------------------------ sous-modules (S5.0)
+
+def avec_template(tmp_path, depot):
+    """Ajoute à `depot` un sous-module `template/` (un fichier `vocab.txt`)."""
+    tpl = tmp_path / "tpl"
+    tpl.mkdir()
+    (tpl / "vocab.txt").write_text("v1\n", encoding="utf-8")
+    git(tpl, "init", "-q")
+    git(tpl, "add", "-A")
+    git(tpl, "commit", "-qm", "v1")
+    git(depot, "-c", "protocol.file.allow=always", "submodule", "add", "-q",
+        str(tpl), "template")
+    git(depot, "commit", "-qm", "template")
+    return tpl
+
+
+def test_extraire_inclut_le_sous_module_a_son_commit_epingle(tmp_path, depot):
+    tpl = avec_template(tmp_path, depot)
+    epingle = git(depot, "rev-parse", "HEAD")
+    (depot / "template" / "vocab.txt").write_text("v2\n", encoding="utf-8")
+    git(depot / "template", "commit", "-qam", "v2")     # copie de travail en avance
+    with instantane.extraire(epingle, depot=str(depot)) as base:
+        assert (instantane.Path(base) / "template" / "vocab.txt").read_text() == "v1\n"
+    assert instantane.extraits(str(depot), epingle) == {
+        "template": git(tpl, "rev-parse", "HEAD")}
+
+
+def test_sous_module_non_initialise_laisse_vide(tmp_path, depot):
+    avec_template(tmp_path, depot)
+    clone = tmp_path / "clone"
+    git(tmp_path, "clone", "-q", str(depot), str(clone))   # sans --recurse
+    commit = git(clone, "rev-parse", "HEAD")
+    with instantane.extraire(commit, depot=str(clone)) as base:
+        assert not (instantane.Path(base) / "template" / "vocab.txt").exists()
+    assert instantane.extraits(str(clone), commit) == {"template": None}
+
+
+def test_figer_note_les_sous_modules_et_verifier_voit_leur_absence(
+        tmp_path, depot, capsys):
+    tpl = avec_template(tmp_path, depot)
+    chemin, doc = instantane.figer("essai", str(depot))
+    assert doc["corpus"]["sous_modules"] == {"template": git(tpl, "rev-parse", "HEAD")}
+    assert instantane.main(["verifier"]) == 0
+    doc["corpus"]["sous_modules"] = {"template": None}      # figé sans lui
+    ecrire(chemin, doc)
+    capsys.readouterr()
+    assert instantane.main(["verifier"]) == 1
+    assert "! sous-module template : non extrait au figeage" in capsys.readouterr().out
+
+
+def test_une_voie_changee_compte_modifiee(depot):
+    chemin, _ = instantane.figer("essai", str(depot))
+    doc = lire(chemin)
+    doc["trouvailles"][0]["voie"] = "mecanique"
+    ecrire(chemin, doc)
+    code, [(_, _, e)] = instantane.verifier()
+    assert (code, len(e["modifiees"])) == (1, 1)

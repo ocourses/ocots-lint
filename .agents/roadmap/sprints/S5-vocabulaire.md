@@ -81,7 +81,7 @@ cite le résultat de `instantane verifier`.
 
 ## Stories
 
-- [ ] **S5.0** — En tant que *mainteneur*, je veux que les instantanés
+- [x] **S5.0** — En tant que *mainteneur*, je veux que les instantanés
   incluent le sous-module `template/` du cours à son commit épinglé, afin
   que le corpus de référence voie le vocabulaire qu'il lira.
   - Critère : `figer` extrait aussi `template/` (et `conventions/`) ; les
@@ -150,6 +150,18 @@ cite le résultat de `instantane verifier`.
   template `v1.1.0`, critères écrits. Décision 0005 : option B acceptée.
   `openquestion` et `difficulty` sont des boîtes (aucun emploi dans le
   corpus : critère 1 inchangé).
+- 2026-09-30 — S5.0 : `reference.extraire` extrait les sous-modules à leur
+  commit épinglé, quand il est présent localement — pour les instantanés
+  **et** pour `verifier --nouvelles`, dont la base aurait sinon été lue sans
+  le vocabulaire du template après S5.2. Les instantanés notent les
+  sous-modules extraits ; `verifier` signale un sous-module qui ne l'est
+  plus ; la **voie** entre dans la comparaison. Rejeu des instantanés de
+  `v0.5.0` : trouvailles et messages inchangés ; **4 voies corrigées**, C4
+  guillemets `tri` → `mecanique` (calcul-diff
+  `slides/calculDiff/slides_diff.tex:235`, `:236` ×2 ; mesure
+  `td/td1/td1.tex:129`) : avec le template, `csquotes` est vu, comme en CI
+  — c'est le piège du `--dry-run` de S4.8. Corpus refigé (8 sous-modules
+  extraits sur 8), `verifier` muet.
 
 ## Bilan
 

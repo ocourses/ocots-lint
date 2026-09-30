@@ -63,7 +63,10 @@ uv run python -m ocots_lint.instantane verifier
 ```
 
 `figer` passe par `git archive` : la copie de travail du cours n'est ni lue
-ni touchée. Les instantanés vont dans `corpus/`, **ignoré par git** : ceux des
+ni touchée. Les sous-modules (`template/`, `conventions/`) sont extraits à
+leur commit épinglé, s'ils sont initialisés dans le dépôt du cours :
+l'instantané le note, et `verifier` signale un sous-module qui n'est plus
+extrait comme au figeage. La voie de chaque trouvaille est comparée. Les instantanés vont dans `corpus/`, **ignoré par git** : ceux des
 cours privés citent leur texte.
 
 `verifier` rejoue chaque instantané sur son commit et compare par

@@ -10,6 +10,15 @@ au moment du tag.
 
 ## Non publié
 
+- **`verifier --nouvelles` lit la révision de base avec ses sous-modules**
+  (`template/`, `conventions/`), à leur commit épinglé, quand ce commit est
+  présent localement. Avant, la base était lue sans template : la voie des
+  guillemets (C4) y différait, et le vocabulaire des boîtes, lu dans le
+  template à partir de S5, aurait pu faire apparaître de fausses
+  trouvailles nouvelles.
+- Instantanés du corpus (outil de mainteneur) : les sous-modules sont
+  extraits et notés ; la **voie** de chaque trouvaille est comparée.
+
 ---
 
 ## v0.5.1 — 2026-09-30
