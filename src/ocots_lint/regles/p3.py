@@ -103,10 +103,10 @@ def regle_P3(racines):
     re_boite_ouvrante = re.compile(
         r"^[^\S\n]*\\begin\{(" + motif(v.boites) + r")\}", re.M)
     for chemin in sources(racines):
-        if est_transparent(chemin):
-            continue  # slides.md#sl4 : P3 ne s'applique pas aux transparents
         arbre = lire_arbre(chemin)
         brut = arbre.texte
+        if est_transparent(chemin, brut, v):
+            continue  # slides.md#sl4 : P3 ne s'applique pas aux transparents
         texte = texte_p3(arbre)               # détection dans la prose…
         lignes, lignes_brutes = texte.split("\n"), brut.split("\n")
         for m in re_boite_ouvrante.finditer(texte):

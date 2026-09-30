@@ -129,7 +129,7 @@ cite le résultat de `instantane verifier`.
   un message clair devant un vocabulaire qu'il ne sait pas lire, plutôt que
   de rendre zéro trouvaille.
   - Critère 3, par fixtures : schéma `2`, JSON invalide, famille inconnue.
-- [ ] **S5.4** — En tant qu'*auteur*, je veux que P3 reconnaisse un
+- [x] **S5.4** — En tant qu'*auteur*, je veux que P3 reconnaisse un
   transparent à sa classe de document, pas seulement à son dossier
   `slides/`, afin de ne plus recevoir P3 sur un transparent rangé ailleurs
   (backlog, cas réel en S4.0 : automatique, `td/td4/`).
@@ -211,6 +211,17 @@ cite le résultat de `instantane verifier`.
   Mesure emploie `myexample` 24 fois, sans ce défaut. Fixture
   `C6/signale/alias_myexample.tex`, écart voulu avec l'ancien outil déclaré.
   Le test du critère 2 n'a plus d'exception de module.
+- 2026-09-30 — S5.4 : `est_transparent` lit la classe déclarée par le
+  fichier (supports du vocabulaire) ; sans classe, le dossier `slides/`.
+  Sonde du corpus : 17 fichiers sous `slides/`, tous `beamer` ; hors
+  `slides/`, un seul `beamer` (automatique `td/td4/slides-td4-rk.tex`,
+  autonome, n'inclut rien) ; aucun fichier sous `slides/` d'une autre
+  classe. Écart : **1 P3 disparue**, faux positif — la « phrase » citée
+  n'était que `\end{myframe} \begin{myframe}{Exemple 2} \scriptsize`.
+  Limite `beamer_hors_dossier_slides` levée ; fixture symétrique
+  `signale/slides/classe_polycopie.tex`. Limite restante, non constatée au
+  corpus : un fichier sans classe, inclus par un transparent rangé hors de
+  `slides/`, reçoit P3.
 
 ## Bilan
 

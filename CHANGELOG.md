@@ -10,6 +10,14 @@ au moment du tag.
 
 ## Non publié
 
+- **Un transparent se reconnaît à sa classe** (S5.4) : P3 ne s'applique
+  pas à un fichier qui déclare `\documentclass{beamer}` (support
+  « slides » du vocabulaire du template), où qu'il soit rangé ; un fichier
+  qui déclare une autre classe reçoit P3, même sous `slides/`. Sans
+  `\documentclass` (chapitre inclus), le dossier `slides/` décide, comme
+  avant. Limite levée (`limites/` → `accepte/`) :
+  `beamer_hors_dossier_slides`. Sur le corpus : un faux positif P3 en
+  moins (automatique, `td/td4/slides-td4-rk.tex`).
 - **C6 lit le vocabulaire** (S5.2, étape 3) : les environnements qui posent
   un symbole de fin sont ceux que le template marque `symbole_de_fin` —
   preuves, exemples, **et leurs alias** (`myexample`, `prooffin`…), que

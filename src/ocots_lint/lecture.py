@@ -36,11 +36,25 @@ def sources(racines):
                     yield os.path.join(dossier, f)
 
 
-def est_transparent(chemin):
-    """Vrai si le fichier vit sous un dossier `slides/` — le support
-    « transparent » où slides.md#sl4 dispense explicitement des règles
-    d'amorce et de reprise du polycopié (P3, P4) : le texte y est
-    télégraphique, c'est l'enseignant qui fait la liaison à l'oral."""
+RE_CLASSE = re.compile(r"^[^%\n]*?\\documentclass(?:\[[^\]]*\])?\{([^}]+)\}", re.M)
+
+# Le support « diapositives » du vocabulaire du template.
+DIAPOSITIVES = "slides"
+
+
+def est_transparent(chemin, texte, v):
+    """Vrai si le fichier est un transparent — le support où slides.md#sl4
+    dispense explicitement des règles d'amorce et de reprise du polycopié
+    (P3, P4) : le texte y est télégraphique, c'est l'enseignant qui fait la
+    liaison à l'oral.
+
+    Un fichier qui déclare sa classe (`\\documentclass{beamer}`) est reconnu
+    par elle, selon les supports du vocabulaire du template (S5.4), où qu'il
+    soit rangé. Un fichier sans classe — un chapitre inclus par un fichier
+    principal — l'est par son dossier : sous `slides/`."""
+    m = RE_CLASSE.search(texte)
+    if m:
+        return v.support(m.group(1).strip()) == DIAPOSITIVES
     return "slides" in os.path.normpath(chemin).split(os.sep)[:-1]
 
 
