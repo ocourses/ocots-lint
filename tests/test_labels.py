@@ -68,9 +68,15 @@ def test_ancienne_syntaxe(cours, source, attendu):
 
 
 def test_ancienne_syntaxe_ignoree_sans_le_vocabulaire(tmp_path, monkeypatch):
-    """Sans `ancienne_syntaxe` dans le vocabulaire, aucun label deviné."""
+    """Sans `ancienne_syntaxe` dans le vocabulaire (template v1.2.0 à
+    v1.4.0), aucun label deviné."""
     monkeypatch.chdir(tmp_path)
     vocabulaire._lire.cache_clear()
+    doc = json.loads(vocabulaire.EMBARQUE.read_text(encoding="utf-8"))
+    for e in doc["environnements"].values():
+        e.pop("ancienne_syntaxe", None)
+    (tmp_path / "template").mkdir()
+    (tmp_path / "template" / "vocabulaire.json").write_text(json.dumps(doc))
     (tmp_path / "a.tex").write_text("\\begin{theorem}{T}{cauchy}\nx\n\\end{theorem}\n")
     assert labels.lire("a.tex", vocabulaire.charger())[0] == []
 

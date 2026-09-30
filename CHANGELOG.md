@@ -10,6 +10,11 @@ au moment du tag.
 
 ## Non publié
 
+- **Vocabulaire embarqué à jour du template `v1.5.0`** (`ancienne_syntaxe`) :
+  pour un cours dont le template n'a pas encore `vocabulaire.json`, les
+  labels de l'ancienne syntaxe (`\begin{theorem}{Titre}{clé}` → `thm:clé`)
+  sont lus aussi. Sur le corpus : 6 labels C5 « jamais cité » de plus
+  (4 calcul-diff, 2 mesure), tous dans des transparents.
 - **C5 : préfixe qui ne nomme pas l'objet** (S6.3) — `exo:` sur un
   exercice (C5 veut `ex:`), `ex:` sur un exemple (`exa:`), label sans
   préfixe… La table est celle de C5, lue dans `conventions/communes.md`

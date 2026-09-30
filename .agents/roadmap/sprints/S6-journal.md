@@ -144,6 +144,10 @@ faute de cas réel que la source manque.
   Confusion récurrente : `ex:` pour un exemple (C5 : `exa:`, `ex:` étant
   l'exercice). Un label à la fois jamais cité et mal préfixé donne deux
   trouvailles sur la même ligne.
+- 2026-09-30 — Template `v1.5.0` publié ; copie embarquée du vocabulaire
+  et sous-module `tests/amont` montés. Corpus : 6 C5 « jamais cité » de
+  plus, les labels de l'ancienne syntaxe annoncés en S6.2 (4 calcul-diff,
+  2 mesure), rien d'autre ne bouge.
 
 ## Bilan
 
