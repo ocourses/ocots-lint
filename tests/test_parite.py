@@ -59,11 +59,41 @@ def executer(commande, cwd):
     return r.returncode, r.stdout, r.stderr
 
 
+def regles_de_l_ancien():
+    """Les règles que l'ancien outil connaît, lues dans son `--list`."""
+    _, sortie, _ = executer([sys.executable, str(ANCIEN), "--list"], RACINE)
+    regles = set()
+    for ligne in sortie.split("\n")[1:]:
+        if not ligne.startswith("  "):
+            break
+        regles.add(ligne.split()[0])
+    return regles
+
+
+# Règles venues après l'ancien outil (S6 : C5) : absentes de son `--list` et
+# de sa liste de règles sur un argument inconnu. On les retire de la sortie
+# du nouveau avant de comparer ; leurs fixtures ne passent pas par ici.
+NOUVELLES = sorted(set(REGLES) - regles_de_l_ancien()) if ANCIEN.exists() else []
+
+
+def sans_nouvelles(sortie):
+    lignes = []
+    for ligne in sortie.split("\n"):
+        if any(ligne.startswith(f"  {r}  ") for r in NOUVELLES):
+            continue
+        if ligne.startswith("règles : "):
+            gardees = [r for r in ligne[len("règles : "):].split(", ")
+                       if r not in NOUVELLES]
+            ligne = "règles : " + ", ".join(gardees)
+        lignes.append(ligne)
+    return "\n".join(lignes)
+
+
 def comparer(cwd, arguments):
     ancien = executer([sys.executable, str(ANCIEN), *arguments], cwd)
-    nouveau = executer([sys.executable, "-m", "ocots_lint", "verifier", *arguments],
-                       cwd)
-    assert nouveau == ancien
+    code, sortie, erreur = executer(
+        [sys.executable, "-m", "ocots_lint", "verifier", *arguments], cwd)
+    assert (code, sans_nouvelles(sortie), sans_nouvelles(erreur)) == ancien
 
 
 @pytest.mark.parametrize("arguments", ARGUMENTS, ids=lambda a: " ".join(a) or "(rien)")

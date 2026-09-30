@@ -6,6 +6,10 @@ doivent être exactement celles marquées `% attendu: <règle>`.
 - `limites/` : ce que l'outil *devrait* faire et ne fait pas encore. Le test
   est attendu en échec (xfail strict) : le jour où l'outil y parvient, le test
   passe, pytest le signale, et la fixture migre vers `signale/` ou `accepte/`.
+
+Une fixture est vérifiée depuis son dossier, comme un cours depuis sa racine :
+une règle qui croise tout le cours (C5) y lit aussi les fixtures voisines —
+leurs clés doivent donc être distinctes.
 """
 
 from collections import Counter
@@ -34,7 +38,8 @@ def _fixtures():
 
 
 @pytest.mark.parametrize("regle,genre,chemin", fixtures())
-def test_trouvailles_conformes_aux_marques(regle, genre, chemin):
+def test_trouvailles_conformes_aux_marques(regle, genre, chemin, monkeypatch):
+    monkeypatch.chdir(chemin.parent)
     trouvees = Counter(ligne for _, ligne, _ in REGLES[regle]([str(chemin)]))
     assert trouvees == attendus(chemin, regle)
 

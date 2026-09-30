@@ -1,0 +1,8 @@
+\newcommand{\thmref}[1]{Théorème~\ref{#1}}
+
+\begin{theorem}[label=thm:weierstrass]
+  Une fonction continue sur un segment y est bornée.
+\end{theorem}
+
+Le renvoi passe par une macro du cours : l'outil ne lit que les commandes de
+renvoi connues (\ref, \eqref, \cref…) et signale le label à tort — \thmref{thm:weierstrass}.

@@ -10,6 +10,13 @@ au moment du tag.
 
 ## Non publié
 
+- **Nouvelle règle C5 : label jamais cité dans le cours** (S6.2 ; P12 pour
+  le polycopié). Les renvois sont lus dans tout le dossier courant, quel que
+  soit le périmètre vérifié ; seuls les labels du périmètre sont signalés.
+  Garantie `heuristique` : un renvoi écrit par une macro propre au cours
+  n'est pas lu (limite écrite ; aucune dans les cours aujourd'hui). Sur le
+  corpus : 109 trouvailles C5 nouvelles, relues, aucun faux positif ; les
+  252 trouvailles existantes ne bougent pas.
 - **Lecture des labels et des renvois** (S6.1, décision 0006), pas encore
   utilisée par une règle : `labels.lire` sur l'arbre — `\label{…}`,
   `label=…` des boîtes du template, ancienne syntaxe (`{titre}{clé}`,

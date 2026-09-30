@@ -3,7 +3,7 @@ from ocots_lint.conventions import FICHIERS
 
 CONTENU = {
     "communes.md": "## C1 — Langue\n\n## C3 — Macros\n\n## C4 — Typographie\n"
-                   "\n## C6 — Listes\n",
+                   "\n## C5 — Labels\n\n## C6 — Listes\n",
     "poly.md": "## P1 — Hypothèses\n\n## P2 — Boîtes\n\n## P3 — Amorce\n"
                "\n## P5 — Remarques | apartés\n",
     "slides.md": "## SL1 — Référence\n",
@@ -26,12 +26,12 @@ def test_une_ligne_par_regle_avec_son_outillage(tmp_path, capsys):
     assert couverture.main(["--conventions", conventions_fictives(tmp_path)]) == 0
     sortie = capsys.readouterr()
     lignes = {l.split()[0]: l for l in sortie.out.splitlines()[2:]}
-    assert list(lignes) == ["C1", "C3", "C4", "C6", "P1", "P2", "P3", "P5", "SL1"]
+    assert list(lignes) == ["C1", "C3", "C4", "C5", "C6", "P1", "P2", "P3", "P5", "SL1"]
     assert lignes["C1"].endswith("mesure")
     assert lignes["C4"].endswith("heuristique + mesure")
     assert lignes["P1"].endswith("non outillée")
     assert lignes["P3"].endswith("signal")
-    assert "9 règles : 5 vérifiées, 2 mesurées seulement, 2 non outillées" in (
+    assert "10 règles : 6 vérifiées, 2 mesurées seulement, 2 non outillées" in (
         sortie.err)
 
 

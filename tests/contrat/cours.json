@@ -19,6 +19,10 @@
       "garantie": "heuristique",
       "resume": "C4 — typographie : ~:, guillemets, apostrophes, renvois, mots composés."
     },
+    "C5": {
+      "garantie": "heuristique",
+      "resume": "C5 — label jamais cité dans le cours (P12 : ne poser un label que si l'objet est cité)."
+    },
     "C6": {
       "garantie": "heuristique",
       "resume": "C6 — \\qedhere manquant en fin de liste ou d'équation ; \\vspace qui compense un \\footnotetext."

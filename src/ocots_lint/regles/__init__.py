@@ -16,6 +16,7 @@ from dataclasses import dataclass
 from typing import Callable
 
 from ocots_lint.regles.c4 import regle_C4
+from ocots_lint.regles.c5 import regle_C5
 from ocots_lint.regles.c6 import regle_C6
 from ocots_lint.regles.p2 import regle_P2
 from ocots_lint.regles.p3 import regle_P3
@@ -48,6 +49,7 @@ REGISTRE = (
     Verificateur("P3", regle_P3, "signal", lecture="arbre"),
     Verificateur("P5", regle_P5, "signal"),
     Verificateur("C4", regle_C4, "heuristique", lecture="arbre"),
+    Verificateur("C5", regle_C5, "heuristique", lecture="arbre"),
     Verificateur("C6", regle_C6, "heuristique"),
 )
 
