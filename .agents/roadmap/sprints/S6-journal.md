@@ -89,6 +89,14 @@ faute de cas réel que la source manque.
   proposée, sprint réécrit. Tranché par l'auteur : 0006 option B (le
   journal instrumenté passe au backlog) ; C5 garde `ex:` ; `??` en échec de
   PR.
+- 2026-09-30 — S6.1 : `ancienne_syntaxe` dans le vocabulaire du template
+  (ocots-latex-template#71 : forme, préfixe, `sans_doublon`, vérifiés
+  contre `tex/`, éprouvés par 6 mutations ; les boîtes étoilées ignorent le
+  label). `labels.py` dans l'outil. **Critère tenu** : labels lus =
+  labels du `.aux`, 148 sur 148 (polycopié de mesure, 10 fichiers inclus)
+  et 10 sur 10 (transparents, chapitre 5), sans les faux `label=\alph*)`
+  des listes. Tout le cours de mesure : 308 labels, 534 renvois, lus en
+  2 s. Le template est passé en v1.4.0 entre-temps, vocabulaire inchangé.
 
 ## Bilan
 
