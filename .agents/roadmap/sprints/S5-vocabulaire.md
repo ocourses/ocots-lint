@@ -117,7 +117,7 @@ cite le résultat de `instantane verifier`.
     mettent quelque chose en avant, et se préparent comme toute autre
     boîte. Même famille que `assumption` (bloc étiqueté H1), à nommer dans
     la PR.
-- [ ] **S5.2** — En tant que *mainteneur*, je veux qu'`ocots-lint` lise ce
+- [x] **S5.2** — En tant que *mainteneur*, je veux qu'`ocots-lint` lise ce
   vocabulaire (décision 0005), et que chaque règle désigne des familles et
   non des noms, afin qu'un environnement ajouté au template soit vu sans
   modifier l'outil.
@@ -195,6 +195,22 @@ cite le résultat de `instantane verifier`.
   attente de l'étape 3. Corpus : trouvailles inchangées ; `--mesure`
   inchangé (mesure C3 : 110, 0, 0, 0). Sous-module du template monté à
   `v1.2.0` (vocabulaire identique à la copie embarquée).
+- 2026-09-30 — S5.2, étape 3 : C6 lit `symbole_de_fin`. **11 C6
+  nouvelles**, toutes justifiées : des `myexample` (alias de `example`, qui
+  pose □ par `\pushQED`/`\popQED`, vérifié aussi dans le template
+  `6ccd939` que calcul-diff épingle) finis sans `\qedhere` :
+
+  | Fichier (calcul-diff) | Lignes | Fin |
+  |---|---|---|
+  | `slides/calculDiff/slides_diff.tex` | 307, 774, 787, 943 | équation hors texte |
+  | `slides/chap4/slides_chapitre_4.tex` | 231 | liste |
+  | `slides/chap5/slides_equations_lineaires.tex` | 73, 177, 258, 330 | équation hors texte |
+  | `slides/chap5/slides_equations_lineaires.tex` | 477 | liste |
+  | `slides/chap6/slides_equations_lineaires.tex` | 156 | équation hors texte |
+
+  Mesure emploie `myexample` 24 fois, sans ce défaut. Fixture
+  `C6/signale/alias_myexample.tex`, écart voulu avec l'ancien outil déclaré.
+  Le test du critère 2 n'a plus d'exception de module.
 
 ## Bilan
 

@@ -38,6 +38,8 @@ MASQUES = sorted(set(REGLES) - SUR_ARBRE)
 ECARTS_VOULUS = {
     "C6/accepte/qedhere_avant_un_saut_espace.tex":
         "S4.6 : `\\\\[1em]` n'est pas l'ouverture de la formule",
+    "C6/signale/alias_myexample.tex":
+        "S5.2 : `myexample` pose le symbole de fin de `example` (vocabulaire)",
     "P5/signale/remarques_etoilees.tex":
         "S5.2 : `remark*` est une remarque (famille du vocabulaire du template)",
 }
