@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: true   # conventions : référence du test de parité
+          submodules: true   # conventions (parité), template (vocabulaire)
       - uses: astral-sh/setup-uv@v6
       - run: uv run --python ${{ matrix.python }} pytest -ra
 

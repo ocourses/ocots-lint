@@ -41,6 +41,16 @@ erreur (`XPASS(strict)`). La fixture change alors de dossier, vers
 3. Sinon : dans `limites/`, avec une phrase dans la fixture qui explique
    pourquoi l'outil se trompe.
 
+## Vocabulaire du template (sprint S5)
+
+`test_vocabulaire.py` : la copie embarquée
+(`src/ocots_lint/donnees/vocabulaire.json`) doit être égale au
+`vocabulaire.json` du template épinglé en sous-module, sous
+`tests/amont/ocots-latex-template` — pas à la racine : un dossier
+`template/` à la racine serait pris pour celui d'un cours (le vocabulaire,
+mais aussi `csquotes`, y seraient lus). Monter ce sous-module, c'est
+recopier son `vocabulaire.json` dans `donnees/`.
+
 ## Parité (sprint S1)
 
 `test_parite.py` compare `ocots-lint verifier` à

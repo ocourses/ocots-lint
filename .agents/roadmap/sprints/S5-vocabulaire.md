@@ -125,7 +125,7 @@ cite le résultat de `instantane verifier`.
     `v1.2.0`, testée égale au fichier du template épinglé en sous-module.
   - Étapes : lecture et repli (sans toucher aux règles) ; puis P2, P3, P5 ;
     puis C6 — une PR chacune, corpus sans écart à chaque fois.
-- [ ] **S5.3** — En tant que *relecteur*, je veux que l'outil s'arrête avec
+- [x] **S5.3** — En tant que *relecteur*, je veux que l'outil s'arrête avec
   un message clair devant un vocabulaire qu'il ne sait pas lire, plutôt que
   de rendre zéro trouvaille.
   - Critère 3, par fixtures : schéma `2`, JSON invalide, famille inconnue.
