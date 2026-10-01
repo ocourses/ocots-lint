@@ -19,6 +19,13 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
 
 ## Outillage
 
+- Verdicts de jugement conservés (option C de la décision 0007) : l'agent
+  consigne son verdict par empreinte de boîte, une passe suivante ne rejuge
+  que ce qui a changé. Critère d'entrée : une seconde passe sur un chapitre
+  déjà relu, où rejuger tout coûte.
+- Extraction des TD et des examens (exercices, questions, corrigés) pour les
+  règles `TD*` et `EX*` (hors périmètre de S7, décision 0007).
+
 - `verifier` sur une copie de travail : ignorer les dossiers ignorés par git
   (ex. `.claude/worktrees/`, copies de cours entières), qui doublent
   aujourd'hui les trouvailles en local — constaté en S4.0 sur le cours de
