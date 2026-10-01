@@ -44,7 +44,7 @@ les règles qui s'y prêtent, *qu'il n'y a rien à trouver*.
 | [S4](sprints/S4-arbre.md) | lecture par arbre syntaxique ; les limites de P2 et C4 tombent | `v0.5.0` | fini |
 | [S5](sprints/S5-vocabulaire.md) | le vocabulaire des boîtes vient du template | `v0.6.0` | fini |
 | [S6](sprints/S6-journal.md) | labels et renvois (C5, P12), croisés sur tout le cours | `v0.7.0` | fini |
-| [S7](sprints/S7-extraction.md) | extraction pour les règles de jugement | `v0.8.0` | **en cours** |
+| [S7](sprints/S7-extraction.md) | extraction pour les règles de jugement | `v0.8.0` | fini |
 
 Les stories non planifiées vivent dans [`backlog.md`](backlog.md). Les choix
 durables et leur pourquoi, dans [`decisions/`](decisions/).

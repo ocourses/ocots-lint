@@ -76,9 +76,9 @@ puis sur Albert ; polycopié seulement.
   rapport Bloquant / Important / Mineur, aucune édition). Essai sur un
   chapitre de mesure : en local (file locale), puis sur Albert ; rapports
   comparés au jugement de l'auteur.
-- [ ] **S7.5** — Conventions : `methode.md` et P1, P3, P4, P7 renvoient à
+- [x] **S7.5** — Conventions : `methode.md` et P1, P3, P4, P7 renvoient à
   `extraire` pour préparer une passe.
-- [ ] **S7.6** — Release `v0.8.0`, relais des conventions, montée des
+- [x] **S7.6** — Release `v0.8.0`, relais des conventions, montée des
   cours.
 
 ## Journal
@@ -136,6 +136,67 @@ puis sur Albert ; polycopié seulement.
   l'exhaustivité et la structure. Aucun signe de gêne chez Albert : pas de
   sortie compacte pour l'instant.
 
-## Bilan
+- 2026-10-01 — S7.5 : conventions#30 — `methode.md`, « Une relecture de
+  jugement se prépare avec l'extraction » ; P1, P3, P4 et P7 y renvoient,
+  avec les champs utiles à chacune. Leçon de S7.4 écrite dans les
+  conventions : P1 et P4 ne portent que sur les résultats.
+- 2026-10-01 — S7.6 : release v0.8.0 (531 tests ; `instantane verifier`
+  inchangé sur les quatre cours, 457 trouvailles) ; conventions v2.7.0,
+  relais (#31). Montées : mesure#384 (`comparer` : 86 inchangées, plan
+  d'issues identique à v0.7.0), démo#21 (11 inchangées ; #19 et #20
+  seulement mises à jour, ligne de version) ; nouvelle cible commentée sur
+  automatique#322 et calcul-diff#83.
 
-*À écrire en fin de sprint.*
+## Bilan (2026-10-01)
+
+**Livré.**
+
+- [`ocots-lint` v0.8.0](https://github.com/ocourses/ocots-lint/releases/tag/v0.8.0) :
+  **`extraire`** — les boîtes du polycopié (empreinte, famille, section,
+  label et citations dans tout le cours, amorce, preuve, reprise, ce qui
+  précède et suit) et la carte des sections (ouverture, contenu,
+  hypothèses, fin), en JSON, sans verdict ; schéma
+  `extraire-1.schema.json` publié et testé. `verifier` inchangé.
+- `ocourses/agents` : rôle `judgment-reviewer` (#42), corrigé après
+  l'essai (#43 : règles selon la famille de la boîte).
+- [`ocots-conventions` v2.7.0](https://github.com/ocourses/ocots-conventions/releases/tag/v2.7.0) :
+  la méthode et P1, P3, P4, P7 renvoient à `extraire` ; relais sur v0.8.0.
+- Cours montés : mesure (#384), démo (#21).
+
+**Critères d'acceptation.**
+
+1. Exhaustif : boîtes 260 / 213 / 77 et titres 88 / 93 / 30, autant que
+   comptés indépendamment ; le seul fichier refusé (calcul-diff,
+   `frontmatter/notations.tex`) est signalé.
+2. Fidèle : 30 boîtes et 12 sections tirées au hasard relues contre la
+   source, sans écart après les corrections notées au journal.
+3. Aucun verdict : test dédié ; `instantane verifier` inchangé à chaque
+   étape.
+4. Contrat : `"schema": 1`, `"extraction": "polycopie"`, schéma publié,
+   sortie de référence comparée en test.
+5. Éprouvé par un agent (mesure#381, annexe B, 15 boîtes, 5 sections) :
+   local (Opus) 1 point juste, 0 à tort, rien de manqué relevé par
+   l'auteur ; Albert (`deepseek-v4-flash`) 0 juste, 2 à tort (P4 sur des
+   exemples), 1 manqué (le point P1). Cause dans le rôle, corrigée (#43).
+6. Temps : 1 à 2,5 s par polycopié, loin de l'alarme de 30 s.
+
+**Démo.** L'essai S7.4 est la démo : le rôle a tourné sur Albert depuis le
+workflow `agent.yml` de mesure, en lisant l'extraction d'une version pas
+encore relayée (`OCOTS_LINT`), sans rien écrire dans le cours (mesure#383,
+fermée sans fusion).
+
+**Ce qui a bien marché.** Relire des échantillons contre la source avant
+de figer le contrat : chaque écart trouvé (amorce réduite à une phrase,
+chapitre déclaré dans le fichier qui inclut, preuve après une note,
+annexes dans un environnement) aurait trompé un relecteur sans erreur
+visible. Comparer deux relecteurs sur le même chapitre a montré que
+l'erreur d'Albert venait du rôle, pas de l'extraction.
+
+**Ce qui a coûté.** Pour un seul chapitre, l'extraction pèse autant que la
+source (28 Ko) : l'argument « lire moins » ne tient pas à cette échelle ;
+ce qu'elle apporte, c'est l'exhaustivité et la structure. Le rôle supposait
+implicitement que P1 et P4 ne visent que les résultats : il a fallu
+l'écrire.
+
+**Reporté au backlog.** Réessai d'Albert avec le rôle corrigé (#43) ;
+sortie compacte si un chapitre plus long gêne un agent.

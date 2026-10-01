@@ -25,6 +25,12 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
   déjà relu, où rejuger tout coûte.
 - Extraction des TD et des examens (exercices, questions, corrigés) pour les
   règles `TD*` et `EX*` (hors périmètre de S7, décision 0007).
+- Réessai du rôle `judgment-reviewer` sur Albert avec le rôle corrigé
+  (agents#43), même chapitre que S7.4 (mesure#381) : critère, aucun P4 sur
+  un exemple et le point P1 trouvé.
+- Sortie compacte d'`extraire` (sans indentation, champs vides omis) :
+  critère d'entrée, un agent gêné par la taille sur un chapitre long ;
+  aujourd'hui, extraction ≈ taille de la source.
 
 - `verifier` sur une copie de travail : ignorer les dossiers ignorés par git
   (ex. `.claude/worktrees/`, copies de cours entières), qui doublent
