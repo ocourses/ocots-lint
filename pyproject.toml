@@ -1,6 +1,6 @@
 [project]
 name = "ocots-lint"
-version = "0.7.0"
+version = "0.8.0"
 description = "Vérifie les conventions de rédaction ocots-conventions sur des sources LaTeX."
 readme = "README.md"
 requires-python = ">=3.10"

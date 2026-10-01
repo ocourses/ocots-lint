@@ -10,6 +10,20 @@ au moment du tag.
 
 ## Non publié
 
+---
+
+## v0.8.0 — 2026-10-01
+
+Extraction pour les règles de jugement (sprint S7, décision 0007) :
+**nouvelle commande `extraire`**, qui prépare la relecture de P1, P3, P4 et
+P7 sans rien juger — les boîtes du polycopié et la carte des sections, en
+JSON, avec leur propre contrat (`schemas/extraire-1.schema.json`).
+`verifier` est inchangé : sur les quatre cours du corpus, les 457
+trouvailles restent identiques, empreintes et messages compris. Éprouvée
+par le rôle `judgment-reviewer` d'`ocourses/agents`, en local puis sur
+Albert (journal dans `.agents/roadmap/sprints/S7-extraction.md`). Les
+conventions `≥ v2.7.0` y renvoient.
+
 - **Contrat d'`extraire`** (S7.3) : schéma JSON publié avec le paquet
   (`schemas/extraire-1.schema.json`) — chaque champ des boîtes et de la
   carte des sections décrit, aucun verdict. Testé comme celui de
