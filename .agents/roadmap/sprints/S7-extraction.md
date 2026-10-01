@@ -71,7 +71,7 @@ puis sur Albert ; polycopié seulement.
 - [x] **S7.3** — Contrat de l'extraction : schéma JSON publié
   (`schemas/`), testé, et documenté dans le README (ce qu'elle contient, ce
   qu'elle ne juge pas).
-- [ ] **S7.4** — Dans `ocourses/agents` : rôle de relecture de jugement
+- [x] **S7.4** — Dans `ocourses/agents` : rôle de relecture de jugement
   (P1, P3, P4, P7 sur un chapitre de polycopié, à partir de l'extraction ;
   rapport Bloquant / Important / Mineur, aucune édition). Essai sur un
   chapitre de mesure : en local (file locale), puis sur Albert ; rapports
@@ -121,6 +121,20 @@ puis sur Albert ; polycopié seulement.
   référence (`tests/contrat/extraction/`) est validée contre le schéma et
   comparée à `tests/contrat/extraction.json` ; les extractions réelles de
   mesure, calcul-diff et automatique (`origin/main`) valident sans erreur.
+- 2026-10-01 — S7.4 : rôle `judgment-reviewer` (agents#42), essayé sur
+  l'annexe B de mesure (15 boîtes, 5 sections), comparaison sur
+  mesure#381. **Local (Opus)** : 1 point P1 mineur (résultat cité depuis
+  les transparents qui nomme un objet défini seulement dans le texte qui
+  précède), juste ; rien d'autre de manqué. **Albert
+  (`deepseek-v4-flash`)** : format suivi, rien écrit dans le cours, mais
+  0 juste sur 2 — deux P4 à tort sur des exemples en fin de section — et
+  le point P1 manqué ; P3 ✅ sur des amorces vides, points sans empreinte.
+  Cause : le rôle ne disait pas que P1 et P4 ne portent que sur les
+  résultats → agents#43 (règles selon `famille`, P3 « — » sur amorce
+  vide, P1 couvre les notations). **Taille** : pour un chapitre,
+  l'extraction (28 Ko) pèse autant que la source ; son apport est
+  l'exhaustivité et la structure. Aucun signe de gêne chez Albert : pas de
+  sortie compacte pour l'instant.
 
 ## Bilan
 
