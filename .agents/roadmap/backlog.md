@@ -36,7 +36,12 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
   lire — par exemple une boîte ouverte par une macro
   (`P2/limites/boite_par_macro.tex`) trouvée dans un cours.
 - CI du template qui compile `examples/` (TeX Live dans GitHub Actions) :
-  prérequis des tests d'instrumentation de S6.
+  `make check` (dont le témoin des labels dupliqués de `variants/compat`,
+  S6.5) ne tourne aujourd'hui qu'en local.
+- C5 : un renvoi écrit par une macro propre au cours
+  (`\newcommand{\thmref}[1]{…\ref{#1}}`) n'est pas lu, le label est
+  signalé à tort (`C5/limites/renvoi_par_macro.tex`). Aucun cours n'en
+  définit (S6.2). Critère d'entrée : un cas réel.
 - Monter `ocots-lint` dans un cours en une étape : une release d'`ocots-lint`
   ouvre d'elle-même la PR qui met à jour `OCOTS_LINT_VERSION` dans
   `ocots-conventions/bin/` (reporté de S3). Suivi :
@@ -49,7 +54,10 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
   [calcul-differentiel-edo-enseignants#83](https://github.com/ocourses/calcul-differentiel-edo-enseignants/issues/83).
   Ensuite seulement : retirer le chemin historique en bash de
   `agents/scripts/checkers/conventions.sh`. Cibles portées à template
-  `v1.2.0` et conventions `v2.5.0` le 2026-09-30 (S5.6).
+  `v1.2.0` et conventions `v2.5.0` le 2026-09-30 (S5.6), puis à template
+  `v1.5.1` et conventions `v2.6.0` le 2026-10-01 (S6.6) — calcul-diff en
+  a besoin : ses transparents à clé vide font échouer les PR qui les
+  touchent (agents#41) tant que le template n'est pas monté.
 - Transparents : un fichier **sans classe**, inclus par un transparent rangé
   hors de `slides/`, reçoit P3 (reconnaître un fichier par le document qui
   l'inclut). Non constaté au corpus (S5.4).
