@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ocourses/ocots-lint/blob/main/src/ocots_lint/schemas/extraire-1.schema.json",
+  "title": "ocots-lint extraire, schéma 1",
+  "description": "Inventaire du polycopié pour les règles de jugement (P1, P3, P4, P7) : les boîtes et la carte des sections. Décrit, ne juge pas : aucun champ n'est un verdict. Un changement incompatible crée un schéma 2 ; un champ ajouté reste compatible.",
+  "type": "object",
+  "required": ["schema", "outil", "version", "extraction", "racines", "boites", "sections", "avertissements"],
+  "properties": {
+    "schema": {"const": 1},
+    "outil": {"const": "ocots-lint"},
+    "version": {"type": "string"},
+    "extraction": {"const": "polycopie"},
+    "racines": {"type": "array", "items": {"type": "string"}, "description": "Le périmètre extrait. Les citations et les fichiers inclus se lisent dans tout le cours."},
+    "boites": {
+      "description": "Chaque environnement d'une famille marquée boîte dans le vocabulaire du template, imbriqués compris, dans l'ordre des fichiers puis du texte.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["empreinte", "fichier", "ligne", "fin", "environnement", "famille", "section", "label", "citations", "precede_par", "amorce", "preuve", "reprise", "suivi_par"],
+        "properties": {
+          "empreinte": {"$ref": "#/$defs/empreinte"},
+          "fichier": {"$ref": "#/$defs/fichier"},
+          "ligne": {"$ref": "#/$defs/ligne", "description": "Ligne du \\begin."},
+          "fin": {"$ref": "#/$defs/ligne", "description": "Ligne du \\end."},
+          "environnement": {"type": "string", "description": "Nom de l'environnement, tel qu'écrit (alias compris)."},
+          "famille": {"type": "string", "description": "Famille du vocabulaire du template (resultat, definition, exemple…)."},
+          "section": {"$ref": "#/$defs/chemin", "description": "Titres en vigueur à la boîte, par niveau ; le chapitre déclaré dans le fichier qui inclut compte."},
+          "label": {"type": ["string", "null"]},
+          "citations": {
+            "type": "object",
+            "required": ["total", "fichiers", "ailleurs"],
+            "properties": {
+              "total": {"type": "integer", "minimum": 0, "description": "Renvois à ce label dans tout le cours."},
+              "fichiers": {"type": "array", "items": {"$ref": "#/$defs/fichier"}},
+              "ailleurs": {"type": "boolean", "description": "Cité depuis un autre fichier : le résultat est lu isolément (P1)."}
+            }
+          },
+          "precede_par": {"type": "string", "description": "L'objet avant l'amorce : un environnement, un titre (section…), ou « début »."},
+          "amorce": {"$ref": "#/$defs/paragraphe", "description": "Dernier paragraphe avant la boîte (P3) ; vide s'il n'y en a pas."},
+          "preuve": {
+            "oneOf": [
+              {"type": "null"},
+              {"type": "object", "required": ["environnement", "ligne", "fin"],
+               "properties": {"environnement": {"type": "string"}, "ligne": {"$ref": "#/$defs/ligne"}, "fin": {"$ref": "#/$defs/ligne"}}}
+            ],
+            "description": "La preuve qui suit immédiatement l'énoncé (une note ou un \\index entre les deux ne les délient pas)."
+          },
+          "reprise": {"$ref": "#/$defs/paragraphe", "description": "Premier paragraphe après l'unité énoncé-preuve (P4) ; vide s'il n'y en a pas."},
+          "suivi_par": {"type": "string", "description": "L'objet après la reprise : un environnement, un titre, ou « fin »."}
+        }
+      }
+    },
+    "sections": {
+      "description": "Chaque titre de section, dans l'ordre de lecture (fichiers inclus suivis).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fichier", "ligne", "niveau", "titre", "label", "parents", "ouverture", "contenu", "hypotheses", "termine_par"],
+        "properties": {
+          "fichier": {"$ref": "#/$defs/fichier"},
+          "ligne": {"$ref": "#/$defs/ligne"},
+          "niveau": {"$ref": "#/$defs/niveau"},
+          "titre": {"type": "string"},
+          "label": {"type": ["string", "null"]},
+          "parents": {"$ref": "#/$defs/chemin"},
+          "ouverture": {
+            "type": "object",
+            "required": ["texte", "structure", "minitoc"],
+            "properties": {
+              "texte": {"type": "array", "items": {"$ref": "#/$defs/paragraphe"}, "description": "Paragraphes avant le premier objet (décor, phrase d'introduction : P7)."},
+              "structure": {
+                "type": "array",
+                "description": "Environnements de la famille structure du template avant le premier objet (introduction de chapitre…).",
+                "items": {"type": "object", "required": ["environnement", "ligne", "debut"],
+                          "properties": {"environnement": {"type": "string"}, "ligne": {"$ref": "#/$defs/ligne"}, "debut": {"$ref": "#/$defs/paragraphe"}}}
+              },
+              "minitoc": {"type": "boolean"}
+            }
+          },
+          "contenu": {
+            "type": "array",
+            "description": "Ce que la section contient directement, dans l'ordre ; une sous-section y figure par son titre.",
+            "items": {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": {"enum": ["boite", "preuve", "objet", "structure", "texte", "titre"]},
+                "environnement": {"type": "string"},
+                "empreinte": {"oneOf": [{"$ref": "#/$defs/empreinte"}, {"type": "null"}], "description": "Pour une boîte : son entrée dans « boites »."},
+                "niveau": {"$ref": "#/$defs/niveau"},
+                "titre": {"type": "string"},
+                "paragraphes": {"type": "integer", "minimum": 1},
+                "fichier": {"$ref": "#/$defs/fichier"},
+                "ligne": {"$ref": "#/$defs/ligne"}
+              }
+            }
+          },
+          "hypotheses": {"type": "array", "items": {"$ref": "#/$defs/empreinte"}, "description": "Boîtes de la famille hypothese posées dans la section ou ses sous-sections."},
+          "termine_par": {"type": "string", "description": "Ce qui termine le contenu direct : « texte », un environnement, un niveau de titre, ou « rien »."}
+        }
+      }
+    },
+    "avertissements": {
+      "description": "Fichiers que l'analyse syntaxique refuse : leurs boîtes ou leurs titres manquent, jamais en silence.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fichier", "ligne", "message"],
+        "properties": {
+          "fichier": {"$ref": "#/$defs/fichier"},
+          "ligne": {"$ref": "#/$defs/ligne"},
+          "message": {"type": "string"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "empreinte": {"type": "string", "pattern": "^[0-9a-f]{16}:[0-9]+$", "description": "Identité stable de la boîte, indépendante du numéro de ligne (même méthode que les trouvailles de verifier)."},
+    "fichier": {"type": "string", "description": "Chemin POSIX relatif au dossier où l'outil est lancé."},
+    "ligne": {"type": "integer", "minimum": 1},
+    "niveau": {"enum": ["part", "chapter", "section", "subsection", "subsubsection"]},
+    "chemin": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/niveau"},
+      "additionalProperties": {"type": "string"}
+    },
+    "paragraphe": {"type": "string", "maxLength": 801, "description": "En prose : sans commentaires, \\label, \\index ni définitions de macros, espaces réduits ; formules en LaTeX ; borné à 800 caractères, « … » marquant la coupure."}
+  }
+}
