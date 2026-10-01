@@ -10,6 +10,22 @@ au moment du tag.
 
 ## Non publié
 
+---
+
+## v0.7.0 — 2026-09-30
+
+Labels et renvois (sprint S6) : **nouvelle règle C5**, croisée sur tout le
+cours. Un label jamais cité nulle part (polycopié, TD, transparents,
+examens), un préfixe qui ne nomme pas l'objet étiqueté (table lue dans les
+conventions), une hypothèse citée par `\ref` au lieu de `\eqref`. Contrat
+inchangé (JSON au schéma 1, sortie texte, codes de sortie) ; une règle de
+plus. Sur les quatre cours du corpus : 252 → 457 trouvailles, toutes les
+205 nouvelles en C5 et relues ; aucune trouvaille existante ne change
+d'empreinte ni de message (journal dans
+`.agents/roadmap/sprints/S6-journal.md`). À lancer depuis la racine du
+cours. Les conventions `≥ v2.6.0` donnent la table des préfixes ; avant,
+l'outil lit sa copie embarquée et le dit sur la sortie d'erreur.
+
 - **C5 : hypothèse citée par `\ref`** (S6.4) — une hypothèse (famille
   `hypothese` du vocabulaire, alias compris) se cite avec `\eqref`, qui la
   rend « (H1) ». Signalé à l'endroit du renvoi. Aucun cas au corpus : la
