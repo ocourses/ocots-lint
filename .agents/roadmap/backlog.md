@@ -59,18 +59,6 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
   ouvre d'elle-même la PR qui met à jour `OCOTS_LINT_VERSION` dans
   `ocots-conventions/bin/` (reporté de S3). Suivi :
   [#27](https://github.com/ocourses/ocots-lint/issues/27).
-- Monter automatique et calcul-diff en conventions `v2.4.0` et template
-  `v1.1.0`, avec le renvoi d'`AGENTS.md` à `methode.md` et
-  `conventions-pr.yml` (reporté de S4.9) : suivi par
-  [automatique-enseignants#322](https://github.com/ocourses/automatique-enseignants/issues/322)
-  et
-  [calcul-differentiel-edo-enseignants#83](https://github.com/ocourses/calcul-differentiel-edo-enseignants/issues/83).
-  Ensuite seulement : retirer le chemin historique en bash de
-  `agents/scripts/checkers/conventions.sh`. Cibles portées à template
-  `v1.2.0` et conventions `v2.5.0` le 2026-09-30 (S5.6), puis à template
-  `v1.5.1` et conventions `v2.6.0` le 2026-10-01 (S6.6) — calcul-diff en
-  a besoin : ses transparents à clé vide font échouer les PR qui les
-  touchent (agents#41) tant que le template n'est pas monté.
 - Transparents : un fichier **sans classe**, inclus par un transparent rangé
   hors de `slides/`, reçoit P3 (reconnaître un fichier par le document qui
   l'inclut). Non constaté au corpus (S5.4).
