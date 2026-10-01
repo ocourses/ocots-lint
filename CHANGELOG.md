@@ -10,6 +10,14 @@ au moment du tag.
 
 ## Non publié
 
+- **`ocots-lint extraire`** (S7.1, décision 0007) : l'inventaire des boîtes
+  du polycopié, en JSON, pour juger P1, P3 et P4 sans relire le fichier
+  entier — empreinte, famille, section (titres posés par `\def` résolus,
+  contexte hérité du fichier qui inclut), label et citations dans tout le
+  cours, paragraphe d'amorce, preuve (rattachée par-dessus une note ou un
+  `\index`), paragraphe de reprise, et ce qui précède et suit. **Aucun
+  verdict.** Sur les trois polycopiés : 260, 213 et 77 boîtes, autant que
+  d'ouvertures comptées indépendamment ; en 1 à 2,5 s. `verifier` inchangé.
 ---
 
 ## v0.7.0 — 2026-09-30
