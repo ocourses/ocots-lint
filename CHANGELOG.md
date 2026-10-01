@@ -10,6 +10,14 @@ au moment du tag.
 
 ## Non publié
 
+- **`extraire` : la carte des sections** (S7.2), pour P7 et P4 en fin de
+  section — chaque titre dans l'ordre de lecture (fichiers inclus, groupes
+  `{…}` et environnements comme `appendix` traversés), son ouverture (texte,
+  introduction de chapitre, `\minitoc`), son contenu, ses hypothèses, ce qui
+  la termine. Titres extraits = titres comptés indépendamment, fichier par
+  fichier (mesure 88, calcul-diff 93 + 1 dans un fichier refusé, signalé,
+  automatique 30). Un paragraphe fait de commandes seules (`\clearpage`)
+  n'est plus du texte, ni en amorce ni en reprise.
 - **`ocots-lint extraire`** (S7.1, décision 0007) : l'inventaire des boîtes
   du polycopié, en JSON, pour juger P1, P3 et P4 sans relire le fichier
   entier — empreinte, famille, section (titres posés par `\def` résolus,

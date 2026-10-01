@@ -9,8 +9,20 @@ from ocots_lint import extraire
 MAIN = """\
 \\documentclass{ocots-book}
 \\begin{document}
+{\\pagestyle{empty}
+\\chapter*{Avant-propos}
+Un avant-propos dans un groupe.
+}
 \\chapter{Suites}
+\\minitoc
+
+\\begin{chapterintro}
+  Ce chapitre étudie les suites.
+\\end{chapterintro}
 \\input{chapitres/suites}
+\\begin{appendix}
+\\chapter{Annexe}
+\\end{appendix}
 \\end{document}
 """
 
@@ -48,6 +60,11 @@ Voici l'exercice.
 \\end{exercise}
 
 \\section{Suite}
+Le cadre de la section.
+
+\\begin{assumption}[label=hyp:h]
+  $u$ est bornée.
+\\end{assumption}
 """
 
 TD = "Par le Théorème~\\ref{thm:bw}.\n"
@@ -72,7 +89,7 @@ def boites(racines=("poly",)):
 def test_toutes_les_boites_imbriquees_comprises(cours):
     assert [b["environnement"] for b in
             extraire.extraire(["poly"])["boites"]] == [
-        "theorem", "remark", "example", "exercise"]
+        "theorem", "remark", "example", "exercise", "assumption"]
 
 
 def test_section_suit_l_inclusion_et_les_macros_de_titre(cours):
@@ -138,7 +155,7 @@ def test_main(cours, capsys):
     sortie = capsys.readouterr()
     doc = json.loads(sortie.out)
     assert doc["schema"] == 1 and doc["racines"] == ["poly"]
-    assert "4 boîte(s) extraite(s)" in sortie.err
+    assert "5 boîte(s), 5 section(s) extraite(s)" in sortie.err
     assert extraire.main(["n-existe-pas/"]) == 2
     assert extraire.main(["--inconnu"]) == 2
 
@@ -151,3 +168,51 @@ def test_main(cours, capsys):
 ])
 def test_paragraphes(texte, attendu):
     assert extraire.paragraphes(texte) == attendu
+
+
+# ------------------------------------------------------------ carte (S7.2)
+
+def sections():
+    return {s["titre"]: s for s in extraire.extraire(["poly"])["sections"]}
+
+
+def test_carte_dans_l_ordre_de_lecture(cours):
+    assert [(s["niveau"], s["titre"]) for s in
+            extraire.extraire(["poly"])["sections"]] == [
+        ("chapter", "Avant-propos"), ("chapter", "Suites"),
+        ("subsection", "Convergence"), ("section", "Suite"),
+        ("chapter", "Annexe")]
+
+
+def test_ouverture_de_chapitre(cours):
+    o = sections()["Suites"]["ouverture"]
+    assert o["minitoc"] is True and o["texte"] == []
+    assert o["structure"] == [{"environnement": "chapterintro", "ligne": 10,
+                               "debut": "Ce chapitre étudie les suites."}]
+    assert sections()["Avant-propos"]["ouverture"]["texte"] == [
+        "Un avant-propos dans un groupe."]
+
+
+def test_contenu_et_fin_de_section(cours):
+    s = sections()["Convergence"]
+    assert [(c["type"], c.get("environnement")) for c in s["contenu"]] == [
+        ("boite", "theorem"), ("preuve", "proof"), ("texte", None),
+        ("boite", "remark"), ("texte", None), ("boite", "exercise")]
+    assert s["termine_par"] == "exercise"
+    assert s["parents"] == {"chapter": "Suites"}
+    assert s["contenu"][0]["empreinte"] == boites()["theorem"]["empreinte"]
+
+
+def test_hypotheses_de_la_section_et_des_parents(cours):
+    hyp = boites()["assumption"]["empreinte"]
+    assert sections()["Suite"]["hypotheses"] == [hyp]
+    assert sections()["Suites"]["hypotheses"] == [hyp]
+    assert sections()["Suite"]["ouverture"]["texte"] == ["Le cadre de la section."]
+
+
+def test_titre_d_un_fichier_refuse_signale(cours):
+    (cours / "poly" / "casse.tex").write_text(
+        "\\section{Cassée}\nx}\n", encoding="utf-8")
+    doc = extraire.extraire(["poly"])
+    assert [a["message"].split(" — ")[-1] for a in doc["avertissements"]] == [
+        "1 titre(s) absent(s) de la carte des sections"]

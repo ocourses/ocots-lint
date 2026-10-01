@@ -63,7 +63,7 @@ puis sur Albert ; polycopié seulement.
   depuis quels fichiers — l'index de S6), la phrase qui l'amène, sa preuve
   éventuelle et la phrase qui suit l'unité énoncé-preuve, afin de juger P1,
   P3 et P4 sans relire le fichier entier.
-- [ ] **S7.2** — En tant qu'*agent de relecture*, je veux la carte de chaque
+- [x] **S7.2** — En tant qu'*agent de relecture*, je veux la carte de chaque
   chapitre et section : introduction de chapitre (`chapterintro`,
   `\minitoc`), texte d'ouverture de section (décor, phrase d'introduction),
   blocs `assumption`, suite des boîtes, ce qui termine la section — afin de
@@ -102,6 +102,20 @@ puis sur Albert ; polycopié seulement.
   d'inversion locale ; → 7 preuves de plus rattachées sur mesure). Après
   correction, les 30 relues sans écart. **Critère 3 tenu** : `instantane
   verifier`, rien ne bouge. Temps : 2,4 s, 1,9 s, 1,2 s.
+- 2026-10-01 — S7.2 : carte des sections. **Exhaustive** : titres de la
+  carte = titres comptés indépendamment, fichier par fichier — mesure 88,
+  automatique 30, calcul-diff 93 et 1 dans `frontmatter/notations.tex`,
+  refusé par l'analyse et signalé. Écarts trouvés en route : les annexes de
+  mesure, incluses dans `\begin{appendix}` (→ tout environnement ou groupe
+  qui contient des titres ou des `\input` est traversé) ; l'avant-propos de
+  calcul-diff, dans un groupe `{\pagestyle{empty} …}` ; un texte en fin de
+  conteneur coupé à la fin du fichier (vu par les tests). **Fidèle** : 12
+  sections tirées au hasard (4 par cours, graine 11) relues contre la
+  source — ouverture, introduction de chapitre, `\minitoc`, contenu, fin.
+  Ce que la carte montre : sections finies sur une boîte ou sa preuve,
+  sans reprise — mesure 46 sur 63, calcul-diff 48 sur 64, automatique 13 sur
+  23 (P4 en compte 73 au corpus) ; chapitres avec introduction — mesure 8
+  sur 10, calcul-diff et automatique 0 ; aucun bloc `assumption`.
 
 ## Bilan
 
