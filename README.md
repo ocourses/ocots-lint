@@ -203,6 +203,24 @@ actuelles d'un fichier n'est pas recréée : le rejet n'est pas redemandé, et
 le plan rappelle de poser les exemptions. Si l'analyse échoue, rien n'est
 touché.
 
+### Pour juger : `extraire`
+
+P1, P3, P4 et P7 demandent un jugement : aucun vérificateur ne les tranche.
+`extraire` donne le matériau, sans verdict — chaque boîte du polycopié avec
+sa section (titres résolus, fichiers inclus suivis), son label et ses
+citations dans tout le cours, le paragraphe qui l'amène, sa preuve, et le
+paragraphe qui suit l'unité énoncé-preuve :
+
+```bash
+ocots-lint extraire > boites.json            # le polycopié (poly/)
+ocots-lint extraire poly/mainmatter/ch1.tex  # un chapitre
+```
+
+Un résultat cité depuis un autre fichier (`citations.ailleurs`) est le cas
+de P1 ; une boîte suivie d'un titre de section, sans reprise, le signal de
+P4. Un fichier que l'analyse refuse n'est pas extrait : il est signalé, avec
+le nombre de boîtes manquantes.
+
 ### Le contrat JSON
 
 `verifier --format json` est **le** format à lire pour un programme : la

@@ -11,6 +11,7 @@ from ocots_lint import (
     comparer,
     couverture,
     exempter,
+    extraire,
     nettoyer,
     synchroniser,
     verifier,
@@ -24,6 +25,7 @@ COMMANDES = {
     "exempter": (exempter.main, "consigner un rejet par une directive, rien d'autre"),
     "synchroniser": (synchroniser.main, "une issue par fichier en infraction"),
     "comparer": (comparer.main, "ce qui change entre deux analyses"),
+    "extraire": (extraire.main, "inventaire des boîtes du polycopié, pour juger"),
 }
 
 AIDE = """\
@@ -41,6 +43,7 @@ Commandes :
   ocots-lint exempter f.tex:42 P2 "raison"   poser une exemption
   ocots-lint synchroniser --dry-run   plan des issues, sans rien toucher
   ocots-lint comparer a.json b.json   ce qui change entre deux analyses
+  ocots-lint extraire            boîtes du polycopié, avec amorce et reprise
   ocots-lint --version
 """
 

@@ -57,7 +57,7 @@ puis sur Albert ; polycopié seulement.
 
 ## Stories
 
-- [ ] **S7.1** — En tant qu'*agent de relecture*, je veux `ocots-lint
+- [x] **S7.1** — En tant qu'*agent de relecture*, je veux `ocots-lint
   extraire [périmètre]` : chaque boîte du polycopié avec son empreinte, sa
   famille, sa section (titre résolu), son label, ses citations (combien,
   depuis quels fichiers — l'index de S6), la phrase qui l'amène, sa preuve
@@ -87,6 +87,21 @@ puis sur Albert ; polycopié seulement.
   (tri, passes, file locale, Albert), prototype d'extraction sur les trois
   polycopiés. Décision 0007 tranchée par l'auteur : A, nouveau rôle en
   local puis sur Albert, polycopié seulement.
+- 2026-10-01 — S7.1 : `ocots-lint extraire`. **Critère 1 tenu** : boîtes
+  extraites = ouvertures d'environnements boîtes comptées indépendamment
+  (commentaires et verbatims retirés), fichier par fichier — mesure 260,
+  calcul-diff 213, automatique 77, aucun écart. **Critère 2 tenu** : 30
+  boîtes tirées au hasard (graine 7, 10 par cours) relues contre la
+  source — amorce, preuve, reprise, ce qui précède et suit, section,
+  citations. Écarts trouvés en route et corrigés : l'amorce réduite à la
+  dernière phrase perdait la motivation portée par la précédente (→ le
+  paragraphe entier ; une ligne de commentaire ne le coupe pas) ; le
+  chapitre déclaré dans `main.tex` avant `\input` manquait (→ contexte
+  hérité de l'incluant) ; une preuve séparée de son énoncé par un
+  `\footnotetext{…}` n'était pas rattachée (calcul-diff, Théorème
+  d'inversion locale ; → 7 preuves de plus rattachées sur mesure). Après
+  correction, les 30 relues sans écart. **Critère 3 tenu** : `instantane
+  verifier`, rien ne bouge. Temps : 2,4 s, 1,9 s, 1,2 s.
 
 ## Bilan
 
