@@ -14,10 +14,10 @@ de [`ocots-conventions`](https://github.com/ocourses/ocots-conventions)
 | `ocots-conventions` | quel texte autour, dans quel ordre, avec quelles notations ? |
 | `ocots-lint` (ici) | le document respecte-t-il ces règles, et avec quelle garantie ? |
 
-> **État : `v0.7.0`.** Garanties, exemptions, empreintes, contrat JSON,
+> **État : `v0.8.0`.** Garanties, exemptions, empreintes, contrat JSON,
 > `synchroniser`, `comparer`, vérification des PR, lecture par arbre
 > syntaxique, vocabulaire lu dans le template, labels et renvois croisés
-> sur tout le cours. Voir la [roadmap](.agents/roadmap/README.md).
+> sur tout le cours, extraction pour les règles de jugement. Voir la [roadmap](.agents/roadmap/README.md).
 
 ---
 
@@ -40,7 +40,7 @@ corrections dont l'équivalence est vérifiée (`~:`, guillemets si `csquotes`
 est chargé). Après `--appliquer` : recompiler, relire le diff, commiter à
 part.
 
-Épingler une version : `git+https://github.com/ocourses/ocots-lint@v0.7.0`.
+Épingler une version : `git+https://github.com/ocourses/ocots-lint@v0.8.0`.
 
 Sortie `1` s'il y a au moins une infraction, `2` pour un argument inconnu,
 `0` sinon — utilisable en CI.
@@ -169,8 +169,8 @@ suppression, avec sa raison.
 
 ```bash
 OL=git+https://github.com/ocourses/ocots-lint
-uvx --from $OL@v0.6.0 ocots-lint verifier --format json > avant.json
-uvx --from $OL@v0.7.0 ocots-lint verifier --format json > apres.json
+uvx --from $OL@v0.7.0 ocots-lint verifier --format json > avant.json
+uvx --from $OL@v0.8.0 ocots-lint verifier --format json > apres.json
 ocots-lint comparer avant.json apres.json
 ```
 
