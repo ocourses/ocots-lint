@@ -218,8 +218,17 @@ ocots-lint extraire poly/mainmatter/ch1.tex  # un chapitre
 
 Un résultat cité depuis un autre fichier (`citations.ailleurs`) est le cas
 de P1 ; une boîte suivie d'un titre de section, sans reprise, le signal de
-P4. Un fichier que l'analyse refuse n'est pas extrait : il est signalé, avec
-le nombre de boîtes manquantes.
+P4.
+
+La **carte des sections** (`sections`), pour P7 : chaque chapitre, section,
+sous-section dans l'ordre de lecture (fichiers inclus suivis, groupes et
+environnements comme `appendix` traversés), avec son ouverture — texte avant
+le premier objet, environnements de structure du template (introduction de
+chapitre), `\minitoc` —, la suite de ce qu'elle contient (boîtes, preuves,
+figures, texte, sous-sections), les hypothèses posées, et ce qui la termine.
+
+Un fichier que l'analyse refuse n'est pas extrait : il est signalé, avec le
+nombre de boîtes ou de titres manquants.
 
 ### Le contrat JSON
 

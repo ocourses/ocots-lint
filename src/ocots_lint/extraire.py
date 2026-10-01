@@ -22,6 +22,13 @@ entier est donné.
 La section d'une boîte suit les fichiers inclus : un chapitre déclaré dans
 `main.tex` avant `\\input{chapitre}` est celui des boîtes du chapitre.
 
+La carte des sections (S7.2), pour P7 et P4 en fin de section : chaque
+chapitre, section, sous-section… dans l'ordre de lecture (fichiers inclus
+suivis), avec son ouverture — le texte avant le premier objet, les
+environnements de structure du template (introduction de chapitre…) et
+`\\minitoc` —, la suite de ce qu'elle contient (boîtes, sous-sections,
+figures, texte), les hypothèses posées, et ce qui la termine.
+
 Un fichier que l'analyse syntaxique refuse n'est pas extrait : il est
 signalé dans `avertissements`, avec le nombre de boîtes qu'il contient.
 
@@ -41,6 +48,9 @@ SCHEMA = 1
 NIVEAUX = ("part", "chapter", "section", "subsection", "subsubsection")
 LISTES = frozenset({"itemize", "enumerate", "description"})
 PREUVE = "preuve"
+STRUCTURE = "structure"           # famille : introduction de chapitre…
+HYPOTHESE = "hypothese"
+INCLUSIONS = frozenset({"input", "include", "subfile"})
 LONGUEUR = 800          # une amorce, une reprise : un paragraphe, borné
 
 RE_DEF = re.compile(r"\\(?:def|renewcommand|newcommand)\s*\{?\\([A-Za-z@]+)\}?\s*\{")
@@ -97,11 +107,17 @@ def _borner(phrase, a_gauche):
     return "…" + phrase[-LONGUEUR:] if a_gauche else phrase[:LONGUEUR] + "…"
 
 
+RE_COMMANDES_SEULES = re.compile(r"^(?:\\[A-Za-z@]+\*?\s*)+$")
+
+
 def paragraphes(texte):
     """Les paragraphes d'un intervalle de source, en prose. Une ligne de
-    commentaire seul ne coupe pas un paragraphe (pour LaTeX non plus)."""
+    commentaire seul ne coupe pas un paragraphe (pour LaTeX non plus) ; un
+    paragraphe fait de commandes seules (`\\clearpage`, `\\minitoc`)
+    n'est pas du texte."""
     texte = RE_LIGNE_COMMENTAIRE.sub("", texte)
-    return [p for p in (prose(x) for x in re.split(r"\n[ \t]*\n", texte)) if p]
+    return [p for p in (prose(x) for x in re.split(r"\n[ \t]*\n", texte))
+            if p and not RE_COMMANDES_SEULES.match(p)]
 
 
 def dernier_paragraphe(texte):
@@ -309,6 +325,201 @@ def extraire_fichier(chemin, v, citations, entree=None):
     return boites, []
 
 
+# ------------------------------------------------------------ carte
+
+def _cible(chemin, argument):
+    cible = argument.strip()
+    cible = cible if cible.endswith(".tex") else cible + ".tex"
+    return os.path.normpath(os.path.join(os.path.dirname(chemin), cible))
+
+
+def _conteneur(n):
+    """Un environnement ou un groupe `{…}` qui contient des titres de section
+    ou des fichiers inclus (`document`, `appendix`, un groupe qui règle le
+    style de page de l'avant-propos…) : son contenu se lit dans l'ordre,
+    comme le reste du document."""
+    pile = list(n.enfants)
+    while pile:
+        x = pile.pop()
+        if x.genre == "macro" and (x.nom in NIVEAUX or x.nom in INCLUSIONS):
+            return True
+        pile.extend(x.enfants)
+    return False
+
+
+RE_TITRE = re.compile(r"\\(?:" + "|".join(NIVEAUX) + r")\*?\s*[\[{]")
+
+
+def _evenements(chemin, v, vus, avertissements):
+    """Le fichier en événements, dans l'ordre de lecture ; un `\\input`
+    est remplacé par les événements du fichier inclus. Un fichier refusé
+    par l'analyse est signalé dans `avertissements` s'il a des titres."""
+    if chemin in vus or not os.path.isfile(chemin):
+        return
+    vus.add(chemin)
+    arbre = lire_arbre(chemin)
+    if arbre.erreur is not None:
+        n = len(RE_TITRE.findall(sans_commentaires(arbre.texte)))
+        if n:
+            ligne, colonne = arbre.position(arbre.erreur.debut)
+            avertissements.append({
+                "fichier": os.path.relpath(chemin), "ligne": ligne, "message":
+                f"analyse syntaxique refusée (colonne {colonne} : "
+                f"{arbre.erreur.message}) — {n} titre(s) absent(s) de la "
+                f"carte des sections"})
+        return
+    fichier = os.path.relpath(chemin)
+    texte = arbre.texte
+    definitions = _definitions(texte)
+    lus, _ = labels.lire(chemin, v)
+
+    def ligne(n):
+        return arbre.position(n.debut)[0]
+
+    def prose_reelle(n):
+        """Des mots ou une formule : ce qui fait d'un intervalle du texte, pas
+        seulement des commandes (`\\footnotetext{…}` entre un énoncé et sa
+        preuve, `\\medskip`)."""
+        return (n.genre == "maths" or (
+            n.genre == "texte" and texte[n.debut:n.fin].strip()) or (
+            n.genre == "environnement" and n.nom in LISTES))
+
+    def parcourir(noeuds, fin):
+        courant = []                    # nœuds du texte en cours
+
+        def vider(jusqu_a):
+            if courant and any(prose_reelle(x) for x in courant):
+                yield ("texte", fichier, courant[0].debut,
+                       texte[courant[0].debut:jusqu_a])
+            courant.clear()
+
+        for n in noeuds:
+            if n.genre == "macro" and n.nom in INCLUSIONS:
+                m = RE_INCLUSION.match(texte, n.debut)
+                if m:
+                    yield from vider(n.debut)
+                    yield from _evenements(_cible(chemin, m.group(1)), v, vus,
+                                           avertissements)
+                    continue
+            if n.genre == "groupe" and _conteneur(n):
+                yield from vider(n.debut)
+                yield from parcourir(n.enfants, n.fin - 1)
+                continue
+            if _est_texte(n):
+                if n.genre == "macro" and n.nom == "minitoc":
+                    yield ("minitoc", fichier, ligne(n))
+                courant.append(n)
+                continue
+            yield from vider(n.debut)
+            if n.genre == "macro":                       # titre de section
+                lig = ligne(n)
+                label = next((x.cle for x in lus if x.objet == n.nom
+                              and lig <= x.ligne <= lig + 2), None)
+                yield ("titre", fichier, lig, n.nom,
+                       titre(n, texte, definitions), label)
+            elif n.genre == "environnement" and n.nom in v.boites:
+                yield ("boite", fichier, ligne(n), n.nom)
+            elif (n.genre == "environnement"
+                  and v.famille(n.nom) == STRUCTURE):
+                corps = (texte[n.enfants[0].debut:n.enfants[-1].fin]
+                         if n.enfants else "")
+                yield ("structure", fichier, ligne(n), n.nom,
+                       premier_paragraphe(corps))
+            elif n.genre == "environnement" and v.famille(n.nom) == PREUVE:
+                yield ("preuve", fichier, ligne(n), n.nom)
+            elif n.genre == "environnement" and _conteneur(n):
+                yield from parcourir(n.enfants, n.enfants[-1].fin)
+            elif n.genre == "environnement":
+                yield ("objet", fichier, ligne(n), n.nom)
+        yield from vider(fin)
+
+    yield from parcourir(arbre.noeuds, len(texte))
+
+
+def carte(racines, v, boites, avertissements):
+    """Les sections, dans l'ordre de lecture, depuis les fichiers du
+    périmètre qu'aucun autre fichier du périmètre n'inclut ; les fichiers
+    refusés par l'analyse s'ajoutent à `avertissements`."""
+    perimetre = [os.path.normpath(c) for c in sources(racines)]
+    inclus = set()
+    for c in perimetre:
+        for m in RE_INCLUSION.finditer(sans_commentaires(lire(c))):
+            inclus.add(_cible(c, m.group(1)))
+    par_position = {(b["fichier"], b["ligne"]): b for b in boites}
+    sections, ouvertes, vus = [], [], set()
+    derniere = None                     # la section qui reçoit le contenu
+
+    def fermer(rang):
+        while ouvertes and NIVEAUX.index(ouvertes[-1]["niveau"]) >= rang:
+            ouvertes.pop()
+
+    for racine in perimetre:
+        if racine in inclus:
+            continue
+        for e in _evenements(racine, v, vus, avertissements):
+            if e[0] == "titre":
+                _, fichier, lig, niveau, intitule, label = e
+                fermer(NIVEAUX.index(niveau))
+                derniere = {
+                    "fichier": fichier, "ligne": lig, "niveau": niveau,
+                    "titre": intitule, "label": label,
+                    "parents": {s["niveau"]: s["titre"] for s in ouvertes},
+                    "ouverture": {"texte": [], "structure": [], "minitoc": False},
+                    "contenu": [], "hypotheses": [], "termine_par": "rien",
+                }
+                if ouvertes:
+                    ouvertes[-1]["contenu"].append(
+                        {"type": "titre", "niveau": niveau, "titre": intitule,
+                         "fichier": fichier, "ligne": lig})
+                    ouvertes[-1]["termine_par"] = niveau
+                ouvertes.append(derniere)
+                sections.append(derniere)
+                continue
+            if derniere is None:
+                continue
+            avant_tout = not derniere["contenu"]
+            if e[0] == "texte":
+                paragraphes_ = paragraphes(e[3])
+                if not paragraphes_:
+                    continue
+                if avant_tout:
+                    derniere["ouverture"]["texte"].extend(
+                        _borner(p, a_gauche=False) for p in paragraphes_)
+                else:
+                    derniere["contenu"].append(
+                        {"type": "texte", "paragraphes": len(paragraphes_)})
+                derniere["termine_par"] = "texte"
+            elif e[0] == "minitoc":
+                derniere["ouverture"]["minitoc"] = True
+            elif e[0] == "structure":
+                _, fichier, lig, nom, debut = e
+                if avant_tout:
+                    derniere["ouverture"]["structure"].append(
+                        {"environnement": nom, "ligne": lig, "debut": debut})
+                else:
+                    derniere["contenu"].append(
+                        {"type": "structure", "environnement": nom,
+                         "fichier": fichier, "ligne": lig})
+            elif e[0] == "boite":
+                _, fichier, lig, nom = e
+                b = par_position.get((fichier, lig))
+                entree = {"type": "boite", "environnement": nom,
+                          "fichier": fichier, "ligne": lig,
+                          "empreinte": b["empreinte"] if b else None}
+                derniere["contenu"].append(entree)
+                derniere["termine_par"] = nom
+                if v.famille(nom) == HYPOTHESE:
+                    for s in ouvertes:
+                        s["hypotheses"].append(entree["empreinte"])
+            elif e[0] in ("objet", "preuve"):
+                _, fichier, lig, nom = e
+                derniere["contenu"].append(
+                    {"type": e[0], "environnement": nom,
+                     "fichier": fichier, "ligne": lig})
+                derniere["termine_par"] = nom
+    return sections
+
+
 def extraire(racines):
     """Le document JSON de l'extraction (dict)."""
     v = vocabulaire.charger()
@@ -323,6 +534,7 @@ def extraire(racines):
                                 entrees.get(os.path.relpath(chemin)))
         boites.extend(b)
         avertissements.extend(a)
+    sections = carte(racines, v, boites, avertissements)
     return {
         "schema": SCHEMA,
         "outil": "ocots-lint",
@@ -330,6 +542,7 @@ def extraire(racines):
         "extraction": "polycopie",
         "racines": list(racines),
         "boites": boites,
+        "sections": sections,
         "avertissements": avertissements,
     }
 
@@ -345,5 +558,6 @@ def main(argv):
     for a in doc["avertissements"]:
         print(f"{a['fichier']}:{a['ligne']}: [ocots-lint] {a['message']}",
               file=sys.stderr)
-    print(f"{len(doc['boites'])} boîte(s) extraite(s)", file=sys.stderr)
+    print(f"{len(doc['boites'])} boîte(s), {len(doc['sections'])} section(s) "
+          f"extraite(s)", file=sys.stderr)
     return 0
