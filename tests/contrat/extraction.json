@@ -1,0 +1,294 @@
+{
+  "schema": 1,
+  "outil": "ocots-lint",
+  "version": "<version>",
+  "extraction": "polycopie",
+  "racines": [
+    "poly"
+  ],
+  "boites": [
+    {
+      "empreinte": "6d8aa8c0db5222f0:0",
+      "fichier": "poly/chapitres/suites.tex",
+      "ligne": 8,
+      "fin": 10,
+      "environnement": "theorem",
+      "famille": "resultat",
+      "section": {
+        "chapter": "Suites",
+        "subsection": "Convergence"
+      },
+      "label": "thm:bw",
+      "citations": {
+        "total": 1,
+        "fichiers": [
+          "td/td1.tex"
+        ],
+        "ailleurs": true
+      },
+      "precede_par": "subsection",
+      "amorce": "Une suite bornée n'est pas forcément convergente. Mais elle a une sous-suite qui l'est : c'est le résultat central.",
+      "preuve": {
+        "environnement": "proof",
+        "ligne": 12,
+        "fin": 14
+      },
+      "reprise": "On en tire la compacité des segments.",
+      "suivi_par": "remark"
+    },
+    {
+      "empreinte": "0de0e21629e5f2db:0",
+      "fichier": "poly/chapitres/suites.tex",
+      "ligne": 18,
+      "fin": 23,
+      "environnement": "remark",
+      "famille": "remarque",
+      "section": {
+        "chapter": "Suites",
+        "subsection": "Convergence"
+      },
+      "label": null,
+      "citations": {
+        "total": 0,
+        "fichiers": [],
+        "ailleurs": false
+      },
+      "precede_par": "proof",
+      "amorce": "On en tire la compacité des segments.",
+      "preuve": null,
+      "reprise": "\\begin{itemize} \\item une liste fait partie du texte ; \\end{itemize} Voici l'exercice.",
+      "suivi_par": "exercise"
+    },
+    {
+      "empreinte": "c1c2fc711173b786:0",
+      "fichier": "poly/chapitres/suites.tex",
+      "ligne": 20,
+      "fin": 22,
+      "environnement": "example",
+      "famille": "exemple",
+      "section": {
+        "chapter": "Suites",
+        "subsection": "Convergence"
+      },
+      "label": null,
+      "citations": {
+        "total": 0,
+        "fichiers": [],
+        "ailleurs": false
+      },
+      "precede_par": "début",
+      "amorce": "\\begin{remark} Une remarque, avec un exemple dedans :",
+      "preuve": null,
+      "reprise": "\\end{remark} \\begin{itemize} \\item une liste fait partie du texte ; \\end{itemize} Voici l'exercice.",
+      "suivi_par": "fin"
+    },
+    {
+      "empreinte": "9493f9e782388985:0",
+      "fichier": "poly/chapitres/suites.tex",
+      "ligne": 29,
+      "fin": 31,
+      "environnement": "exercise",
+      "famille": "exercice",
+      "section": {
+        "chapter": "Suites",
+        "subsection": "Convergence"
+      },
+      "label": null,
+      "citations": {
+        "total": 0,
+        "fichiers": [],
+        "ailleurs": false
+      },
+      "precede_par": "remark",
+      "amorce": "\\begin{itemize} \\item une liste fait partie du texte ; \\end{itemize} Voici l'exercice.",
+      "preuve": null,
+      "reprise": "",
+      "suivi_par": "section"
+    },
+    {
+      "empreinte": "51d621218143c3cc:0",
+      "fichier": "poly/chapitres/suites.tex",
+      "ligne": 36,
+      "fin": 38,
+      "environnement": "assumption",
+      "famille": "hypothese",
+      "section": {
+        "chapter": "Suites",
+        "section": "Suite"
+      },
+      "label": "hyp:h",
+      "citations": {
+        "total": 0,
+        "fichiers": [],
+        "ailleurs": false
+      },
+      "precede_par": "section",
+      "amorce": "Le cadre de la section.",
+      "preuve": null,
+      "reprise": "",
+      "suivi_par": "fin"
+    }
+  ],
+  "sections": [
+    {
+      "fichier": "poly/main.tex",
+      "ligne": 4,
+      "niveau": "chapter",
+      "titre": "Avant-propos",
+      "label": null,
+      "parents": {},
+      "ouverture": {
+        "texte": [
+          "Un avant-propos dans un groupe."
+        ],
+        "structure": [],
+        "minitoc": false
+      },
+      "contenu": [],
+      "hypotheses": [],
+      "termine_par": "texte"
+    },
+    {
+      "fichier": "poly/main.tex",
+      "ligne": 7,
+      "niveau": "chapter",
+      "titre": "Suites",
+      "label": null,
+      "parents": {},
+      "ouverture": {
+        "texte": [],
+        "structure": [
+          {
+            "environnement": "chapterintro",
+            "ligne": 10,
+            "debut": "Ce chapitre étudie les suites."
+          }
+        ],
+        "minitoc": true
+      },
+      "contenu": [
+        {
+          "type": "titre",
+          "niveau": "subsection",
+          "titre": "Convergence",
+          "fichier": "poly/chapitres/suites.tex",
+          "ligne": 2
+        },
+        {
+          "type": "titre",
+          "niveau": "section",
+          "titre": "Suite",
+          "fichier": "poly/chapitres/suites.tex",
+          "ligne": 33
+        }
+      ],
+      "hypotheses": [
+        "51d621218143c3cc:0"
+      ],
+      "termine_par": "section"
+    },
+    {
+      "fichier": "poly/chapitres/suites.tex",
+      "ligne": 2,
+      "niveau": "subsection",
+      "titre": "Convergence",
+      "label": null,
+      "parents": {
+        "chapter": "Suites"
+      },
+      "ouverture": {
+        "texte": [
+          "Une suite bornée n'est pas forcément convergente. Mais elle a une sous-suite qui l'est : c'est le résultat central."
+        ],
+        "structure": [],
+        "minitoc": false
+      },
+      "contenu": [
+        {
+          "type": "boite",
+          "environnement": "theorem",
+          "fichier": "poly/chapitres/suites.tex",
+          "ligne": 8,
+          "empreinte": "6d8aa8c0db5222f0:0"
+        },
+        {
+          "type": "preuve",
+          "environnement": "proof",
+          "fichier": "poly/chapitres/suites.tex",
+          "ligne": 12
+        },
+        {
+          "type": "texte",
+          "paragraphes": 1
+        },
+        {
+          "type": "boite",
+          "environnement": "remark",
+          "fichier": "poly/chapitres/suites.tex",
+          "ligne": 18,
+          "empreinte": "0de0e21629e5f2db:0"
+        },
+        {
+          "type": "texte",
+          "paragraphes": 1
+        },
+        {
+          "type": "boite",
+          "environnement": "exercise",
+          "fichier": "poly/chapitres/suites.tex",
+          "ligne": 29,
+          "empreinte": "9493f9e782388985:0"
+        }
+      ],
+      "hypotheses": [],
+      "termine_par": "exercise"
+    },
+    {
+      "fichier": "poly/chapitres/suites.tex",
+      "ligne": 33,
+      "niveau": "section",
+      "titre": "Suite",
+      "label": null,
+      "parents": {
+        "chapter": "Suites"
+      },
+      "ouverture": {
+        "texte": [
+          "Le cadre de la section."
+        ],
+        "structure": [],
+        "minitoc": false
+      },
+      "contenu": [
+        {
+          "type": "boite",
+          "environnement": "assumption",
+          "fichier": "poly/chapitres/suites.tex",
+          "ligne": 36,
+          "empreinte": "51d621218143c3cc:0"
+        }
+      ],
+      "hypotheses": [
+        "51d621218143c3cc:0"
+      ],
+      "termine_par": "assumption"
+    },
+    {
+      "fichier": "poly/main.tex",
+      "ligne": 15,
+      "niveau": "chapter",
+      "titre": "Annexe",
+      "label": null,
+      "parents": {},
+      "ouverture": {
+        "texte": [],
+        "structure": [],
+        "minitoc": false
+      },
+      "contenu": [],
+      "hypotheses": [],
+      "termine_par": "rien"
+    }
+  ],
+  "avertissements": []
+}

@@ -239,6 +239,10 @@ sortie texte est faite pour un humain. Il porte un numéro de schéma
 Un champ ajouté reste compatible ; un changement incompatible crée un
 schéma 2.
 
+`extraire` a son propre contrat, publié de même
+([`schemas/extraire-1.schema.json`](src/ocots_lint/schemas/extraire-1.schema.json)) :
+ce que chaque champ décrit, et qu'aucun n'est un verdict.
+
 Chaque trouvaille porte une **empreinte** (`3f9a0c2e71b84d55:0`), son
 identité indépendante du numéro de ligne : la règle, le fichier, la ligne
 signalée et ses voisines non vides, commentaires retirés. Ajouter des lignes

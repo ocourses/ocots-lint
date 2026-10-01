@@ -10,6 +10,12 @@ au moment du tag.
 
 ## Non publié
 
+- **Contrat d'`extraire`** (S7.3) : schéma JSON publié avec le paquet
+  (`schemas/extraire-1.schema.json`) — chaque champ des boîtes et de la
+  carte des sections décrit, aucun verdict. Testé comme celui de
+  `verifier` : sortie validée contre le schéma et comparée à une référence
+  (`tests/contrat/extraction.json`). Les extractions des trois polycopiés
+  réels y sont conformes.
 - **`extraire` : la carte des sections** (S7.2), pour P7 et P4 en fin de
   section — chaque titre dans l'ordre de lecture (fichiers inclus, groupes
   `{…}` et environnements comme `appendix` traversés), son ouverture (texte,

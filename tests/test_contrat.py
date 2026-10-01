@@ -1,4 +1,4 @@
-"""Contrat avec les consommateurs de `verifier` (S3.3).
+"""Contrat avec les consommateurs de `verifier` (S3.3) et d'`extraire` (S7.3).
 
 - **JSON** : validé contre le schéma publié, et comparé à une sortie de
   référence. Changer la sortie JSON, c'est changer le contrat : on régénère
@@ -113,3 +113,38 @@ def test_chaque_ligne_lisible_par_le_detecteur():
 ])
 def test_codes_de_sortie(argv, code):
     assert lancer(*argv, cwd=CONTRAT.parent)[0] == code
+
+
+# ------------------------------------------------------------- extraire (S7.3)
+
+EXTRACTION = CONTRAT / "extraction"
+
+
+def schema_extraire():
+    fichier = resources.files("ocots_lint") / "schemas" / "extraire-1.schema.json"
+    return json.loads(fichier.read_text(encoding="utf-8"))
+
+
+def extraire_json():
+    r = subprocess.run([sys.executable, "-m", "ocots_lint", "extraire"],
+                       cwd=EXTRACTION, capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    return json.loads(r.stdout)
+
+
+def test_extraire_valide_contre_le_schema_publie():
+    jsonschema.Draft202012Validator.check_schema(schema_extraire())
+    jsonschema.validate(extraire_json(), schema_extraire())
+
+
+def test_extraire_reference():
+    doc = extraire_json()
+    assert doc["version"]
+    doc["version"] = "<version>"
+    comparer_a_la_reference("extraction.json",
+                            json.dumps(doc, ensure_ascii=False, indent=2) + "\n")
+
+
+def test_extraire_schema_publie_avec_le_paquet():
+    from ocots_lint.extraire import SCHEMA
+    assert schema_extraire()["properties"]["schema"]["const"] == SCHEMA

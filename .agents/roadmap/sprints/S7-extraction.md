@@ -68,7 +68,7 @@ puis sur Albert ; polycopié seulement.
   `\minitoc`), texte d'ouverture de section (décor, phrase d'introduction),
   blocs `assumption`, suite des boîtes, ce qui termine la section — afin de
   juger P7, et P4 en fin de section.
-- [ ] **S7.3** — Contrat de l'extraction : schéma JSON publié
+- [x] **S7.3** — Contrat de l'extraction : schéma JSON publié
   (`schemas/`), testé, et documenté dans le README (ce qu'elle contient, ce
   qu'elle ne juge pas).
 - [ ] **S7.4** — Dans `ocourses/agents` : rôle de relecture de jugement
@@ -116,6 +116,11 @@ puis sur Albert ; polycopié seulement.
   sans reprise — mesure 46 sur 63, calcul-diff 48 sur 64, automatique 13 sur
   23 (P4 en compte 73 au corpus) ; chapitres avec introduction — mesure 8
   sur 10, calcul-diff et automatique 0 ; aucun bloc `assumption`.
+- 2026-10-01 — S7.3 : schéma `extraire-1.schema.json` (draft 2020-12),
+  publié avec le paquet. **Critère 4 tenu** : la sortie d'un petit cours de
+  référence (`tests/contrat/extraction/`) est validée contre le schéma et
+  comparée à `tests/contrat/extraction.json` ; les extractions réelles de
+  mesure, calcul-diff et automatique (`origin/main`) valident sans erreur.
 
 ## Bilan
 
