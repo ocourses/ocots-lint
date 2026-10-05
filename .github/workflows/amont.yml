@@ -20,7 +20,7 @@ name: Amont
 
 on:
   schedule:
-    - cron: "41 5 * * 1"   # lundi, décalé des valeurs rondes
+    - cron: "41 2 * * 5"   # vendredi, décalé des valeurs rondes
   workflow_dispatch: {}
 
 permissions:
