@@ -40,6 +40,14 @@ corrections dont l'équivalence est vérifiée (`~:`, guillemets si `csquotes`
 est chargé). Après `--appliquer` : recompiler, relire le diff, commiter à
 part.
 
+**Fichiers exclus.** Le parcours d'un dossier saute `template/`,
+`conventions/`, `build/`, et les préfixes de chemins listés dans
+`.agents-ignore` à la racine du cours (un par ligne, `#` commente), par
+exemple `attic/` pour des documents rangés. Ce fichier est le même que pour
+`synchroniser` et les détecteurs d'`ocourses/agents`. Un fichier, ou un
+dossier, nommé explicitement en argument reste vérifié :
+`ocots-lint verifier attic/`.
+
 Épingler une version : `git+https://github.com/ocourses/ocots-lint@v0.8.0`.
 
 Sortie `1` s'il y a au moins une infraction, `2` pour un argument inconnu,

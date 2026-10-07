@@ -13,6 +13,25 @@ import re
 
 SKIP = ("/template/", "/build/", "/conventions/", "/.git/")
 
+# Préfixes de chemins exclus par le cours, relatifs à sa racine (le dossier
+# courant) : un document rangé (`attic/`, `archived/`) ne produit plus de
+# trouvailles. Le même fichier sert à `synchroniser` et aux détecteurs de
+# `ocourses/agents`.
+AGENTS_IGNORE = ".agents-ignore"
+
+
+def lire_ignores(chemin=AGENTS_IGNORE):
+    """Préfixes de `.agents-ignore` (lignes non vides, `#` commente)."""
+    if not chemin or not os.path.isfile(chemin):
+        return []
+    with open(chemin, encoding="utf-8") as fh:
+        return [ligne.strip() for ligne in fh
+                if ligne.strip() and not ligne.strip().startswith("#")]
+
+
+def est_ignore(fichier, ignores):
+    return any(fichier.startswith(p) for p in ignores)
+
 
 
 def motif(noms):
@@ -22,18 +41,30 @@ def motif(noms):
                             sorted(noms, key=lambda n: (-len(n), n))) + ")"
 
 
+def _relatif(chemin):
+    return os.path.normpath(os.path.relpath(chemin)).replace(os.sep, "/")
+
+
 def sources(racines):
+    """Les `.tex` des racines. Le parcours d'un dossier saute `SKIP` et les
+    préfixes de `.agents-ignore` ; ce qu'on désigne explicitement (un
+    fichier, ou un dossier lui-même exclu) reste lu."""
+    ignores = lire_ignores()
     for racine in racines:
         if os.path.isfile(racine):
             yield racine
             continue
+        filtre = ignores and not est_ignore(_relatif(racine) + "/", ignores)
         for dossier, _, fichiers in os.walk(racine):
             chemin = dossier + "/"
             if any(s in chemin for s in SKIP):
                 continue
             for f in sorted(fichiers):
                 if f.endswith(".tex"):
-                    yield os.path.join(dossier, f)
+                    complet = os.path.join(dossier, f)
+                    if filtre and est_ignore(_relatif(complet), ignores):
+                        continue
+                    yield complet
 
 
 RE_CLASSE = re.compile(r"^[^%\n]*?\\documentclass(?:\[[^\]]*\])?\{([^}]+)\}", re.M)

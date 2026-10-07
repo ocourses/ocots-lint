@@ -46,6 +46,7 @@ from dataclasses import dataclass, field
 from pathlib import PurePath
 
 from ocots_lint import __version__, conventions
+from ocots_lint.lecture import est_ignore, lire_ignores
 from ocots_lint.regles import REGISTRE, REGLES
 from ocots_lint.sorties import SCHEMA_JSON
 from ocots_lint.verifier import analyser
@@ -128,19 +129,6 @@ class Plan:
 
 def titre(fichier, famille=CONVENTIONS):
     return famille.prefixe + fichier
-
-
-def lire_ignores(chemin):
-    """Préfixes de `.agents-ignore` (lignes non vides, `#` commente)."""
-    if not chemin or not os.path.isfile(chemin):
-        return []
-    with open(chemin, encoding="utf-8") as fh:
-        return [ligne.strip() for ligne in fh
-                if ligne.strip() and not ligne.strip().startswith("#")]
-
-
-def est_ignore(fichier, ignores):
-    return any(fichier.startswith(p) for p in ignores)
 
 
 def corps_issue(fichier, trouvailles, avertissements, contexte_versions,
