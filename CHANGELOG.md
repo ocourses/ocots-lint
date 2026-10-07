@@ -10,6 +10,15 @@ au moment du tag.
 
 ## Non publié
 
+---
+
+## v0.9.0 — 2026-10-07
+
+`.agents-ignore` vaut désormais pour toutes les commandes, pas seulement
+pour `synchroniser` : un document rangé (`attic/`, `archived/`) ne produit
+plus de trouvailles. Sur les quatre cours, seul `calcul-differentiel-edo`
+exclut quelque chose (`attic/`) : ses autres trouvailles sont identiques.
+
 ### Changé
 
 - **`.agents-ignore` respecté par toutes les commandes** (#75) : jusqu'ici,
