@@ -10,6 +10,19 @@ au moment du tag.
 
 ## Non publié
 
+### Changé
+
+- **`.agents-ignore` respecté par toutes les commandes** (#75) : jusqu'ici,
+  seul `synchroniser` le lisait, et `verifier` lancé sans argument parcourait
+  aussi les documents rangés (`attic/`, `archived/`). Le parcours des
+  racines (`lecture.sources`) saute désormais ses préfixes, pour `verifier`
+  (et donc `verifier-pr.yml`), `nettoyer`, `--mesure` et `extraire`. Un
+  fichier ou un dossier nommé explicitement reste lu. Effet de bord voulu :
+  C5 et P12, qui croisent les labels de tout le cours, ne voient plus ceux des
+  fichiers exclus. Mesuré sur `calcul-differentiel-edo` (`attic/` exclu) :
+  180 trouvailles en moins, toutes sous `attic/` ; les 60 autres sont
+  identiques.
+
 ---
 
 ## v0.8.0 — 2026-10-01
