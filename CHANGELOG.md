@@ -10,6 +10,10 @@ au moment du tag.
 
 ## Non publié
 
+- `couverture --support commun|poly|slides|td|exam` limite le tableau et le
+  résumé aux règles applicables au support ; le résumé distingue vérifiées,
+  mesurées seulement et non outillées (#79).
+
 ---
 
 ## v0.9.0 — 2026-10-07
