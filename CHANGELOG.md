@@ -10,6 +10,13 @@ au moment du tag.
 
 ## Non publié
 
+- **C4 : le mot du renvoi nomme le niveau de la cible** (#85) : `Section~\ref{ssec:…}` et
+  `Sous-section~\ref{sec:…}` sont signalés ; le préfixe du label (table de C5) décide du mot.
+  Seul `\ref` est lu : `\cref` et `\autoref` posent le mot eux-mêmes. `labels.Renvoi` porte le
+  mot de niveau écrit avant le renvoi (`niveau`).
+- **C4 : `Sous-section~\ref{…}` n'est plus signalé « en bas de casse »** : la forme correcte
+  contenait le mot `section` en minuscules.
+
 - **Relais vers `ocots-conventions`** (#27) : `release.yml` ouvre, après la release, la PR qui
   monte `OCOTS_LINT_VERSION` et ouvre une entrée du `CHANGELOG` des conventions
   (`scripts/relais-conventions`). Sauté sans GitHub App (variable `RELAIS_APP_ID`) ; la
