@@ -44,6 +44,23 @@ def test_markdown(tmp_path, capsys):
     assert "| Remarques \\| apartés | signal |" in out
 
 
+def test_support_td_ne_compte_que_commun_et_td(tmp_path, capsys):
+    assert couverture.main(["--conventions", conventions_fictives(tmp_path),
+                            "--support", "td"]) == 0
+    sortie = capsys.readouterr()
+    lignes = [l for l in sortie.out.splitlines()
+              if l and not l.startswith("Conventions") and not l.startswith("|")]
+    assert [l.split()[0] for l in lignes] == ["C1", "C3", "C4", "C5", "C6"]
+    assert "5 règles applicables au support « td »" in sortie.err
+    assert "3 vérifiées" in sortie.err
+
+
+def test_support_inconnu(tmp_path, capsys):
+    assert couverture.main(["--conventions", conventions_fictives(tmp_path),
+                            "--support", "tds"]) == 2
+    assert "support inconnu" in capsys.readouterr().err
+
+
 def test_regle_outillee_absente_des_conventions(tmp_path, capsys):
     dossier = conventions_fictives(tmp_path, sans=("P5",))
     assert couverture.main(["--conventions", dossier]) == 2

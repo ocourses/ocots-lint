@@ -32,6 +32,8 @@ uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint verifier P2 pol
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint verifier --list
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint verifier --mesure poly/
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint couverture
+uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint couverture --support td
+uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint couverture --support td
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint nettoyer C4 poly/              # aperçu
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint nettoyer C4 poly/ --appliquer  # écrit
 ```
@@ -74,6 +76,20 @@ déclare sa **garantie** :
 `ocots-lint couverture` liste chaque règle des conventions du cours
 (`./conventions`) avec sa garantie, ou « non outillée ». Il sort `2` si
 l'outil cite une règle que ces conventions ne connaissent pas.
+
+Pour savoir ce que l'outil peut réellement conclure sur un support précis,
+ajouter `--support commun|poly|slides|td|exam`. Le support inclut les règles
+communes (`C*`) et ses règles propres : par exemple, `--support td` affiche
+les `C*` et `TD*`, pas les règles `P*`, `SL*` ou `EX*`. Le résumé distingue
+les règles vérifiées, mesurées seulement et non outillées. Une absence de
+trouvaille sur un TD ne signifie donc pas qu'une règle `TD*` a été vérifiée.
+
+Pour savoir ce que `verifier` peut réellement conclure sur un support précis,
+ajouter `--support commun|poly|slides|td|exam`. Le support inclut les règles
+communes (`C*`) et ses règles propres : par exemple, `--support td` affiche
+les `C*` et `TD*`, pas les règles `P*`, `SL*` ou `EX*`. Le résumé distingue
+les règles vérifiées, mesurées seulement et non outillées. Une absence de
+trouvaille sur un TD ne signifie donc pas qu'une règle `TD*` a été vérifiée.
 
 Chaque limite connue
 d'un vérificateur est écrite comme un **test attendu en échec**
