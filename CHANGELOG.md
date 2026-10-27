@@ -10,6 +10,11 @@ au moment du tag.
 
 ## Non publié
 
+- `couverture` lit `site.md` quand les conventions l'ont : les règles `WEB*`
+  sont listées « hors ocots-lint » et comptées à part ; `--support site` les
+  liste seules. Elles sont vérifiées par le socle `ocots-site` (décision 0008,
+  #78). Le paragraphe sur `--support`, en double dans le README, n'y est plus
+  qu'une fois.
 - `couverture --support commun|poly|slides|td|exam` limite le tableau et le
   résumé aux règles applicables au support ; le résumé distingue vérifiées,
   mesurées seulement et non outillées (#79).

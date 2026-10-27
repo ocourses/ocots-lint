@@ -10,9 +10,11 @@ import subprocess
 from dataclasses import dataclass
 
 FICHIERS = ("communes.md", "poly.md", "slides.md", "td.md", "exam.md")
+# Lus s'ils existent : des conventions épinglées avant leur arrivée restent lisibles.
+FACULTATIFS = ("site.md",)
 DEPOT = "https://github.com/ocourses/ocots-conventions"
 
-RE_REGLE = re.compile(r"^## ((?:C|P|SL|TD|EX)\d+) — (.+?)\s*$", re.M)
+RE_REGLE = re.compile(r"^## ((?:C|P|SL|TD|EX|WEB)\d+) — (.+?)\s*$", re.M)
 
 
 class ConventionsIntrouvables(Exception):
@@ -52,8 +54,11 @@ def trouver(chemin=None):
 def regles(dossier):
     """Les règles, dans l'ordre des fichiers puis du texte."""
     trouvees = []
-    for fichier in FICHIERS:
-        with open(os.path.join(dossier, fichier), encoding="utf-8") as fh:
+    for fichier in FICHIERS + FACULTATIFS:
+        chemin = os.path.join(dossier, fichier)
+        if fichier in FACULTATIFS and not os.path.isfile(chemin):
+            continue
+        with open(chemin, encoding="utf-8") as fh:
             for m in RE_REGLE.finditer(fh.read()):
                 trouvees.append(Regle(m.group(1), m.group(2), fichier))
     return trouvees
