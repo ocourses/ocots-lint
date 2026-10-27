@@ -15,6 +15,13 @@ au moment du tag.
   liste seules. Elles sont vérifiées par le socle `ocots-site` (décision 0008,
   #78). Le paragraphe sur `--support`, en double dans le README, n'y est plus
   qu'une fois.
+- P2 n'est plus signalée entre deux boîtes sous une diapositive titrée d'un
+  transparent (`slide{titre}`, `frame{titre}` ou `\frametitle`) ; les frames
+  nues restent contrôlées selon SL4 (#74, conventions#34).
+- `verifier --mesure` repère désormais le motif P7 d'un `\chapter*` ajouté à
+  la table des matières sans `\adjustmtc` immédiatement après
+  `\addcontentsline`. C'est une mesure non bloquante, avec fixtures positive et
+  négative (#73, conventions#36).
 - `couverture --support commun|poly|slides|td|exam` limite le tableau et le
   résumé aux règles applicables au support ; le résumé distingue vérifiées,
   mesurées seulement et non outillées (#79).

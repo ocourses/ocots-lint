@@ -21,6 +21,7 @@ from pathlib import Path
 
 import pytest
 
+from ocots_lint.mesures import MESURES
 from ocots_lint.regles import REGLES, SUR_ARBRE
 
 from outils import FIXTURES
@@ -76,10 +77,25 @@ def regles_de_l_ancien():
 NOUVELLES = sorted(set(REGLES) - regles_de_l_ancien()) if ANCIEN.exists() else []
 
 
+def mesures_de_l_ancien():
+    """Les messages des mesures que l'ancien outil connaît, lus dans son `--list`."""
+    _, sortie, _ = executer([sys.executable, str(ANCIEN), "--list"], RACINE)
+    section = sortie.split("Mesures", 1)[-1].split("\n")
+    return {ligne.split("  ", 2)[2] for ligne in section if ligne.startswith("  ")}
+
+
+# Mesures venues après l'ancien outil (P7, #73) : chacune de leurs lignes (dans
+# `--list`, le bilan et les signalements de `--mesure`) finit par leur message.
+NOUVELLES_MESURES = (sorted({m for _, _, m, _ in MESURES} - mesures_de_l_ancien())
+                     if ANCIEN.exists() else [])
+
+
 def sans_nouvelles(sortie):
     lignes = []
     for ligne in sortie.split("\n"):
         if any(ligne.startswith(f"  {r}  ") for r in NOUVELLES):
+            continue
+        if any(ligne.endswith(m) for m in NOUVELLES_MESURES):
             continue
         if ligne.startswith("règles : "):
             gardees = [r for r in ligne[len("règles : "):].split(", ")
