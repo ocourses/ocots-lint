@@ -78,18 +78,17 @@ déclare sa **garantie** :
 l'outil cite une règle que ces conventions ne connaissent pas.
 
 Pour savoir ce que l'outil peut réellement conclure sur un support précis,
-ajouter `--support commun|poly|slides|td|exam`. Le support inclut les règles
+ajouter `--support commun|poly|slides|td|exam|site`. Le support inclut les règles
 communes (`C*`) et ses règles propres : par exemple, `--support td` affiche
 les `C*` et `TD*`, pas les règles `P*`, `SL*` ou `EX*`. Le résumé distingue
 les règles vérifiées, mesurées seulement et non outillées. Une absence de
 trouvaille sur un TD ne signifie donc pas qu'une règle `TD*` a été vérifiée.
 
-Pour savoir ce que `verifier` peut réellement conclure sur un support précis,
-ajouter `--support commun|poly|slides|td|exam`. Le support inclut les règles
-communes (`C*`) et ses règles propres : par exemple, `--support td` affiche
-les `C*` et `TD*`, pas les règles `P*`, `SL*` ou `EX*`. Le résumé distingue
-les règles vérifiées, mesurées seulement et non outillées. Une absence de
-trouvaille sur un TD ne signifie donc pas qu'une règle `TD*` a été vérifiée.
+Les règles des sites web (`WEB*`, `site.md`) ne sont pas vérifiées par cet
+outil mais par le socle `ocots-site`, dans `npm test` de chaque cours
+([décision 0008](.agents/roadmap/decisions/0008-site.md)) : `couverture` les
+liste « hors ocots-lint » (`--support site` pour elles seules) et les compte à
+part ; le « Vérifié par » de chaque règle dit ce qui la contrôle.
 
 Chaque limite connue
 d'un vérificateur est écrite comme un **test attendu en échec**

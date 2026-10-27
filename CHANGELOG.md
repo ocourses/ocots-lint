@@ -10,6 +10,11 @@ au moment du tag.
 
 ## Non publié
 
+- `couverture` lit `site.md` quand les conventions l'ont : les règles `WEB*`
+  sont listées « hors ocots-lint » et comptées à part ; `--support site` les
+  liste seules. Elles sont vérifiées par le socle `ocots-site` (décision 0008,
+  #78). Le paragraphe sur `--support`, en double dans le README, n'y est plus
+  qu'une fois.
 - P2 n'est plus signalée entre deux boîtes sous une diapositive titrée d'un
   transparent (`slide{titre}`, `frame{titre}` ou `\frametitle`) ; les frames
   nues restent contrôlées selon SL4 (#74, conventions#34).
@@ -17,7 +22,6 @@ au moment du tag.
   la table des matières sans `\adjustmtc` immédiatement après
   `\addcontentsline`. C'est une mesure non bloquante, avec fixtures positive et
   négative (#73, conventions#36).
-
 - `couverture --support commun|poly|slides|td|exam` limite le tableau et le
   résumé aux règles applicables au support ; le résumé distingue vérifiées,
   mesurées seulement et non outillées (#79).

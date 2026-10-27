@@ -1,5 +1,5 @@
 from ocots_lint import couverture
-from ocots_lint.conventions import FICHIERS
+from ocots_lint.conventions import FACULTATIFS, FICHIERS
 
 CONTENU = {
     "communes.md": "## C1 — Langue\n\n## C3 — Macros\n\n## C4 — Typographie\n"
@@ -9,11 +9,13 @@ CONTENU = {
     "slides.md": "## SL1 — Référence\n",
     "td.md": "# TD\n",
     "exam.md": "# Examens\n",
+    "site.md": "## WEB1 — Modèles\n\n## WEB2 — Une page tient\n",
 }
 
 
-def conventions_fictives(tmp_path, sans=()):
-    for fichier in FICHIERS:
+def conventions_fictives(tmp_path, sans=(), fichiers=FICHIERS):
+    tmp_path.mkdir(parents=True, exist_ok=True)
+    for fichier in fichiers:
         texte = CONTENU[fichier]
         for ident in sans:
             texte = "\n".join(l for l in texte.split("\n")
@@ -55,6 +57,30 @@ def test_support_td_ne_compte_que_commun_et_td(tmp_path, capsys):
     assert [l.split()[0] for l in lignes] == ["C1", "C3", "C4", "C5", "C6"]
     assert "5 règles applicables au support « td »" in sortie.err
     assert "3 vérifiées" in sortie.err
+
+
+def test_les_regles_web_sont_hors_ocots_lint_et_comptees_a_part(tmp_path, capsys):
+    # Le résumé avec site.md : celui sans, plus deux règles « hors ocots-lint ».
+    sans_web = conventions_fictives(tmp_path / "sans")
+    assert couverture.main(["--conventions", sans_web]) == 0
+    sans = capsys.readouterr().err.strip().rstrip(".")
+    dossier = conventions_fictives(tmp_path / "avec", fichiers=FICHIERS + FACULTATIFS)
+    assert couverture.main(["--conventions", dossier]) == 0
+    sortie = capsys.readouterr()
+    lignes = {l.split()[0]: l for l in sortie.out.splitlines()[2:]}
+    assert lignes["WEB1"].endswith("hors ocots-lint")
+    total, reste = sans.split(" règles : ", 1)
+    assert sortie.err.strip() == (f"{int(total) + 2} règles : {reste}, "
+                                  "2 hors ocots-lint (site.md, « Vérifié par »).")
+
+
+def test_support_site_ne_liste_que_les_regles_web(tmp_path, capsys):
+    dossier = conventions_fictives(tmp_path, fichiers=FICHIERS + FACULTATIFS)
+    assert couverture.main(["--conventions", dossier, "--support", "site"]) == 0
+    sortie = capsys.readouterr()
+    lignes = [l for l in sortie.out.splitlines()[2:] if l]
+    assert [l.split()[0] for l in lignes] == ["WEB1", "WEB2"]
+    assert "0 non outillées, 2 hors ocots-lint" in sortie.err
 
 
 def test_support_inconnu(tmp_path, capsys):
