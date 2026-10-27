@@ -10,6 +10,10 @@ au moment du tag.
 
 ## Non publié
 
+- **Relais vers `ocots-conventions`** (#27) : `release.yml` ouvre, après la release, la PR qui
+  monte `OCOTS_LINT_VERSION` et ouvre une entrée du `CHANGELOG` des conventions
+  (`scripts/relais-conventions`). Sauté sans GitHub App (variable `RELAIS_APP_ID`) ; la
+  release n'en dépend pas. Mise en place : README, « Relais vers `ocots-conventions` ».
 
 ---
 

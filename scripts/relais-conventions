@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+"""Prépare, dans un clone d'ocots-conventions, la montée vers une version d'ocots-lint.
+
+    scripts/relais-conventions CONVENTIONS VERSION NOTES.md
+
+Deux changements, les mêmes que ceux qu'on faisait à la main (#27) :
+  - `OCOTS_LINT_VERSION` de `bin/ocots-lint` passe à VERSION ;
+  - une entrée « `ocots-lint` passe à vX.Y.Z » ouvre la section « Non publié » du
+    CHANGELOG, avec un lien vers la release et le résumé de ses notes (leur premier
+    paragraphe). NOTES.md est la sortie de `scripts/notes-de-version`.
+
+Ce qui reste à un humain : choisir la version des conventions (correctif, mineure ou
+majeure : une décision, pas un calcul), compléter l'entrée si l'outil change ce que
+les règles voient, fusionner, puis taguer.
+
+Sans effet si les conventions sont déjà à VERSION (sortie 0, rien d'écrit).
+Sortie 1 si `bin/ocots-lint` n'a pas de ligne `OCOTS_LINT_VERSION=` ou si le
+CHANGELOG n'a pas de section « Non publié ».
+"""
+
+import re
+import sys
+import textwrap
+from pathlib import Path
+
+DEPOT = "https://github.com/ocourses/ocots-lint"
+RE_VERSION = re.compile(r"^OCOTS_LINT_VERSION=(\S+)$", re.M)
+
+
+def version_epinglee(relais):
+    """La version qu'épingle le texte de `bin/ocots-lint`, ou None."""
+    m = RE_VERSION.search(relais)
+    return m.group(1) if m else None
+
+
+def monte_relais(relais, version):
+    return RE_VERSION.sub(f"OCOTS_LINT_VERSION={version}", relais, count=1)
+
+
+def resume(notes):
+    """Le premier paragraphe des notes d'une release, sur une ligne."""
+    paragraphe = notes.strip().split("\n\n")[0]
+    return " ".join(paragraphe.split())
+
+
+def entree(version, notes):
+    texte = f"`ocots-lint` passe à [`{version}`]({DEPOT}/releases/tag/{version}) : {resume(notes)}"
+    return textwrap.fill(texte, width=78, initial_indent="- ", subsequent_indent="  ",
+                         break_long_words=False, break_on_hyphens=False) + "\n"
+
+
+def ajoute_entree(changelog, ligne):
+    """L'entrée en tête de « Non publié » ; None s'il n'y a pas cette section."""
+    m = re.search(r"^## Non publié\n\n", changelog, re.M)
+    return None if m is None else changelog[:m.end()] + ligne + changelog[m.end():]
+
+
+def main(argv):
+    dossier, version, notes = Path(argv[0]), argv[1], Path(argv[2]).read_text(encoding="utf-8")
+    relais = dossier / "bin/ocots-lint"
+    texte = relais.read_text(encoding="utf-8")
+    actuelle = version_epinglee(texte)
+    if actuelle is None:
+        print("bin/ocots-lint : pas de ligne OCOTS_LINT_VERSION=", file=sys.stderr)
+        return 1
+    if actuelle == version:
+        print(f"déjà à {version} : rien à faire")
+        return 0
+    journal = dossier / "CHANGELOG.md"
+    nouveau = ajoute_entree(journal.read_text(encoding="utf-8"), entree(version, notes))
+    if nouveau is None:
+        print("CHANGELOG.md : pas de section « Non publié »", file=sys.stderr)
+        return 1
+    relais.write_text(monte_relais(texte, version), encoding="utf-8")
+    journal.write_text(nouveau, encoding="utf-8")
+    print(f"{actuelle} -> {version}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
