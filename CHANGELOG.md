@@ -10,6 +10,11 @@ au moment du tag.
 
 ## Non publié
 
+- `verifier --mesure` repère désormais le motif P7 d'un `\chapter*` ajouté à
+  la table des matières sans `\adjustmtc` immédiatement après
+  `\addcontentsline`. C'est une mesure non bloquante, avec fixtures positive et
+  négative (#73, conventions#36).
+
 - `couverture --support commun|poly|slides|td|exam` limite le tableau et le
   résumé aux règles applicables au support ; le résumé distingue vérifiées,
   mesurées seulement et non outillées (#79).

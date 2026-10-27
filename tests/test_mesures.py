@@ -37,3 +37,18 @@ def test_bilan_liste_toutes_les_mesures_meme_a_zero(capsys):
     bilan = sortie.err.splitlines()
     assert len(bilan) == len(MESURES)
     assert all(re.match(r"mesure \w+ :\s+0  ", ligne) for ligne in bilan)
+
+
+def test_p7_signale_un_chapitre_etoile_ajoute_sans_adjustmtc(capsys):
+    chemin = FIXTURES / "mesures" / "minitoc_sans_adjustmtc.tex"
+    assert mesurer([str(chemin)]) == 0
+    sortie = capsys.readouterr()
+    assert "[mesure P7]" in sortie.out
+    assert r"sans \adjustmtc — \adjustmtc juste après \addcontentsline" in sortie.out
+
+
+def test_p7_accepte_adjustmtc_juste_apres_l_ajout(capsys):
+    chemin = FIXTURES / "mesures" / "minitoc_avec_adjustmtc.tex"
+    assert mesurer([str(chemin)]) == 0
+    sortie = capsys.readouterr()
+    assert "[mesure P7]" not in sortie.out
