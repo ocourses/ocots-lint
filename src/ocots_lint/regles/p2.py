@@ -14,7 +14,13 @@ import re
 
 from ocots_lint import vocabulaire
 from ocots_lint.arbre import lire_arbre
-from ocots_lint.lecture import ligne_de, motif, sans_commentaires, sources
+from ocots_lint.lecture import (
+    est_transparent,
+    ligne_de,
+    motif,
+    sans_commentaires,
+    sources,
+)
 
 # Familles du vocabulaire du template (template/vocabulaire.json) : un alias
 # (`myexercisecb`) ou une variante étoilée (`remark*`) a la famille de sa
@@ -76,11 +82,28 @@ def _freres(arbre):
             yield n.enfants
 
 
+def _slide_titre(n, texte):
+    """Vrai pour une diapositive titrée, pas pour une frame nue."""
+    slide = "s" + "lide"
+    frame = "fr" + "ame"
+    if n.genre != "environnement" or n.nom not in {slide, frame}:
+        return False
+    debut = texte[n.debut:n.debut + 300]
+    return bool(re.search(r"\\begin\{" + re.escape(n.nom) + r"\}\s*\{[^}\n]+\}", debut))
+
+
 def chaines_arbre(arbre, v):
-    """(boîte, boîte suivante) séparées seulement par de la mise en page,
-    dans l'ordre du texte."""
+    """(boîte, boîte suivante) séparées seulement par de la mise en page.
+
+    Dans un transparent, SL4 porte le fil par le titre de `slide`/`frame` :
+    deux boîtes sous une diapositive titrée ne forment donc pas une infraction.
+    Une frame nue reste contrôlée.
+    """
     paires = []
-    for freres in _freres(arbre):
+
+    def parcourir(freres, parent=None):
+        if parent is not None and _slide_titre(parent, arbre.texte):
+            return
         precedente = None
         for n in freres:
             if _est_boite(n, v):
@@ -89,6 +112,10 @@ def chaines_arbre(arbre, v):
                 precedente = n
             elif not _transparent(n, arbre.texte):
                 precedente = None
+            if n.enfants:
+                parcourir(n.enfants, n)
+
+    parcourir(arbre.noeuds)
     return sorted(paires, key=lambda p: p[0].fin)
 
 
@@ -105,6 +132,8 @@ def regle_P2(racines):
                     ligne = arbre.position(avant.fin - 1)[0]
                     yield chemin, ligne, f"{avant.nom} -> {apres.nom}"
             continue
+        if est_transparent(chemin, arbre.texte, v):
+            continue  # structure inconnue : ne pas inventer une P2 de slide
         texte = sans_commentaires(arbre.texte)            # repli
         for m in chaine.finditer(texte):
             if not tolere(v, m.group(1), m.group(3)):

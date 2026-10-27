@@ -10,6 +10,8 @@ au moment du tag.
 
 ## Non publié
 
+- P2 n'est plus signalée entre deux boîtes sous un `slide{titre}` ou une
+  `frame{titre}` ; les frames nues restent contrôlées selon SL4 (#74, conventions#34).
 - `couverture --support commun|poly|slides|td|exam` limite le tableau et le
   résumé aux règles applicables au support ; le résumé distingue vérifiées,
   mesurées seulement et non outillées (#79).
