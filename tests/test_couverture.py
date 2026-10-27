@@ -61,7 +61,8 @@ def test_support_td_ne_compte_que_commun_et_td(tmp_path, capsys):
 
 def test_les_regles_web_sont_hors_ocots_lint_et_comptees_a_part(tmp_path, capsys):
     # Le résumé avec site.md : celui sans, plus deux règles « hors ocots-lint ».
-    assert couverture.main(["--conventions", conventions_fictives(tmp_path / "sans")]) == 0
+    sans_web = conventions_fictives(tmp_path / "sans")
+    assert couverture.main(["--conventions", sans_web]) == 0
     sans = capsys.readouterr().err.strip().rstrip(".")
     dossier = conventions_fictives(tmp_path / "avec", fichiers=FICHIERS + FACULTATIFS)
     assert couverture.main(["--conventions", dossier]) == 0
