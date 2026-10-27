@@ -14,6 +14,7 @@ CONTENU = {
 
 
 def conventions_fictives(tmp_path, sans=(), fichiers=FICHIERS):
+    tmp_path.mkdir(parents=True, exist_ok=True)
     for fichier in fichiers:
         texte = CONTENU[fichier]
         for ident in sans:
@@ -59,13 +60,17 @@ def test_support_td_ne_compte_que_commun_et_td(tmp_path, capsys):
 
 
 def test_les_regles_web_sont_hors_ocots_lint_et_comptees_a_part(tmp_path, capsys):
-    dossier = conventions_fictives(tmp_path, fichiers=FICHIERS + FACULTATIFS)
+    # Le résumé avec site.md : celui sans, plus deux règles « hors ocots-lint ».
+    assert couverture.main(["--conventions", conventions_fictives(tmp_path / "sans")]) == 0
+    sans = capsys.readouterr().err.strip().rstrip(".")
+    dossier = conventions_fictives(tmp_path / "avec", fichiers=FICHIERS + FACULTATIFS)
     assert couverture.main(["--conventions", dossier]) == 0
     sortie = capsys.readouterr()
     lignes = {l.split()[0]: l for l in sortie.out.splitlines()[2:]}
     assert lignes["WEB1"].endswith("hors ocots-lint")
-    assert ("12 règles : 6 vérifiées, 2 mesurées seulement, 2 non outillées, "
-            "2 hors ocots-lint") in sortie.err
+    total, reste = sans.split(" règles : ", 1)
+    assert sortie.err.strip() == (f"{int(total) + 2} règles : {reste}, "
+                                  "2 hors ocots-lint (site.md, « Vérifié par »).")
 
 
 def test_support_site_ne_liste_que_les_regles_web(tmp_path, capsys):
