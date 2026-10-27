@@ -74,36 +74,25 @@ def _transparent(n, texte):
     return False
 
 
-def _freres(arbre):
-    """Chaque liste de nœuds frères de l'arbre, à tous les niveaux."""
-    yield arbre.noeuds
-    for n in arbre.parcourir():
-        if n.enfants:
-            yield n.enfants
-
-
-def _slide_titre(n, texte):
-    """Vrai pour une diapositive titrée, pas pour une frame nue."""
-    slide = "s" + "lide"
-    frame = "fr" + "ame"
-    if n.genre != "environnement" or n.nom not in {slide, frame}:
+def _diapositive_titree(n, texte, v):
+    """Une diapositive dont le titre porte le fil (SL4) : un environnement de la
+    famille « structure » du vocabulaire, ou la `frame` de beamer, titré par un
+    premier argument `{titre}` ou par `\\frametitle`. Une frame nue n'en est pas une."""
+    diapositive = n.nom == "frame" or v.famille(n.nom) == "structure"
+    if n.genre != "environnement" or not diapositive:
         return False
-    debut = texte[n.debut:n.debut + 300]
-    return bool(re.search(r"\\begin\{" + re.escape(n.nom) + r"\}\s*\{[^}\n]+\}", debut))
+    pleins = [e for e in n.enfants if not _transparent(e, texte)]
+    return bool(pleins) and pleins[0].genre == "groupe" or any(
+        e.genre == "macro" and e.nom == "frametitle" for e in n.enfants)
 
 
-def chaines_arbre(arbre, v):
-    """(boîte, boîte suivante) séparées seulement par de la mise en page.
-
-    Dans un transparent, SL4 porte le fil par le titre de `slide`/`frame` :
-    deux boîtes sous une diapositive titrée ne forment donc pas une infraction.
-    Une frame nue reste contrôlée.
-    """
+def chaines_arbre(arbre, v, transparent=False):
+    """(boîte, boîte suivante) séparées seulement par de la mise en page, dans
+    l'ordre du texte. Dans un transparent, rien n'est cherché sous une
+    diapositive titrée : son titre porte le fil (SL4)."""
     paires = []
 
-    def parcourir(freres, parent=None):
-        if parent is not None and _slide_titre(parent, arbre.texte):
-            return
+    def parcourir(freres):
         precedente = None
         for n in freres:
             if _est_boite(n, v):
@@ -112,8 +101,9 @@ def chaines_arbre(arbre, v):
                 precedente = n
             elif not _transparent(n, arbre.texte):
                 precedente = None
-            if n.enfants:
-                parcourir(n.enfants, n)
+            titree = transparent and _diapositive_titree(n, arbre.texte, v)
+            if n.enfants and not titree:
+                parcourir(n.enfants)
 
     parcourir(arbre.noeuds)
     return sorted(paires, key=lambda p: p[0].fin)
@@ -125,15 +115,16 @@ def regle_P2(racines):
     chaine = re_chaine(v)
     for chemin in sources(racines):
         arbre = lire_arbre(chemin)
+        transparent = est_transparent(chemin, arbre.texte, v)
         if arbre.erreur is None:
-            for avant, apres in chaines_arbre(arbre, v):
+            for avant, apres in chaines_arbre(arbre, v, transparent):
                 if not tolere(v, avant.nom, apres.nom):
                     # la ligne du \end{…} de la première boîte
                     ligne = arbre.position(avant.fin - 1)[0]
                     yield chemin, ligne, f"{avant.nom} -> {apres.nom}"
             continue
-        if est_transparent(chemin, arbre.texte, v):
-            continue  # structure inconnue : ne pas inventer une P2 de slide
+        if transparent:
+            continue  # sans arbre, les titres de diapositive ne se lisent pas
         texte = sans_commentaires(arbre.texte)            # repli
         for m in chaine.finditer(texte):
             if not tolere(v, m.group(1), m.group(3)):
