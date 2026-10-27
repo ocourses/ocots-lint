@@ -114,3 +114,21 @@ def test_index_du_cours_couvre_tous_les_fichiers(cours):
     lus, cites = labels.index_du_cours(vocabulaire.charger())
     assert [(x.cle, x.fichier) for x in lus] == [("sec:a", "poly/a.tex")]
     assert [(x.cle, x.fichier) for x in cites] == [("sec:a", "td/b.tex")]
+
+
+@pytest.mark.parametrize("source,niveau", [
+    ("Section~\\ref{sec:a}", "section"),
+    ("les Sections \\ref{sec:a}", "section"),
+    ("Sous-section~\\ref{ssec:a}", "sous-section"),
+    ("sous section~\\ref{ssec:a}", "sous-section"),
+    ("Théorème~\\ref{thm:a}", None),
+    ("\\ref{sec:a}", None),
+    ("Section~\\cref{sec:a}", None),           # \cref pose le mot lui-même
+])
+def test_niveau_ecrit_avant_le_renvoi(cours, source, niveau):
+    assert lire(cours, source + "\n")[1][0].niveau == niveau
+
+
+def test_niveau_ecrit_avant_le_renvoi_en_repli(cours):
+    _, cites = lire(cours, "}\nSous-section~\\ref{ssec:a}\n")
+    assert [(c.cle, c.niveau) for c in cites] == [("ssec:a", "sous-section")]

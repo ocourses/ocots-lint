@@ -45,6 +45,7 @@ class Renvoi:
     fichier: str
     ligne: int
     commande: str
+    niveau: str | None = None   # « section » ou « sous-section », écrit avant le renvoi
 
 
 # ------------------------------------------------------------ texte
@@ -173,6 +174,18 @@ def _parcourir(noeuds, texte, v, objet, sortie):
             _parcourir(n.enfants, texte, v, section, sortie)
 
 
+RE_NIVEAU_AVANT = re.compile(r"\b((?:sous[- ])?section)s?[ ~]*$", re.I)
+
+
+def _niveau_avant(texte, decalage):
+    """Le mot de niveau qui précède ce renvoi (`Section~`, `Sous-section `),
+    ramené à « section » ou « sous-section », sinon None."""
+    m = RE_NIVEAU_AVANT.search(texte[max(0, decalage - 20):decalage])
+    if not m:
+        return None
+    return "sous-section" if m.group(1).lower().startswith("sous") else "section"
+
+
 RE_LABEL = re.compile(r"\\label\{([^}]+)\}")
 RE_RENVOI = re.compile(r"\\(" + "|".join(sorted(RENVOIS)) + r")\*?\{([^}]+)\}"
                        r"|\\(hyperref)\[([^\]]+)\]")
@@ -186,8 +199,9 @@ def lire(chemin, v):
     if arbre.erreur is None:
         _parcourir(arbre.noeuds, arbre.texte, v, None, trouves)
         position = arbre.position
+        texte_source = arbre.texte
     else:                                   # repli : sans objet
-        texte = sans_commentaires(arbre.texte)
+        texte = texte_source = sans_commentaires(arbre.texte)
         for m in RE_LABEL.finditer(texte):
             trouves.append((Label(m.group(1).strip(), None, 0, None), m.start()))
         for m in RE_RENVOI.finditer(texte):
@@ -205,7 +219,10 @@ def lire(chemin, v):
         if isinstance(element, Label):
             labels.append(Label(element.cle, fichier, ligne, element.objet))
         else:
-            renvois.append(Renvoi(element.cle, fichier, ligne, element.commande))
+            niveau = (_niveau_avant(texte_source, decalage)
+                      if element.commande == "ref" else None)
+            renvois.append(Renvoi(element.cle, fichier, ligne, element.commande,
+                                  niveau))
     return labels, renvois
 
 
