@@ -19,6 +19,7 @@ from ocots_lint.lecture import (
     sources,
 )
 from ocots_lint.regles.c6 import RE_ESPACE_MANUEL
+from ocots_lint.regles.p7 import RE_CHAPITRE_AJUSTEMENT
 
 
 def ancienne_syntaxe(v):
@@ -44,6 +45,9 @@ MESURES = (
      "abréviation « t.q. » — « tel que »", False),
     ("C6", RE_ESPACE_MANUEL,
      "espace vertical manuel", False),
+    ("P7", RE_CHAPITRE_AJUSTEMENT,
+     "chapitre étoilé ajouté à la table : ajouter \adjustmtc juste après "
+     "\addcontentsline", False),
 )
 
 
