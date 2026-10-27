@@ -10,6 +10,9 @@ au moment du tag.
 
 ## Non publié
 
+- **Relais : la liste de la PR dit quand** (#27) : « Avant de fusionner » (CI, relire l'entrée) et
+  « Après la fusion » (la version se choisit dans la PR `chore(release)` des conventions, le tag
+  se pose sur son merge). Elle mêlait les deux.
 ---
 
 ## v0.11.0 — 2026-10-27
