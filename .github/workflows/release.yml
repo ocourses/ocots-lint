@@ -25,3 +25,63 @@ jobs:
       - run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md
         env:
           GH_TOKEN: ${{ github.token }}
+
+  relais:
+    # Ouvre, dans ocots-conventions, la PR qui monte OCOTS_LINT_VERSION et ouvre une
+    # entrée du CHANGELOG (#27). Sans la GitHub App (variable RELAIS_APP_ID), le job est
+    # sauté : la release n'en dépend pas. Un jeton d'application, contrairement à
+    # github.token, fait tourner la CI de la PR ouverte.
+    needs: release
+    if: vars.RELAIS_APP_ID != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - id: app
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.RELAIS_APP_ID }}
+          private-key: ${{ secrets.RELAIS_APP_KEY }}
+          owner: ocourses
+          repositories: ocots-conventions
+      - uses: actions/checkout@v4
+        with:
+          repository: ocourses/ocots-conventions
+          path: conventions
+          token: ${{ steps.app.outputs.token }}
+      - run: scripts/notes-de-version "$GITHUB_REF_NAME" > notes.md
+      - run: scripts/relais-conventions conventions "$GITHUB_REF_NAME" notes.md
+      - name: Branche, commit et PR
+        working-directory: conventions
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: |
+          if git diff --quiet; then echo "conventions déjà à $GITHUB_REF_NAME"; exit 0; fi
+          branche="relais/ocots-lint-$GITHUB_REF_NAME"
+          if git ls-remote --exit-code --heads origin "$branche" >/dev/null; then
+            echo "::notice::la branche $branche existe déjà : relais déjà ouvert"; exit 0
+          fi
+          git switch -c "$branche"
+          git config user.name "ocots-lint release"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -q -am "chore: ocots-lint passe à $GITHUB_REF_NAME" -m "Refs ocourses/ocots-lint#27"
+          git push -q origin "$branche"
+          {
+            echo "Relais automatique de la release [$GITHUB_REF_NAME](https://github.com/ocourses/ocots-lint/releases/tag/$GITHUB_REF_NAME) d'\`ocots-lint\` (ocourses/ocots-lint#27)."
+            echo
+            echo "**Ce que fait cette PR** : \`OCOTS_LINT_VERSION\` passe à \`$GITHUB_REF_NAME\` dans \`bin/ocots-lint\`, et une entrée ouvre « Non publié » dans le CHANGELOG."
+            echo
+            echo "**À faire à la main**"
+            echo "- [ ] choisir la version des conventions (correctif, mineure ou majeure : une décision, pas un calcul) et dire dans l'entrée ce que l'outil change pour les règles ;"
+            echo "- [ ] attendre la CI (\`relais\` vérifie que la version épinglée répond) ;"
+            echo "- [ ] fusionner, puis taguer \`vX.Y.Z\` sur le commit de merge de la PR de release des conventions."
+            echo
+            echo "<details><summary>Notes de la release</summary>"
+            echo
+            cat ../notes.md
+            echo
+            echo "</details>"
+          } > ../corps-pr.md
+          gh pr create --base main --head "$branche" \
+            --title "chore: ocots-lint passe à $GITHUB_REF_NAME" --body-file ../corps-pr.md

@@ -299,3 +299,23 @@ Voir [`AGENTS.md`](AGENTS.md) pour la méthode de travail, et
 Tant que la version est en `0.x`, la CLI peut encore changer d'un mineur à
 l'autre. Chaque version est un tag `vX.Y.Z` avec son entrée dans
 [`CHANGELOG.md`](CHANGELOG.md).
+
+### Relais vers `ocots-conventions`
+
+Un tag `vX.Y.Z` poussé crée la release (`release.yml`). Le même workflow ouvre ensuite,
+dans [`ocots-conventions`](https://github.com/ocourses/ocots-conventions), la PR qui passe
+`OCOTS_LINT_VERSION` de `bin/ocots-lint` à cette version et ouvre une entrée du
+`CHANGELOG` (`scripts/relais-conventions`, testé). Ce qui reste à faire à la main : choisir
+la version des conventions, compléter l'entrée, fusionner, taguer.
+
+Le job `relais` est **sauté** tant que la GitHub App n'est pas configurée : la release n'en
+dépend jamais. Pour l'activer, sur ce dépôt :
+
+| Réglage | Valeur |
+|---|---|
+| variable `RELAIS_APP_ID` | l'identifiant de l'App |
+| secret `RELAIS_APP_KEY` | sa clé privée (`.pem`) |
+
+L'App est installée sur `ocots-conventions` avec les permissions **Contents** et **Pull
+requests** en écriture, et rien d'autre. Un jeton d'App fait tourner la CI de la PR ouverte
+(`github.token` ne le ferait pas) et n'expire pas : rien à ajouter à `secrets-expiry.txt`.
