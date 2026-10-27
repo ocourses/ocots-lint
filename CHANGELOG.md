@@ -10,6 +10,16 @@ au moment du tag.
 
 ## Non publié
 
+
+---
+
+## v0.10.0 — 2026-10-27
+
+Deux règles des conventions v2.10.0 sont outillées (SL4 pour P2 dans les
+transparents, P7 en mesure) et `couverture` lit `site.md`. Une montée depuis
+v0.9.0 peut **faire disparaître** des trouvailles P2 dans les transparents ;
+elle n'en fait pas apparaître.
+
 - `couverture` lit `site.md` quand les conventions l'ont : les règles `WEB*`
   sont listées « hors ocots-lint » et comptées à part ; `--support site` les
   liste seules. Elles sont vérifiées par le socle `ocots-site` (décision 0008,
@@ -25,6 +35,9 @@ au moment du tag.
 - `couverture --support commun|poly|slides|td|exam` limite le tableau et le
   résumé aux règles applicables au support ; le résumé distingue vérifiées,
   mesurées seulement et non outillées (#79).
+- Limite connue de P2 : un transparent que l'analyse refuse n'est plus contrôlé
+  par le repli du polycopié (il donnait des faux positifs sur `slide{titre}`) ;
+  ce trou n'est pas signalé par `verifier` (#74).
 
 ---
 
