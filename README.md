@@ -305,8 +305,10 @@ l'autre. Chaque version est un tag `vX.Y.Z` avec son entrée dans
 Un tag `vX.Y.Z` poussé crée la release (`release.yml`). Le même workflow ouvre ensuite,
 dans [`ocots-conventions`](https://github.com/ocourses/ocots-conventions), la PR qui passe
 `OCOTS_LINT_VERSION` de `bin/ocots-lint` à cette version et ouvre une entrée du
-`CHANGELOG` (`scripts/relais-conventions`, testé). Ce qui reste à faire à la main : choisir
-la version des conventions, compléter l'entrée, fusionner, taguer.
+`CHANGELOG` (`scripts/relais-conventions`, testé). Ce qui reste à faire à la main, et quand :
+avant de fusionner, attendre la CI et relire l'entrée ; après, choisir la version des
+conventions dans leur PR `chore(release)` (la PR du bot n'en porte aucune) et taguer sur le
+merge de **celle-ci**.
 
 Le job `relais` est **sauté** tant que la GitHub App n'est pas configurée : la release n'en
 dépend jamais. Pour l'activer, sur ce dépôt :

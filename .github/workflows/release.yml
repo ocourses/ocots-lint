@@ -72,10 +72,13 @@ jobs:
             echo
             echo "**Ce que fait cette PR** : \`OCOTS_LINT_VERSION\` passe à \`$GITHUB_REF_NAME\` dans \`bin/ocots-lint\`, et une entrée ouvre « Non publié » dans le CHANGELOG."
             echo
-            echo "**À faire à la main**"
-            echo "- [ ] choisir la version des conventions (correctif, mineure ou majeure : une décision, pas un calcul) et dire dans l'entrée ce que l'outil change pour les règles ;"
+            echo "**Avant de fusionner**"
             echo "- [ ] attendre la CI (\`relais\` vérifie que la version épinglée répond) ;"
-            echo "- [ ] fusionner, puis taguer \`vX.Y.Z\` sur le commit de merge de la PR de release des conventions."
+            echo "- [ ] relire l'entrée du CHANGELOG : elle reprend les notes de la release, complétez-la si l'outil change ce que disent les règles."
+            echo
+            echo "**Après la fusion**"
+            echo "La version des conventions (correctif, mineure ou majeure : une décision, pas un calcul) se choisit dans la PR \`chore(release)\` des conventions, qui renomme « Non publié » en \`## vX.Y.Z\`. Cette PR-ci ne porte aucune version."
+            echo "- [ ] fusionner la PR \`chore(release)\`, puis poser le tag \`vX.Y.Z\` sur **son** commit de merge, pas sur celui de cette PR."
             echo
             echo "<details><summary>Notes de la release</summary>"
             echo
