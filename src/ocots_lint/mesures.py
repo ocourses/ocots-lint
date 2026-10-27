@@ -46,8 +46,8 @@ MESURES = (
     ("C6", RE_ESPACE_MANUEL,
      "espace vertical manuel", False),
     ("P7", RE_CHAPITRE_AJUSTEMENT,
-     "chapitre étoilé ajouté à la table : ajouter \adjustmtc juste après "
-     "\addcontentsline", False),
+     r"chapitre étoilé ajouté à la table sans \adjustmtc — \adjustmtc juste "
+     r"après \addcontentsline", False),
 )
 
 

@@ -44,7 +44,7 @@ def test_p7_signale_un_chapitre_etoile_ajoute_sans_adjustmtc(capsys):
     assert mesurer([str(chemin)]) == 0
     sortie = capsys.readouterr()
     assert "[mesure P7]" in sortie.out
-    assert "adjustmtc" in sortie.out
+    assert r"sans \adjustmtc — \adjustmtc juste après \addcontentsline" in sortie.out
 
 
 def test_p7_accepte_adjustmtc_juste_apres_l_ajout(capsys):
