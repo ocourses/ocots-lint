@@ -59,7 +59,7 @@ pour le polycopié. Suivi : [#70](https://github.com/ocourses/ocots-lint/issues/
   `EX4`–`EX6` sans relire les fichiers entiers.
 - [x] **S8.6** — `couverture --support exam` liste aussi les `TD*`
   (prérequis de `exam.md`).
-- [ ] **S8.7** — Dans `ocourses/agents` : rôle de relecture des TD et des
+- [~] **S8.7** — Dans `ocourses/agents` : rôle de relecture des TD et des
   examens à partir de l'extraction, essayé en local puis sur Albert sur un
   TD et un examen, comparé au jugement de l'auteur. *Demande l'auteur.*
 - [ ] **S8.8** — Conventions : `TD3`, `TD8`, `EX3`, `SL8` disent qu'elles
@@ -107,6 +107,16 @@ pour le polycopié. Suivi : [#70](https://github.com/ocourses/ocots-lint/issues/
 - 2026-10-28 — Issue au template (famille des corrigés) : la création
   depuis l'agent a été refusée (écriture hors de ce dépôt) ; texte au
   backlog, à ouvrir par l'auteur.
+
+- 2026-10-28 — S8.7 : rôle `td-exam-reviewer` (agents#51), essai local sur
+  mesure : `td/td2/` (5 exercices) et `exams/2024-2025/session1/` (6
+  exercices, 2 parties). TD : 1 point (TD5 : 11 résultats du poly cités en
+  clair, aucun `\ref`). Examen : 5 points (barème absent des consignes, des
+  exercices et des corrigés — EX2, EX5, EX6, tous Important ; un corrigé de
+  21 lignes, TD6 Mineur ; indépendance des parties non dite, EX4 Mineur).
+  Défaut du rôle trouvé à l'essai : il disait « déjà signalé par TD8 » le
+  corrigé d'un exercice sans question, que TD8 permet (corrigé). Reste :
+  comparer ces rapports au jugement de l'auteur, puis l'essai sur Albert.
 
 ## Bilan d'étape (2026-10-28, avant S8.7 et S8.8)
 

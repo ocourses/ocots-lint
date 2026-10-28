@@ -23,6 +23,12 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
 
 ## Outillage
 
+- `extraire --exercices` : le texte **entre** les exercices (le paragraphe
+  « Objectifs » qui ouvre un TD, « Pour aller plus loin » qui le ferme)
+  n'est pas extrait ; TD4 (ouverture, alternance des thèmes) demande de lire
+  la source. Constaté à l'essai local de S8.7 sur `td/td2/`. Critère
+  d'entrée : un agent qui juge TD4 de travers faute de ce texte.
+
 - Verdicts de jugement conservés (option C de la décision 0007) : l'agent
   consigne son verdict par empreinte de boîte, une passe suivante ne rejuge
   que ce qui a changé. Critère d'entrée : une seconde passe sur un chapitre
