@@ -24,6 +24,13 @@ au moment du tag.
   (`\begin{exercise}[Fourier]`). Un corrigé n'est pas lu. Une montée **fait apparaître** :
   mesure-integration 18 (`enumerate` dans les exercices de neuf sujets), les autres cours 0.
   Limite connue : un `enumerate` de données dans l'intro (`TD3/limites/`).
+- **`EX3` vérifiée** (`heuristique`, S8.3, #70) : un barème écrit dans le texte d'un sujet
+  (`\begin{exercise}(7 points)`, « barème prévisionnel : 8 points », « (1 point) » devant une
+  question) au lieu de la clé `points=`. Ni le préambule ni une `correction` (répartition par
+  question, `EX6`) ne sont lus ; « 3 points d'intersection », « points fixes » sont écartés.
+  Une montée **fait apparaître** : automatique 53 (sujets 2014–2023, dont `archive/`),
+  mesure-integration 17, calcul-differentiel-edo 0. Limite connue : des points d'une figure
+  (`EX3/limites/`).
 - **Support d'un fichier** (S8.0) : lu par sa classe, sinon par son dossier le plus proche
   (`slides/`, `td/`, `exams/`), sinon le polycopié. Un fichier rangé sous `slides/` puis
   sous `td/` est un TD, plus un transparent. Aucun écart au corpus.

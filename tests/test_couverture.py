@@ -38,7 +38,8 @@ def test_une_ligne_par_regle_avec_son_outillage(tmp_path, capsys):
     assert lignes["P3"].endswith("signal")
     assert lignes["TD8"].endswith("exact")
     assert lignes["TD3"].endswith("heuristique")
-    assert "15 règles : 8 vérifiées, 3 mesurées seulement, 4 non outillées" in (
+    assert lignes["EX3"].endswith("heuristique")
+    assert "15 règles : 9 vérifiées, 3 mesurées seulement, 3 non outillées" in (
         sortie.err)
 
 

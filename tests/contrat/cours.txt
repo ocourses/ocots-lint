@@ -9,6 +9,7 @@ cours.tex:2: [P3] amorce passe-partout : « …Soit $f$ une fonction mesurable. 
 C4 : 3 infraction(s)
 C5 : 0 infraction(s)
 C6 : 0 infraction(s)
+EX3 : 0 infraction(s)
 P2 : 1 infraction(s) (+ 1 exemptée(s))
 P3 : 1 infraction(s)
 P5 : 0 infraction(s)

@@ -27,6 +27,10 @@
       "garantie": "heuristique",
       "resume": "C6 — \\qedhere manquant en fin de liste ou d'équation ; \\vspace qui compense un \\footnotetext."
     },
+    "EX3": {
+      "garantie": "heuristique",
+      "resume": "EX3 — barème écrit dans le texte du sujet au lieu de la clé points=."
+    },
     "TD3": {
       "garantie": "heuristique",
       "resume": "TD3 — enumerate pour les questions, numéro saisi à la main, titre libre d'exercice."
