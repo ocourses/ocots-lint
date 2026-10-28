@@ -3,6 +3,8 @@ décision 0007).
 
     ocots-lint extraire               le polycopié (`poly/`), JSON sur la sortie
     ocots-lint extraire poly/ch1.tex  un fichier, un dossier
+    ocots-lint extraire --exercices   les exercices des TD et des examens
+                                      (extraire_exercices.py)
 
 Pour les règles qu'aucun outil ne tranche — P1 (hypothèses d'un résultat
 cité de loin), P3 (amorce motivée), P4 (reprise) — chaque boîte est donnée
@@ -548,6 +550,9 @@ def extraire(racines):
 
 
 def main(argv):
+    if "--exercices" in argv:
+        from ocots_lint import extraire_exercices
+        return extraire_exercices.main([a for a in argv if a != "--exercices"])
     inconnues = [a for a in argv if a.startswith("-") or not os.path.exists(a)]
     if inconnues:
         print(f"argument ou chemin inconnu : {', '.join(inconnues)}", file=sys.stderr)

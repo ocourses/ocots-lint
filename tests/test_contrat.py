@@ -148,3 +148,39 @@ def test_extraire_reference():
 def test_extraire_schema_publie_avec_le_paquet():
     from ocots_lint.extraire import SCHEMA
     assert schema_extraire()["properties"]["schema"]["const"] == SCHEMA
+
+
+# ------------------------------------------------- extraire --exercices (S8.5)
+
+EXERCICES = CONTRAT / "exercices"
+
+
+def schema_exercices():
+    nom = "extraire-exercices-1.schema.json"
+    fichier = resources.files("ocots_lint") / "schemas" / nom
+    return json.loads(fichier.read_text(encoding="utf-8"))
+
+
+def exercices_json():
+    r = subprocess.run([sys.executable, "-m", "ocots_lint", "extraire", "--exercices"],
+                       cwd=EXERCICES, capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    return json.loads(r.stdout)
+
+
+def test_exercices_valide_contre_le_schema_publie():
+    jsonschema.Draft202012Validator.check_schema(schema_exercices())
+    jsonschema.validate(exercices_json(), schema_exercices())
+
+
+def test_exercices_reference():
+    doc = exercices_json()
+    assert doc["version"]
+    doc["version"] = "<version>"
+    comparer_a_la_reference("exercices.json",
+                            json.dumps(doc, ensure_ascii=False, indent=2) + "\n")
+
+
+def test_exercices_schema_publie_avec_le_paquet():
+    from ocots_lint.extraire_exercices import SCHEMA
+    assert schema_exercices()["properties"]["schema"]["const"] == SCHEMA

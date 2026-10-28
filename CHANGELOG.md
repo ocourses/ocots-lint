@@ -22,7 +22,8 @@ au moment du tag.
   posé directement dans un `exercise` (il numérote les questions), un numéro de question saisi
   à la main en tête de ligne (« 1) », « 2. », `\textbf{3.}`), un titre libre passé en en-tête
   (`\begin{exercise}[Fourier]`). Un corrigé n'est pas lu. Une montée **fait apparaître** :
-  mesure-integration 18 (`enumerate` dans les exercices de neuf sujets), les autres cours 0.
+  mesure-integration 18 (`enumerate` dans les exercices de neuf sujets), automatique 3 (un
+  `enumerate` dont chaque item porte son corrigé, dans une question), les autres cours 0.
   Limite connue : un `enumerate` de données dans l'intro (`TD3/limites/`).
 - **`EX3` vérifiée** (`heuristique`, S8.3, #70) : un barème écrit dans le texte d'un sujet
   (`\begin{exercise}(7 points)`, « barème prévisionnel : 8 points », « (1 point) » devant une
@@ -37,6 +38,12 @@ au moment du tag.
   `\setbeamercolor`, `\definecolor`…). Une couleur du thème (`\ocotscolor{…}`) et
   `\slidecolor` ne sont pas signalées. Une montée **fait apparaître** : automatique 1 (un
   `\color{red}` dans une formule de `td/td4/slides-td4-rk.tex`), les autres cours 0.
+- **`extraire --exercices`** (S8.5, #70) : l'inventaire des exercices des TD et des examens,
+  sans verdict, pour les règles de jugement `TD4`–`TD6`, `EX1`, `EX2`, `EX4`–`EX6` : questions
+  numérotées, corrigés rattachés et leur place, `points`, intro, renvois et leur cible ;
+  documents (`solutions=`, champs d'examen), consignes, parties. Nouveau contrat publié,
+  `schemas/extraire-exercices-1.schema.json`. Exhaustif sur les quatre cours : 191 exercices et
+  293 corrigés, autant que comptés indépendamment.
 - **`couverture --support exam`** liste aussi les `TD*` (S8.6) : `exam.md` a `td.md` pour
   prérequis, et `TD3`, `TD8` lisent les sujets.
 - **Support d'un fichier** (S8.0) : lu par sa classe, sinon par son dossier le plus proche

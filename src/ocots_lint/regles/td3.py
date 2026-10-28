@@ -4,6 +4,9 @@ Trois gestes que td.md#td3 exclut, lus dans l'arbre d'un TD ou d'un sujet :
 
 - un `enumerate` posé directement dans un exercice : il numérote les
   questions à la place de `question` (cas de mesure, 18 dans ses examens) ;
+  ou, plus loin dans l'exercice, un `enumerate` dont les items portent
+  chacun leur corrigé : ce sont des questions (anciens sujets
+  d'automatique) ;
 - une ligne d'énoncé qui commence par un numéro saisi à la main
   (« 1) », « 2. », `\\textbf{3.}`) ;
 - un titre libre passé à l'exercice (`[Fourier]`) : l'en-tête n'accepte que
@@ -41,6 +44,20 @@ def _numeros(n, texte):
                 yield m.start()
 
 
+def _exercice(ancetres, v):
+    return next(a for a in ancetres if v.famille(a.nom) == EXERCICE)
+
+
+def _items_corriges(n, ancetres, v):
+    """Un enumerate d'un exercice, hors corrigé, qui contient un corrigé :
+    ses items sont des questions."""
+    if not any(v.famille(a.nom) == EXERCICE for a in ancetres) or any(
+            v.est_corrige(a.nom) for a in ancetres):
+        return False
+    return any(e.genre == "environnement" and v.est_corrige(e.nom)
+               for e in n.enfants)
+
+
 def regle_TD3(racines):
     """TD3 — enumerate pour les questions, numéro saisi à la main, titre libre d'exercice."""  # noqa: E501
     v = vocabulaire.charger()
@@ -58,11 +75,12 @@ def regle_TD3(racines):
                         f"titre libre « {', '.join(libres)} » passé à {n.nom} "
                         f"— l'en-tête ne prend que des clés ; la source va "
                         f"dans le texte d'intro")
-            if famille == EXERCICE and n.genre == "environnement" \
-                    and n.nom == "enumerate":
+            if n.genre == "environnement" and n.nom == "enumerate" and (
+                    famille == EXERCICE or _items_corriges(n, ancetres, v)):
                 yield chemin, arbre.position(n.debut)[0], (
-                    f"enumerate qui numérote les questions de {parent.nom} — "
-                    f"une question par environnement de la famille « question »")
+                    f"enumerate qui numérote les questions de "
+                    f"{_exercice(ancetres, v).nom} — une question par "
+                    f"environnement de la famille « question »")
             enonce = famille == EXERCICE or (
                 famille == vocabulaire.QUESTION and not v.est_corrige(parent.nom))
             if enonce:
