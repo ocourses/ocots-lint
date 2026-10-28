@@ -31,6 +31,12 @@ au moment du tag.
   Une montée **fait apparaître** : automatique 53 (sujets 2014–2023, dont `archive/`),
   mesure-integration 17, calcul-differentiel-edo 0. Limite connue : des points d'une figure
   (`EX3/limites/`).
+- **`SL8` vérifiée** (`heuristique`, S8.4, #70) : dans un transparent, une couleur en dur
+  posée dans une diapositive (`\textcolor{red}`, `{\color{blue!20} …}`, y compris dans une
+  légende ou une formule) et un réglage de thème après `\begin{document}` (`\usetheme`,
+  `\setbeamercolor`, `\definecolor`…). Une couleur du thème (`\ocotscolor{…}`) et
+  `\slidecolor` ne sont pas signalées. Une montée **fait apparaître** : automatique 1 (un
+  `\color{red}` dans une formule de `td/td4/slides-td4-rk.tex`), les autres cours 0.
 - **Support d'un fichier** (S8.0) : lu par sa classe, sinon par son dossier le plus proche
   (`slides/`, `td/`, `exams/`), sinon le polycopié. Un fichier rangé sous `slides/` puis
   sous `td/` est un TD, plus un transparent. Aucun écart au corpus.

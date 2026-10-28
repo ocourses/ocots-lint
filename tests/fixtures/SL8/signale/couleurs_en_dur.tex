@@ -1,0 +1,15 @@
+\documentclass{beamer}
+\usepackage[theme=ocots]{ocots}
+\begin{document}
+\begin{slide}{Titre}
+    Un mot en \textcolor{red}{rouge}. % attendu: SL8
+    {\color{blue!20} Un passage pâle.} % attendu: SL8
+    $\R^{\color{red} 2}$ % attendu: SL8
+    \begin{figure}
+        \caption{Un schéma en {\color[rgb]{1,0,0}boucle ouverte}.} % attendu: SL8
+    \end{figure}
+\end{slide}
+\begin{frame}
+    \colorbox{yellow}{Encadré.} % attendu: SL8
+\end{frame}
+\end{document}

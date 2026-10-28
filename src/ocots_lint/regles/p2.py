@@ -21,6 +21,7 @@ from ocots_lint.lecture import (
     sans_commentaires,
     sources,
 )
+from ocots_lint.regles.supports import est_diapositive
 
 # Familles du vocabulaire du template (template/vocabulaire.json) : un alias
 # (`myexercisecb`) ou une variante étoilée (`remark*`) a la famille de sa
@@ -78,8 +79,7 @@ def _diapositive_titree(n, texte, v):
     """Une diapositive dont le titre porte le fil (SL4) : un environnement de la
     famille « structure » du vocabulaire, ou la `frame` de beamer, titré par un
     premier argument `{titre}` ou par `\\frametitle`. Une frame nue n'en est pas une."""
-    diapositive = n.nom == "frame" or v.famille(n.nom) == "structure"
-    if n.genre != "environnement" or not diapositive:
+    if not est_diapositive(n, v):
         return False
     pleins = [e for e in n.enfants if not _transparent(e, texte)]
     return bool(pleins) and pleins[0].genre == "groupe" or any(

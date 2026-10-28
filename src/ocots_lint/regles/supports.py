@@ -17,6 +17,7 @@ EXAMENS = frozenset({"exam"})
 TRANSPARENTS = frozenset({DIAPOSITIVES})
 
 EXERCICE = "exercice"           # famille du vocabulaire du template
+STRUCTURE = "structure"         # famille : diapositive, partie…
 
 
 def arbres(racines, v, supports):
@@ -30,3 +31,10 @@ def arbres(racines, v, supports):
 def dans_un_exercice(ancetres, v):
     """L'exercice qui contient le nœud, ou None."""
     return next((a for a in ancetres if v.famille(a.nom) == EXERCICE), None)
+
+
+def est_diapositive(n, v):
+    """Une diapositive : un environnement de la famille « structure » du
+    vocabulaire, ou la `frame` de beamer."""
+    return n.genre == "environnement" and (
+        n.nom == "frame" or v.famille(n.nom) == STRUCTURE)
