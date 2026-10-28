@@ -168,6 +168,17 @@ class Arbre:
             yield from self.avec_ancetres(n.enfants, dedans, arguments)
 
 
+def precedent(freres, i, texte, sauter=lambda n: False):
+    """Le frère qui précède `freres[i]`, blancs et commentaires sautés, et
+    ceux que `sauter` écarte ; None s'il n'y en a pas."""
+    for n in reversed(freres[:i]):
+        vide = n.genre == "commentaire" or (
+            n.genre == "texte" and not texte[n.debut:n.fin].strip())
+        if not vide and not sauter(n):
+            return n
+    return None
+
+
 # ------------------------------------------------------------ conversion
 
 def _liste(noeuds):

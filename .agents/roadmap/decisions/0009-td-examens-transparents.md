@@ -24,8 +24,8 @@ calcul-diff, démo ; `td/`, `exams/`, `slides/`) :
 | Règle | Ce que dit la règle | Constat au corpus |
 |---|---|---|
 | `TD8` | `correction` frère de la question, avant `\end{exercise}` | 39 `correction` **dans** une `question` (automatique, td1) ; 9 **hors** de tout `exercise` (examens d'automatique) |
-| `TD3` | questions par `question`, jamais d'`enumerate` détourné ni de « 1) » ; `exercise` sans titre libre | 18 `enumerate` posés directement dans un `exercise` (mesure, examens) ; aucun « 1) » saisi à la main hors listes |
-| `EX3` | barème par `points=`, pas dans le texte | 46 barèmes écrits à la main : `\begin{exercise}(7 points)`, « barème prévisionnel : 8 points », « Intégrale de Dirichlet - 7 points » |
+| `TD3` | questions par `question`, jamais d'`enumerate` détourné ni de « 1) » ; `exercise` sans titre libre | 18 `enumerate` posés directement dans un `exercise` (mesure, examens) ; 3 `enumerate` dont chaque item porte son corrigé (automatique) ; aucun « 1) » saisi à la main hors listes |
+| `EX3` | barème par `points=`, pas dans le texte | 70 barèmes écrits à la main (automatique 53, mesure 17) : `\begin{exercise}(7 points)`, « barème prévisionnel : 8 points », « (1 point) » devant une question |
 | `SL8` | thème et couleurs réglés au préambule | 2 `\color` dans une légende de diapositive (automatique), tous deux sur une couleur du thème (`\ocotscolor{…}`) |
 
 ## Décisions

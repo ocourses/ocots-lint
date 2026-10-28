@@ -17,18 +17,8 @@ Vaut pour les TD et les examens (EX6).
 """
 
 from ocots_lint import vocabulaire
+from ocots_lint.arbre import precedent
 from ocots_lint.regles.supports import EXERCICES, arbres, dans_un_exercice
-
-
-def _precedent(n, freres, texte):
-    """Le frère qui précède `n`, blancs et commentaires sautés, ou None."""
-    i = next(k for k, f in enumerate(freres) if f is n)
-    for f in reversed(freres[:i]):
-        if f.genre == "commentaire" or (
-                f.genre == "texte" and not texte[f.debut:f.fin].strip()):
-            continue
-        return f
-    return None
 
 
 def regle_TD8(racines):
@@ -48,7 +38,8 @@ def regle_TD8(racines):
                     and not v.est_corrige(ancetres[0].nom):
                 question = ancetres[0]
                 # après une sous-question (ou son corrigé) : il en est la sœur
-                if est_question(_precedent(n, question.enfants, arbre.texte)):
+                i = next(k for k, f in enumerate(question.enfants) if f is n)
+                if est_question(precedent(question.enfants, i, arbre.texte)):
                     continue
                 yield chemin, ligne, (
                     f"{n.nom} dans une {question.nom} — la placer juste après "

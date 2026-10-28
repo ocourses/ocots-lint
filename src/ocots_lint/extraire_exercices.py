@@ -32,7 +32,7 @@ import re
 import sys
 
 from ocots_lint import __version__, empreintes, labels, vocabulaire
-from ocots_lint.arbre import lire_arbre
+from ocots_lint.arbre import lire_arbre, precedent
 from ocots_lint.extraire import _borner, _groupe, paragraphes, prose
 from ocots_lint.lecture import (
     RE_CLASSE,
@@ -89,20 +89,6 @@ def decrire_document(chemin, arbre, v, support):
 
 
 # ------------------------------------------------------------ exercices
-
-def _plein(n, texte):
-    return n.genre != "commentaire" and not (
-        n.genre == "texte" and not texte[n.debut:n.fin].strip())
-
-
-def _precedent(freres, i, texte, sauter=lambda f: False):
-    """Le frère plein qui précède `freres[i]`, en sautant ceux que `sauter`
-    écarte, ou None."""
-    for f in reversed(freres[:i]):
-        if _plein(f, texte) and not sauter(f):
-            return f
-    return None
-
 
 class _Lecteur:
     """Décrit les exercices d'un fichier analysé."""
@@ -178,7 +164,7 @@ class _Lecteur:
                     parcourir(n.enfants, q)
                 elif self.est_corrige(n):
                     # deux corrigés de suite corrigent la même question
-                    avant = _precedent(freres, i, self.texte, self.est_corrige)
+                    avant = precedent(freres, i, self.texte, self.est_corrige)
                     if self.est_question(avant):
                         cible = next(q for q in reversed(questions)
                                      if q["ligne"] == self.ligne(avant.debut))

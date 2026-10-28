@@ -10,10 +10,14 @@ raison.
 
 Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
 
-- `TD3` — questions numérotées à la main au lieu des environnements.
-- `TD8` — `question` rouverte dans un `\solution`.
-- `EX3` — barème écrit à la main au lieu des clés.
-- `SL8` — réglage de thème posé localement au lieu de globalement.
+- `SL8`, second alinéa — page de titre recomposée à la main (logo en
+  dur au lieu de `\ocotslogos`) : un signal possible, mais la raison
+  (QR code de mesure, chapitre 1) ne se voit pas ; reporté de S8.
+- `TD7` — plusieurs `\solution` dans un même `exercise` d'un TD (deux
+  questions disparaissaient du sujet de mesure, ocots-conventions#26) :
+  aucun `\solution` au corpus depuis ; critère d'entrée, un cas réel.
+- `EX3`, second alinéa — total des `points` : le template le calcule
+  désormais ; rien à vérifier sauf demande de l'auteur.
 - `C3` — les mesures actuelles (ancienne syntaxe `{titre}{label}`,
   `\emph{\textbf{…}}`) deviennent bloquantes quand le corpus est propre.
 
@@ -23,8 +27,10 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
   consigne son verdict par empreinte de boîte, une passe suivante ne rejuge
   que ce qui a changé. Critère d'entrée : une seconde passe sur un chapitre
   déjà relu, où rejuger tout coûte.
-- Extraction des TD et des examens (exercices, questions, corrigés) pour les
-  règles `TD*` et `EX*` (hors périmètre de S7, décision 0007).
+- Template : une famille `corrige` dans `vocabulaire.json` pour
+  `correction` et ses alias, afin de retirer `vocabulaire.CORRIGE`, seul
+  nom d'environnement en dur (décision 0009, point 4). Issue à ouvrir dans
+  `ocots-latex-template` (l'agent n'a pas pu, S8).
 - Réessai du rôle `judgment-reviewer` sur Albert avec le rôle corrigé
   (agents#43), même chapitre que S7.4 (mesure#381) : critère, aucun P4 sur
   un exemple et le point P1 trouvé.
