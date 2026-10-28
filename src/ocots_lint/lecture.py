@@ -72,21 +72,38 @@ RE_CLASSE = re.compile(r"^[^%\n]*?\\documentclass(?:\[[^\]]*\])?\{([^}]+)\}", re
 # Le support « diapositives » du vocabulaire du template.
 DIAPOSITIVES = "slides"
 
+# Le support d'un fichier sans classe — un chapitre, un `contenu.tex` inclus
+# par ses wrappers — se lit à son dossier, rangé selon l'arborescence des
+# cours : `slides/`, `td/`, `exams/`.
+DOSSIERS = {"slides": DIAPOSITIVES, "td": "td", "exams": "exam"}
+
+
+def support_de(chemin, texte, v):
+    """Le support du fichier, tel que le vocabulaire du template le nomme
+    (`book`, `slides`, `td`, `exam`…) : chaque famille de règles ne lit que le
+    sien — `P*` le polycopié, `SL*` les transparents, `TD*` et `EX*` les TD et
+    les examens.
+
+    Un fichier qui déclare sa classe (`\\documentclass{beamer}`) est reconnu
+    par elle, selon les supports du vocabulaire du template (S5.4), où qu'il
+    soit rangé. Un fichier sans classe l'est par le plus proche de ses
+    dossiers qui nomme un support (`DOSSIERS`), sinon il est du support par
+    défaut (le polycopié)."""
+    m = RE_CLASSE.search(texte)
+    if m:
+        return v.support(m.group(1).strip())
+    for dossier in reversed(os.path.normpath(chemin).split(os.sep)[:-1]):
+        if dossier in DOSSIERS:
+            return DOSSIERS[dossier]
+    return v.supports["defaut"]
+
 
 def est_transparent(chemin, texte, v):
     """Vrai si le fichier est un transparent — le support où slides.md#sl4
     dispense explicitement des règles d'amorce et de reprise du polycopié
     (P3, P4) : le texte y est télégraphique, c'est l'enseignant qui fait la
-    liaison à l'oral.
-
-    Un fichier qui déclare sa classe (`\\documentclass{beamer}`) est reconnu
-    par elle, selon les supports du vocabulaire du template (S5.4), où qu'il
-    soit rangé. Un fichier sans classe — un chapitre inclus par un fichier
-    principal — l'est par son dossier : sous `slides/`."""
-    m = RE_CLASSE.search(texte)
-    if m:
-        return v.support(m.group(1).strip()) == DIAPOSITIVES
-    return "slides" in os.path.normpath(chemin).split(os.sep)[:-1]
+    liaison à l'oral."""
+    return support_de(chemin, texte, v) == DIAPOSITIVES
 
 
 def lire(chemin):

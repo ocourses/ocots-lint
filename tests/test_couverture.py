@@ -6,9 +6,9 @@ CONTENU = {
                    "\n## C5 — Labels\n\n## C6 — Listes\n",
     "poly.md": "## P1 — Hypothèses\n\n## P2 — Boîtes\n\n## P3 — Amorce\n"
                "\n## P5 — Remarques | apartés\n\n## P7 — Ouverture\n",
-    "slides.md": "## SL1 — Référence\n",
-    "td.md": "# TD\n",
-    "exam.md": "# Examens\n",
+    "slides.md": "## SL1 — Référence\n\n## SL8 — Thème global\n",
+    "td.md": "# TD\n\n## TD3 — Questions\n\n## TD8 — Corrigé au fil des questions\n",
+    "exam.md": "# Examens\n\n## EX3 — Barème par les clés\n",
     "site.md": "## WEB1 — Modèles\n\n## WEB2 — Une page tient\n",
 }
 
@@ -30,12 +30,17 @@ def test_une_ligne_par_regle_avec_son_outillage(tmp_path, capsys):
     lignes = {l.split()[0]: l for l in sortie.out.splitlines()[2:]}
     assert list(lignes) == [
         "C1", "C3", "C4", "C5", "C6", "P1", "P2", "P3", "P5", "P7", "SL1",
+        "SL8", "TD3", "TD8", "EX3",
     ]
     assert lignes["C1"].endswith("mesure")
     assert lignes["C4"].endswith("heuristique + mesure")
     assert lignes["P1"].endswith("non outillée")
     assert lignes["P3"].endswith("signal")
-    assert "11 règles : 6 vérifiées, 3 mesurées seulement, 2 non outillées" in (
+    assert lignes["TD8"].endswith("exact")
+    assert lignes["TD3"].endswith("heuristique")
+    assert lignes["EX3"].endswith("heuristique")
+    assert lignes["SL8"].endswith("heuristique")
+    assert "15 règles : 10 vérifiées, 3 mesurées seulement, 2 non outillées" in (
         sortie.err)
 
 
@@ -54,9 +59,21 @@ def test_support_td_ne_compte_que_commun_et_td(tmp_path, capsys):
     sortie = capsys.readouterr()
     lignes = [l for l in sortie.out.splitlines()
               if l and not l.startswith("Conventions") and not l.startswith("|")]
-    assert [l.split()[0] for l in lignes] == ["C1", "C3", "C4", "C5", "C6"]
-    assert "5 règles applicables au support « td »" in sortie.err
-    assert "3 vérifiées" in sortie.err
+    assert [l.split()[0] for l in lignes] == [
+        "C1", "C3", "C4", "C5", "C6", "TD3", "TD8"]
+    assert "7 règles applicables au support « td »" in sortie.err
+    assert "5 vérifiées" in sortie.err
+
+
+def test_support_exam_inclut_les_regles_des_td(tmp_path, capsys):
+    """Décision 0009, point 3 : exam.md a td.md pour prérequis."""
+    assert couverture.main(["--conventions", conventions_fictives(tmp_path),
+                            "--support", "exam"]) == 0
+    sortie = capsys.readouterr()
+    lignes = [l for l in sortie.out.splitlines()[2:] if l]
+    assert [l.split()[0] for l in lignes] == [
+        "C1", "C3", "C4", "C5", "C6", "TD3", "TD8", "EX3"]
+    assert "8 règles applicables au support « exam » : 6 vérifiées" in sortie.err
 
 
 def test_les_regles_web_sont_hors_ocots_lint_et_comptees_a_part(tmp_path, capsys):

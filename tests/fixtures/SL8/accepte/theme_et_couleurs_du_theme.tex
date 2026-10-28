@@ -1,0 +1,15 @@
+\documentclass{beamer}
+\usepackage[theme=ocots]{ocots}
+\definecolor{maison}{HTML}{336699}
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+\newcommand{\tocon}[1]{{\color{\ocotscolor{link}}#1}}
+\begin{document}
+\slidecolor{\ocotscolor{slide2}}
+\begin{slide}{Titre}
+    \caption{Schéma en {\color{\ocotscolor{emphB}} boucle ouverte}.}
+    \textcolor{\ocotscolor{link}}{Lien.} \emphB{hypothèse}
+    % \textcolor{red}{commenté}
+\end{slide}
+% Hors de toute diapositive, une couleur ne s'affiche pas en projection.
+{\color{red}}
+\end{document}

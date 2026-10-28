@@ -25,7 +25,8 @@ COMMANDES = {
     "exempter": (exempter.main, "consigner un rejet par une directive, rien d'autre"),
     "synchroniser": (synchroniser.main, "une issue par fichier en infraction"),
     "comparer": (comparer.main, "ce qui change entre deux analyses"),
-    "extraire": (extraire.main, "inventaire des boîtes du polycopié, pour juger"),
+    "extraire": (extraire.main, "inventaire des boîtes du polycopié (--exercices : "
+                                "des TD et des examens), pour juger"),
 }
 
 AIDE = """\
@@ -44,6 +45,7 @@ Commandes :
   ocots-lint synchroniser --dry-run   plan des issues, sans rien toucher
   ocots-lint comparer a.json b.json   ce qui change entre deux analyses
   ocots-lint extraire            boîtes du polycopié, avec amorce et reprise
+  ocots-lint extraire --exercices   exercices des TD et des examens, avec leurs corrigés
   ocots-lint --version
 """
 

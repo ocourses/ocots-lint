@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ocourses/ocots-lint/blob/main/src/ocots_lint/schemas/extraire-exercices-1.schema.json",
+  "title": "ocots-lint extraire --exercices, schéma 1",
+  "description": "Inventaire des exercices des TD et des examens pour les règles de jugement (TD4–TD6, EX1, EX2, EX4–EX6) : documents, consignes, parties, exercices avec leurs questions et leurs corrigés. Décrit, ne juge pas : aucun champ n'est un verdict. Un changement incompatible crée un schéma 2 ; un champ ajouté reste compatible.",
+  "type": "object",
+  "required": ["schema", "outil", "version", "extraction", "racines", "documents", "consignes", "parties", "exercices", "hors_exercice", "avertissements"],
+  "properties": {
+    "schema": {"const": 1},
+    "outil": {"const": "ocots-lint"},
+    "version": {"type": "string"},
+    "extraction": {"const": "exercices"},
+    "racines": {"type": "array", "items": {"type": "string"}, "description": "Le périmètre extrait (défaut : td/ et exams/). Seuls les fichiers des supports TD et examen sont lus ; les cibles des renvois se lisent dans tout le cours."},
+    "documents": {
+      "description": "Chaque fichier du périmètre qui déclare sa classe : un sujet, une correction.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fichier", "support", "classe", "titre", "solutions", "champs", "inclut"],
+        "properties": {
+          "fichier": {"$ref": "#/$defs/fichier"},
+          "support": {"$ref": "#/$defs/support"},
+          "classe": {"type": "string"},
+          "titre": {"type": ["string", "null"], "description": "L'argument de \\title, en prose."},
+          "solutions": {"type": ["string", "null"], "description": "L'option solutions= (none, inline, end) : ce que le document compose des corrigés."},
+          "champs": {"type": "object", "propertyNames": {"enum": ["duree", "documents", "calculatrice", "examnote"]}, "additionalProperties": {"type": "string"}, "description": "Les champs d'examen renseignés (EX2) ; un champ absent n'y figure pas."},
+          "inclut": {"type": "array", "items": {"$ref": "#/$defs/fichier"}, "description": "Les fichiers chargés par \\input, \\include, \\subfile."}
+        }
+      }
+    },
+    "consignes": {
+      "description": "Chaque environnement de consignes (famille « consigne » du vocabulaire), là où il est écrit (EX2).",
+      "type": "array",
+      "items": {"$ref": "#/$defs/bloc"}
+    },
+    "parties": {
+      "description": "Chaque environnement de structure (docpart…) des fichiers lus, avec ses paragraphes avant son premier exercice : titre, annonce d'indépendance (EX4).",
+      "type": "array",
+      "items": {"$ref": "#/$defs/bloc"}
+    },
+    "exercices": {
+      "description": "Chaque exercice (famille « exercice »), non imbriqué, dans l'ordre des fichiers puis du texte.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["empreinte", "fichier", "ligne", "fin", "environnement", "support", "partie", "label", "points", "intro", "questions", "corrections", "renvois"],
+        "properties": {
+          "empreinte": {"type": "string", "pattern": "^[0-9a-f]{16}:[0-9]+$", "description": "Identité stable de l'exercice, indépendante du numéro de ligne."},
+          "fichier": {"$ref": "#/$defs/fichier"},
+          "ligne": {"$ref": "#/$defs/ligne"},
+          "fin": {"$ref": "#/$defs/ligne"},
+          "environnement": {"type": "string"},
+          "support": {"$ref": "#/$defs/support"},
+          "partie": {
+            "oneOf": [
+              {"type": "null"},
+              {"type": "object", "required": ["fichier", "ligne"], "properties": {"fichier": {"$ref": "#/$defs/fichier"}, "ligne": {"$ref": "#/$defs/ligne"}}}
+            ],
+            "description": "La partie qui contient l'exercice, sinon la dernière posée avant lui dans le fichier (renvoi vers « parties »)."
+          },
+          "label": {"type": ["string", "null"], "description": "Le label de l'exercice lui-même (label= ou \\label dans son texte)."},
+          "points": {"type": ["string", "null"], "description": "La clé points= (EX3), telle qu'écrite."},
+          "intro": {"type": "array", "items": {"$ref": "#/$defs/paragraphe"}, "description": "Les paragraphes entre l'en-tête et la première question ou le premier corrigé."},
+          "questions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["numero", "environnement", "ligne", "fin", "label", "enonce", "corrections"],
+              "properties": {
+                "numero": {"type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$", "description": "Le numéro dans l'exercice, comme le template le compose : 2, 2.1."},
+                "environnement": {"type": "string"},
+                "ligne": {"$ref": "#/$defs/ligne"},
+                "fin": {"$ref": "#/$defs/ligne"},
+                "label": {"type": ["string", "null"]},
+                "enonce": {"$ref": "#/$defs/paragraphe", "description": "Le texte propre de la question, sans ses sous-questions ni ses corrigés."},
+                "corrections": {"type": "array", "items": {"$ref": "#/$defs/correction"}}
+              }
+            }
+          },
+          "corrections": {"type": "array", "items": {"$ref": "#/$defs/correction"}, "description": "Les corrigés de l'exercice qui ne suivent aucune question."},
+          "renvois": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["cle", "ligne", "commande", "cible"],
+              "properties": {
+                "cle": {"type": "string"},
+                "ligne": {"$ref": "#/$defs/ligne"},
+                "commande": {"type": "string"},
+                "cible": {"type": ["string", "null"], "description": "Le fichier qui définit ce label dans le cours, ou null s'il n'existe pas : un renvoi vers le polycopié (TD5), ou qui ne résout pas dans un sujet (EX1)."}
+              }
+            }
+          }
+        }
+      }
+    },
+    "hors_exercice": {
+      "description": "Les corrigés qu'aucun exercice ne contient (TD8 les signale).",
+      "type": "array",
+      "items": {"allOf": [{"$ref": "#/$defs/correction"}, {"required": ["fichier"], "properties": {"fichier": {"$ref": "#/$defs/fichier"}}}]}
+    },
+    "avertissements": {
+      "description": "Fichiers que l'analyse syntaxique refuse : non extraits, avec le nombre d'exercices manquants.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fichier", "ligne", "message"],
+        "properties": {
+          "fichier": {"$ref": "#/$defs/fichier"},
+          "ligne": {"$ref": "#/$defs/ligne"},
+          "message": {"type": "string"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "fichier": {"type": "string", "description": "Chemin POSIX relatif au dossier où l'outil est lancé."},
+    "ligne": {"type": "integer", "minimum": 1},
+    "support": {"enum": ["td", "exam"]},
+    "paragraphe": {"type": "string", "maxLength": 801, "description": "En prose : sans commentaires, \\label, \\index ni définitions de macros, espaces réduits ; formules en LaTeX ; borné à 800 caractères, « … » marquant la coupure."},
+    "bloc": {
+      "type": "object",
+      "required": ["fichier", "ligne", "fin", "environnement", "label", "paragraphes"],
+      "properties": {
+        "fichier": {"$ref": "#/$defs/fichier"},
+        "ligne": {"$ref": "#/$defs/ligne"},
+        "fin": {"$ref": "#/$defs/ligne"},
+        "environnement": {"type": "string"},
+        "label": {"type": ["string", "null"]},
+        "paragraphes": {"type": "array", "items": {"$ref": "#/$defs/paragraphe"}}
+      }
+    },
+    "correction": {
+      "type": "object",
+      "required": ["ligne", "fin", "environnement", "place", "lignes"],
+      "properties": {
+        "ligne": {"$ref": "#/$defs/ligne"},
+        "fin": {"$ref": "#/$defs/ligne"},
+        "environnement": {"type": "string"},
+        "place": {"enum": ["apres", "dans", "exercice", "hors_exercice"], "description": "après la question corrigée (TD8) ; dans la question qui le contient ; rattaché à l'exercice ; hors de tout exercice."},
+        "lignes": {"type": "integer", "minimum": 0, "description": "Lignes non vides du corrigé, commentaires exclus : un signal de calibrage (TD6), pas un verdict."}
+      }
+    }
+  }
+}

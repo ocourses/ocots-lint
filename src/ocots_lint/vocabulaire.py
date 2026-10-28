@@ -30,6 +30,12 @@ SCHEMA = 1
 FICHIER = os.path.join("template", "vocabulaire.json")
 EMBARQUE = Path(__file__).parent / "donnees" / "vocabulaire.json"
 
+QUESTION = "question"           # famille : question, sous-question, corrigé
+# Le seul nom d'environnement du template que l'outil connaît : le
+# vocabulaire ne distingue pas encore le corrigé de la question (décision
+# 0009). À retirer quand le template publiera une famille pour les corrigés.
+CORRIGE = "correction"
+
 
 class VocabulaireIllisible(Exception):
     pass
@@ -50,6 +56,18 @@ class Vocabulaire:
         """La famille de `nom` (celle de sa cible pour un alias), ou None."""
         e = self._cible(nom)
         return e["famille"] if e else None
+
+    def canonique(self, nom):
+        """Le nom de la cible d'un alias (`mycorr` → `correction`), sinon `nom`."""
+        e = self.environnements.get(nom)
+        return e["alias_de"] if e and "alias_de" in e else nom
+
+    def est_corrige(self, nom):
+        """Vrai pour le corrigé d'une question (TD8). Le vocabulaire range
+        question, sous-question et corrigé dans une même famille : seul le nom
+        canonique les distingue (décision 0009, point 4)."""
+        return (self.famille(nom) == QUESTION
+                and self.canonique(nom) == CORRIGE)
 
     def noms(self, *familles):
         """Les environnements de ces familles, alias compris."""

@@ -1,0 +1,274 @@
+{
+  "schema": 1,
+  "outil": "ocots-lint",
+  "version": "<version>",
+  "extraction": "exercices",
+  "racines": [
+    "td",
+    "exams"
+  ],
+  "documents": [
+    {
+      "fichier": "td/td1/correction.tex",
+      "support": "td",
+      "classe": "ocots-td",
+      "titre": "Correction du TD 1",
+      "solutions": "inline",
+      "champs": {},
+      "inclut": [
+        "td/td1/contenu.tex"
+      ]
+    },
+    {
+      "fichier": "td/td1/sujet.tex",
+      "support": "td",
+      "classe": "ocots-td",
+      "titre": "TD 1 --- Suites de fonctions",
+      "solutions": "none",
+      "champs": {},
+      "inclut": [
+        "td/td1/contenu.tex"
+      ]
+    },
+    {
+      "fichier": "exams/2025/sujet.tex",
+      "support": "exam",
+      "classe": "ocots-exam",
+      "titre": "Examen",
+      "solutions": "none",
+      "champs": {
+        "duree": "1h30",
+        "calculatrice": "interdite"
+      },
+      "inclut": []
+    }
+  ],
+  "consignes": [
+    {
+      "fichier": "exams/2025/sujet.tex",
+      "ligne": 8,
+      "fin": 10,
+      "environnement": "instructions",
+      "label": null,
+      "paragraphes": [
+        "\\item Documents autorisés : une feuille A4."
+      ]
+    }
+  ],
+  "parties": [
+    {
+      "fichier": "exams/2025/sujet.tex",
+      "ligne": 11,
+      "fin": 23,
+      "environnement": "docpart",
+      "label": "partie:analyse",
+      "paragraphes": [
+        "Analyse",
+        "Les exercices sont indépendants."
+      ]
+    },
+    {
+      "fichier": "exams/2025/sujet.tex",
+      "ligne": 24,
+      "fin": 26,
+      "environnement": "docpart",
+      "label": null,
+      "paragraphes": [
+        "Probabilités"
+      ]
+    }
+  ],
+  "exercices": [
+    {
+      "empreinte": "b8ce69efa088693d:0",
+      "fichier": "td/td1/contenu.tex",
+      "ligne": 1,
+      "fin": 26,
+      "environnement": "exercise",
+      "support": "td",
+      "partie": null,
+      "label": "ex:suite",
+      "points": null,
+      "intro": [
+        "Soit $(f_n)$ une suite de fonctions mesurables.",
+        "D'après Sontag, ex. 1.4."
+      ],
+      "questions": [
+        {
+          "numero": "1",
+          "environnement": "question",
+          "ligne": 5,
+          "fin": 7,
+          "label": "q:cv",
+          "enonce": "Montrer que $(f_n)$ converge.",
+          "corrections": [
+            {
+              "ligne": 8,
+              "fin": 10,
+              "environnement": "correction",
+              "place": "apres",
+              "lignes": 1
+            }
+          ]
+        },
+        {
+          "numero": "2",
+          "environnement": "question",
+          "ligne": 11,
+          "fin": 22,
+          "label": null,
+          "enonce": "Cas particuliers.",
+          "corrections": [
+            {
+              "ligne": 23,
+              "fin": 25,
+              "environnement": "correction",
+              "place": "apres",
+              "lignes": 1
+            }
+          ]
+        },
+        {
+          "numero": "2.1",
+          "environnement": "subquestion",
+          "ligne": 13,
+          "fin": 15,
+          "label": null,
+          "enonce": "Cas $a > 0$.",
+          "corrections": [
+            {
+              "ligne": 16,
+              "fin": 18,
+              "environnement": "correction",
+              "place": "apres",
+              "lignes": 1
+            }
+          ]
+        },
+        {
+          "numero": "2.2",
+          "environnement": "subquestion",
+          "ligne": 19,
+          "fin": 21,
+          "label": null,
+          "enonce": "Cas $a < 0$, en utilisant la question~\\ref{q:cv}.",
+          "corrections": []
+        }
+      ],
+      "corrections": [],
+      "renvois": [
+        {
+          "cle": "thm:cvd",
+          "ligne": 9,
+          "commande": "ref",
+          "cible": "poly/ch1.tex"
+        },
+        {
+          "cle": "q:cv",
+          "ligne": 20,
+          "commande": "ref",
+          "cible": "td/td1/contenu.tex"
+        }
+      ]
+    },
+    {
+      "empreinte": "6cb9b63dc49c9524:0",
+      "fichier": "td/td1/contenu.tex",
+      "ligne": 28,
+      "fin": 34,
+      "environnement": "exercise",
+      "support": "td",
+      "partie": null,
+      "label": null,
+      "points": null,
+      "intro": [
+        "\\exercisenotext Un exercice sans question."
+      ],
+      "questions": [],
+      "corrections": [
+        {
+          "ligne": 31,
+          "fin": 33,
+          "environnement": "correction",
+          "place": "exercice",
+          "lignes": 1
+        }
+      ],
+      "renvois": [
+        {
+          "cle": "eq:absente",
+          "ligne": 32,
+          "commande": "ref",
+          "cible": null
+        }
+      ]
+    },
+    {
+      "empreinte": "f292a39a893bef27:0",
+      "fichier": "exams/2025/sujet.tex",
+      "ligne": 15,
+      "fin": 22,
+      "environnement": "exercise",
+      "support": "exam",
+      "partie": {
+        "fichier": "exams/2025/sujet.tex",
+        "ligne": 11
+      },
+      "label": "ex:stab",
+      "points": "8",
+      "intro": [],
+      "questions": [
+        {
+          "numero": "1",
+          "environnement": "question",
+          "ligne": 16,
+          "fin": 18,
+          "label": null,
+          "enonce": "Montrer que l'équilibre est stable.",
+          "corrections": [
+            {
+              "ligne": 19,
+              "fin": 21,
+              "environnement": "correction",
+              "place": "apres",
+              "lignes": 1
+            }
+          ]
+        }
+      ],
+      "corrections": [],
+      "renvois": []
+    },
+    {
+      "empreinte": "311d59aa8b0be569:0",
+      "fichier": "exams/2025/sujet.tex",
+      "ligne": 27,
+      "fin": 29,
+      "environnement": "exercise",
+      "support": "exam",
+      "partie": {
+        "fichier": "exams/2025/sujet.tex",
+        "ligne": 24
+      },
+      "label": null,
+      "points": "4",
+      "intro": [
+        "Énoncé sans question."
+      ],
+      "questions": [],
+      "corrections": [],
+      "renvois": []
+    }
+  ],
+  "hors_exercice": [
+    {
+      "fichier": "exams/2025/sujet.tex",
+      "ligne": 30,
+      "fin": 32,
+      "environnement": "correction",
+      "place": "hors_exercice",
+      "lignes": 1
+    }
+  ],
+  "avertissements": []
+}

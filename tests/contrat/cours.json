@@ -26,6 +26,22 @@
     "C6": {
       "garantie": "heuristique",
       "resume": "C6 — \\qedhere manquant en fin de liste ou d'équation ; \\vspace qui compense un \\footnotetext."
+    },
+    "EX3": {
+      "garantie": "heuristique",
+      "resume": "EX3 — barème écrit dans le texte du sujet au lieu de la clé points=."
+    },
+    "SL8": {
+      "garantie": "heuristique",
+      "resume": "SL8 — couleur en dur dans une diapositive, réglage de thème dans le corps."
+    },
+    "TD3": {
+      "garantie": "heuristique",
+      "resume": "TD3 — enumerate pour les questions, numéro saisi à la main, titre libre d'exercice."
+    },
+    "TD8": {
+      "garantie": "exact",
+      "resume": "TD8 — correction hors de tout exercice, ou imbriquée dans une question."
     }
   },
   "trouvailles": [

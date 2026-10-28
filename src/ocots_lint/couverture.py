@@ -31,7 +31,9 @@ SUPPORTS = {
     "poly": ("C", "P"),
     "slides": ("C", "SL"),
     "td": ("C", "TD"),
-    "exam": ("C", "EX"),
+    # exam.md a td.md pour prérequis : TD3 et TD8 lisent aussi les sujets
+    # (décision 0009, point 3).
+    "exam": ("C", "TD", "EX"),
     "site": ("WEB",),
 }
 

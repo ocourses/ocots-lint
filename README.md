@@ -33,7 +33,7 @@ uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint verifier --list
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint verifier --mesure poly/
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint couverture
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint couverture --support td
-uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint couverture --support td
+uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint extraire --exercices
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint nettoyer C4 poly/              # aperçu
 uvx --from git+https://github.com/ocourses/ocots-lint ocots-lint nettoyer C4 poly/ --appliquer  # écrit
 ```
@@ -80,7 +80,9 @@ l'outil cite une règle que ces conventions ne connaissent pas.
 Pour savoir ce que l'outil peut réellement conclure sur un support précis,
 ajouter `--support commun|poly|slides|td|exam|site`. Le support inclut les règles
 communes (`C*`) et ses règles propres : par exemple, `--support td` affiche
-les `C*` et `TD*`, pas les règles `P*`, `SL*` ou `EX*`. Le résumé distingue
+les `C*` et `TD*`, pas les règles `P*`, `SL*` ou `EX*`. Un sujet d'examen
+suit aussi les règles des TD (`exam.md` les a pour prérequis) : `--support
+exam` affiche les `C*`, `TD*` et `EX*`. Le résumé distingue
 les règles vérifiées, mesurées seulement et non outillées. Une absence de
 trouvaille sur un TD ne signifie donc pas qu'une règle `TD*` a été vérifiée.
 
@@ -254,6 +256,22 @@ figures, texte, sous-sections), les hypothèses posées, et ce qui la termine.
 Un fichier que l'analyse refuse n'est pas extrait : il est signalé, avec le
 nombre de boîtes ou de titres manquants.
 
+**Les TD et les examens** : `extraire --exercices`, pour les règles de
+jugement `TD4`–`TD6`, `EX1`, `EX2`, `EX4`–`EX6`. Chaque exercice avec son
+label, ses `points`, son texte d'intro, ses questions numérotées comme le
+document les compose (2, 2.1), le corrigé rattaché à chacune et sa place
+(après la question, dans la question, à l'exercice), le nombre de lignes de
+chaque corrigé (calibrage, `TD6`), et ses renvois avec le fichier qui
+définit leur cible (`null` : le renvoi ne résout pas, `EX1`) ; chaque
+document avec son mode `solutions=`, ses champs d'examen (`\duree`…) et ce
+qu'il inclut ; les consignes et les parties là où elles sont écrites (`EX2`,
+`EX4`) ; les corrigés hors de tout exercice.
+
+```bash
+ocots-lint extraire --exercices > exercices.json   # td/ et exams/
+ocots-lint extraire --exercices td/td1/            # un TD
+```
+
 ### Le contrat JSON
 
 `verifier --format json` est **le** format à lire pour un programme : la
@@ -265,7 +283,10 @@ schéma 2.
 
 `extraire` a son propre contrat, publié de même
 ([`schemas/extraire-1.schema.json`](src/ocots_lint/schemas/extraire-1.schema.json)) :
-ce que chaque champ décrit, et qu'aucun n'est un verdict.
+ce que chaque champ décrit, et qu'aucun n'est un verdict. `extraire
+--exercices` a le sien
+([`schemas/extraire-exercices-1.schema.json`](src/ocots_lint/schemas/extraire-exercices-1.schema.json)),
+qui évolue indépendamment.
 
 Chaque trouvaille porte une **empreinte** (`3f9a0c2e71b84d55:0`), son
 identité indépendante du numéro de ligne : la règle, le fichier, la ligne

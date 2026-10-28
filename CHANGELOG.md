@@ -13,6 +13,44 @@ au moment du tag.
 - **Relais : la liste de la PR dit quand** (#27) : « Avant de fusionner » (CI, relire l'entrée) et
   « Après la fusion » (la version se choisit dans la PR `chore(release)` des conventions, le tag
   se pose sur son merge). Elle mêlait les deux.
+- **`TD8` vérifiée** (`exact`, S8.1, #70) : une `correction` hors de tout `exercise`, ou
+  imbriquée dans une `question` sans suivre la sous-question qu'elle corrige, est signalée,
+  dans les TD et les examens. Une montée **fait apparaître** ces trouvailles : automatique 9
+  (corrigés posés après `\end{exercise}` dans quatre sujets), mesure-integration,
+  calcul-differentiel-edo et la démo 0.
+- **`TD3` vérifiée** (`heuristique`, S8.2, #70) : dans les TD et les examens, un `enumerate`
+  posé directement dans un `exercise` (il numérote les questions), un numéro de question saisi
+  à la main en tête de ligne (« 1) », « 2. », `\textbf{3.}`), un titre libre passé en en-tête
+  (`\begin{exercise}[Fourier]`). Un corrigé n'est pas lu. Une montée **fait apparaître** :
+  mesure-integration 18 (`enumerate` dans les exercices de neuf sujets), automatique 3 (un
+  `enumerate` dont chaque item porte son corrigé, dans une question), les autres cours 0.
+  Limite connue : un `enumerate` de données dans l'intro (`TD3/limites/`).
+- **`EX3` vérifiée** (`heuristique`, S8.3, #70) : un barème écrit dans le texte d'un sujet
+  (`\begin{exercise}(7 points)`, « barème prévisionnel : 8 points », « (1 point) » devant une
+  question) au lieu de la clé `points=`. Ni le préambule ni une `correction` (répartition par
+  question, `EX6`) ne sont lus ; « 3 points d'intersection », « points fixes » sont écartés.
+  Une montée **fait apparaître** : automatique 53 (sujets 2014–2023, dont `archive/`),
+  mesure-integration 17, calcul-differentiel-edo 0. Limite connue : des points d'une figure
+  (`EX3/limites/`).
+- **`SL8` vérifiée** (`heuristique`, S8.4, #70) : dans un transparent, une couleur en dur
+  posée dans une diapositive (`\textcolor{red}`, `{\color{blue!20} …}`, y compris dans une
+  légende ou une formule) et un réglage de thème après `\begin{document}` (`\usetheme`,
+  `\setbeamercolor`, `\definecolor`…). Une couleur du thème (`\ocotscolor{…}`) et
+  `\slidecolor` ne sont pas signalées. Une montée **fait apparaître** : automatique 1 (un
+  `\color{red}` dans une formule de `td/td4/slides-td4-rk.tex`), les autres cours 0.
+- **`extraire --exercices`** (S8.5, #70) : l'inventaire des exercices des TD et des examens,
+  sans verdict, pour les règles de jugement `TD4`–`TD6`, `EX1`, `EX2`, `EX4`–`EX6` : questions
+  numérotées, corrigés rattachés et leur place, `points`, intro, renvois et leur cible ;
+  documents (`solutions=`, champs d'examen), consignes, parties. Nouveau contrat publié,
+  `schemas/extraire-exercices-1.schema.json`. Exhaustif sur les quatre cours : 191 exercices et
+  293 corrigés, autant que comptés indépendamment.
+- **`couverture --support exam`** liste aussi les `TD*` (S8.6) : `exam.md` a `td.md` pour
+  prérequis, et `TD3`, `TD8` lisent les sujets.
+- **Support d'un fichier** (S8.0) : lu par sa classe, sinon par son dossier le plus proche
+  (`slides/`, `td/`, `exams/`), sinon le polycopié. Un fichier rangé sous `slides/` puis
+  sous `td/` est un TD, plus un transparent. Aucun écart au corpus.
+- Un fichier que l'analyse refuse : l'avertissement dit aussi les règles qu'il saute (règles
+  sans repli : `TD8`), et ne cite que les règles qui valent pour son support.
 ---
 
 ## v0.11.0 — 2026-10-27
