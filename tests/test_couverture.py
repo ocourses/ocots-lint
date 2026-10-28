@@ -37,7 +37,8 @@ def test_une_ligne_par_regle_avec_son_outillage(tmp_path, capsys):
     assert lignes["P1"].endswith("non outillée")
     assert lignes["P3"].endswith("signal")
     assert lignes["TD8"].endswith("exact")
-    assert "15 règles : 7 vérifiées, 3 mesurées seulement, 5 non outillées" in (
+    assert lignes["TD3"].endswith("heuristique")
+    assert "15 règles : 8 vérifiées, 3 mesurées seulement, 4 non outillées" in (
         sortie.err)
 
 
@@ -59,7 +60,7 @@ def test_support_td_ne_compte_que_commun_et_td(tmp_path, capsys):
     assert [l.split()[0] for l in lignes] == [
         "C1", "C3", "C4", "C5", "C6", "TD3", "TD8"]
     assert "7 règles applicables au support « td »" in sortie.err
-    assert "4 vérifiées" in sortie.err
+    assert "5 vérifiées" in sortie.err
 
 
 def test_les_regles_web_sont_hors_ocots_lint_et_comptees_a_part(tmp_path, capsys):

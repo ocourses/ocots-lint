@@ -24,6 +24,7 @@ from ocots_lint.regles.p2 import regle_P2
 from ocots_lint.regles.p3 import regle_P3
 from ocots_lint.regles.p5 import regle_P5
 from ocots_lint.regles.supports import EXERCICES
+from ocots_lint.regles.td3 import regle_TD3
 from ocots_lint.regles.td8 import regle_TD8
 
 # Ce qu'une trouvaille — ou son absence — permet de conclure.
@@ -57,6 +58,8 @@ REGISTRE = (
     Verificateur("C4", regle_C4, "heuristique", lecture="arbre"),
     Verificateur("C5", regle_C5, "heuristique", lecture="arbre"),
     Verificateur("C6", regle_C6, "heuristique"),
+    Verificateur("TD3", regle_TD3, "heuristique", lecture="arbre", repli=False,
+                 supports=EXERCICES),
     Verificateur("TD8", regle_TD8, "exact", lecture="arbre", repli=False,
                  supports=EXERCICES),
 )

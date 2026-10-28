@@ -18,6 +18,12 @@ au moment du tag.
   dans les TD et les examens. Une montée **fait apparaître** ces trouvailles : automatique 9
   (corrigés posés après `\end{exercise}` dans quatre sujets), mesure-integration,
   calcul-differentiel-edo et la démo 0.
+- **`TD3` vérifiée** (`heuristique`, S8.2, #70) : dans les TD et les examens, un `enumerate`
+  posé directement dans un `exercise` (il numérote les questions), un numéro de question saisi
+  à la main en tête de ligne (« 1) », « 2. », `\textbf{3.}`), un titre libre passé en en-tête
+  (`\begin{exercise}[Fourier]`). Un corrigé n'est pas lu. Une montée **fait apparaître** :
+  mesure-integration 18 (`enumerate` dans les exercices de neuf sujets), les autres cours 0.
+  Limite connue : un `enumerate` de données dans l'intro (`TD3/limites/`).
 - **Support d'un fichier** (S8.0) : lu par sa classe, sinon par son dossier le plus proche
   (`slides/`, `td/`, `exams/`), sinon le polycopié. Un fichier rangé sous `slides/` puis
   sous `td/` est un TD, plus un transparent. Aucun écart au corpus.
