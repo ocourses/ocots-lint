@@ -80,7 +80,9 @@ l'outil cite une règle que ces conventions ne connaissent pas.
 Pour savoir ce que l'outil peut réellement conclure sur un support précis,
 ajouter `--support commun|poly|slides|td|exam|site`. Le support inclut les règles
 communes (`C*`) et ses règles propres : par exemple, `--support td` affiche
-les `C*` et `TD*`, pas les règles `P*`, `SL*` ou `EX*`. Le résumé distingue
+les `C*` et `TD*`, pas les règles `P*`, `SL*` ou `EX*`. Un sujet d'examen
+suit aussi les règles des TD (`exam.md` les a pour prérequis) : `--support
+exam` affiche les `C*`, `TD*` et `EX*`. Le résumé distingue
 les règles vérifiées, mesurées seulement et non outillées. Une absence de
 trouvaille sur un TD ne signifie donc pas qu'une règle `TD*` a été vérifiée.
 

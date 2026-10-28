@@ -65,6 +65,17 @@ def test_support_td_ne_compte_que_commun_et_td(tmp_path, capsys):
     assert "5 vérifiées" in sortie.err
 
 
+def test_support_exam_inclut_les_regles_des_td(tmp_path, capsys):
+    """Décision 0009, point 3 : exam.md a td.md pour prérequis."""
+    assert couverture.main(["--conventions", conventions_fictives(tmp_path),
+                            "--support", "exam"]) == 0
+    sortie = capsys.readouterr()
+    lignes = [l for l in sortie.out.splitlines()[2:] if l]
+    assert [l.split()[0] for l in lignes] == [
+        "C1", "C3", "C4", "C5", "C6", "TD3", "TD8", "EX3"]
+    assert "8 règles applicables au support « exam » : 6 vérifiées" in sortie.err
+
+
 def test_les_regles_web_sont_hors_ocots_lint_et_comptees_a_part(tmp_path, capsys):
     # Le résumé avec site.md : celui sans, plus deux règles « hors ocots-lint ».
     sans_web = conventions_fictives(tmp_path / "sans")

@@ -37,6 +37,8 @@ au moment du tag.
   `\setbeamercolor`, `\definecolor`…). Une couleur du thème (`\ocotscolor{…}`) et
   `\slidecolor` ne sont pas signalées. Une montée **fait apparaître** : automatique 1 (un
   `\color{red}` dans une formule de `td/td4/slides-td4-rk.tex`), les autres cours 0.
+- **`couverture --support exam`** liste aussi les `TD*` (S8.6) : `exam.md` a `td.md` pour
+  prérequis, et `TD3`, `TD8` lisent les sujets.
 - **Support d'un fichier** (S8.0) : lu par sa classe, sinon par son dossier le plus proche
   (`slides/`, `td/`, `exams/`), sinon le polycopié. Un fichier rangé sous `slides/` puis
   sous `td/` est un TD, plus un transparent. Aucun écart au corpus.
