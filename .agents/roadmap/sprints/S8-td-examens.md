@@ -9,7 +9,7 @@ règles de jugement `TD*` et `EX*` leur matériau, comme `extraire` le fait
 pour le polycopié. Suivi : [#70](https://github.com/ocourses/ocots-lint/issues/70).
 
 **Lecture** : [décision 0009](../decisions/0009-td-examens-transparents.md) —
-**proposée**.
+**acceptée**.
 
 **Version visée** : `v0.12.0`.
 

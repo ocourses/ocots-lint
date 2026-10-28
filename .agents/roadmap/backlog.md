@@ -29,8 +29,8 @@ Repérées comme probablement mécaniques ; à confirmer en lisant la règle.
   déjà relu, où rejuger tout coûte.
 - Template : une famille `corrige` dans `vocabulaire.json` pour
   `correction` et ses alias, afin de retirer `vocabulaire.CORRIGE`, seul
-  nom d'environnement en dur (décision 0009, point 4). Issue à ouvrir dans
-  `ocots-latex-template` (l'agent n'a pas pu, S8).
+  nom d'environnement en dur (décision 0009, point 4). Issue :
+  `ocots-latex-template` : ouverte, [#101](https://github.com/ocourses/ocots-latex-template/issues/101).
 - Réessai du rôle `judgment-reviewer` sur Albert avec le rôle corrigé
   (agents#43), même chapitre que S7.4 (mesure#381) : critère, aucun P4 sur
   un exemple et le point P1 trouvé.
