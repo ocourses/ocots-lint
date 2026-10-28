@@ -148,7 +148,9 @@ EN_ATTENTE = set()
 
 # Mots français homographes d'un environnement : « proposition » dans les
 # motifs de P3 et C4 (prose française), « correction » (voie de correction,
-# messages de `nettoyer`). Ce ne sont pas des noms d'environnement.
+# messages de `nettoyer`). Ce ne sont pas des noms d'environnement — sauf
+# `vocabulaire.CORRIGE`, seule exception voulue (décision 0009, point 4) :
+# le vocabulaire ne distingue pas encore le corrigé de la question.
 FRANCAIS = {"proposition", "correction"}
 
 
@@ -180,3 +182,21 @@ def test_aucun_nom_du_template_en_dur_dans_le_code():
                for ligne, chaine in chaines_du_code(p)
                for m in motif.finditer(chaine)]
     assert trouves == []
+
+
+# ------------------------------------------------------------ corrigés (S8)
+
+def test_nom_canonique_d_un_alias(cours):
+    v = vocabulaire.charger()
+    assert v.canonique("mycorr") == "correction"
+    assert v.canonique("question") == "question"
+    assert v.canonique("inconnu") == "inconnu"
+
+
+def test_le_corrige_se_distingue_de_la_question(cours):
+    """Décision 0009, point 4 : même famille, seul le nom canonique les
+    distingue."""
+    v = vocabulaire.charger()
+    assert {n for n in v.environnements if v.est_corrige(n)} == {
+        "correction", "mycorr", "mycorrection"}
+    assert not v.est_corrige("subquestion")
