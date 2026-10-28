@@ -78,19 +78,25 @@ def _groupe(texte, i, ouvre="{", ferme="}"):
     return None, i
 
 
-def _options(chaine):
-    """{clé: valeur} d'une liste `a=b, c={d,e}` (virgules de premier niveau)."""
-    morceaux, profondeur, courant = [], 0, ""
+def morceaux(chaine):
+    """Les éléments d'une liste d'options `a=b, c={d,e}, nosolution`, coupée
+    aux virgules de premier niveau, blancs retirés."""
+    elements, profondeur, courant = [], 0, ""
     for c in chaine:
         if c == "," and profondeur == 0:
-            morceaux.append(courant)
+            elements.append(courant)
             courant = ""
             continue
         profondeur += (c == "{") - (c == "}")
         courant += c
-    morceaux.append(courant)
+    elements.append(courant)
+    return [e.strip() for e in elements if e.strip()]
+
+
+def _options(chaine):
+    """{clé: valeur} d'une liste `a=b, c={d,e}` (virgules de premier niveau)."""
     options = {}
-    for m in morceaux:
+    for m in morceaux(chaine):
         if "=" in m:
             k, v = m.split("=", 1)
             v = v.strip()
@@ -98,6 +104,20 @@ def _options(chaine):
                 v = v[1:-1]
             options[k.strip()] = v.strip()
     return options
+
+
+def en_tete(noeud, texte):
+    """(options, position après) de l'en-tête `[…]` qui suit `\\begin{nom}`,
+    ou (None, position après `\\begin{nom}`)."""
+    fin_begin = texte.index("}", noeud.debut) + 1
+    options, j = _groupe(texte, fin_begin, "[", "]")
+    return (options, j) if options is not None else (None, fin_begin)
+
+
+def options_de(noeud, texte):
+    """{clé: valeur} de l'en-tête `[…]` d'un environnement du template."""
+    options, _ = en_tete(noeud, texte)
+    return _options(options) if options is not None else {}
 
 
 def _avec_prefixe(cle, syntaxe):
@@ -112,14 +132,11 @@ def _avec_prefixe(cle, syntaxe):
 def _label_de_boite(noeud, texte, v):
     """(clé, décalage de la clé) posée par l'en-tête d'un environnement du
     template, ou None."""
-    fin_begin = texte.index("}", noeud.debut) + 1          # \begin{nom}
-    i = fin_begin
-    options, j = _groupe(texte, i, "[", "]")
+    options, i = en_tete(noeud, texte)
     if options is not None:
         cle = _options(options).get("label")
         if cle:
-            return cle, texte.index(cle, i)
-        i = j
+            return cle, texte.index(cle, texte.index("}", noeud.debut))
     syntaxe = (v.environnements.get(noeud.nom) or {}).get("ancienne_syntaxe")
     if not syntaxe:
         return None

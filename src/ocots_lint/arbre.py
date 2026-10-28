@@ -155,6 +155,16 @@ class Arbre:
             yield from self.parcourir(n.enfants)
 
 
+    def avec_ancetres(self, noeuds=None, ancetres=()):
+        """(nœud, ancêtres) de chaque nœud, en profondeur, dans l'ordre du
+        texte ; `ancetres` : les environnements qui le contiennent, du plus
+        proche au plus lointain. Les arguments ne sont pas parcourus."""
+        for n in (self.noeuds or ()) if noeuds is None else noeuds:
+            yield n, ancetres
+            dedans = (n, *ancetres) if n.genre == "environnement" else ancetres
+            yield from self.avec_ancetres(n.enfants, dedans)
+
+
 # ------------------------------------------------------------ conversion
 
 def _liste(noeuds):

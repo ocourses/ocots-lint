@@ -26,6 +26,10 @@
     "C6": {
       "garantie": "heuristique",
       "resume": "C6 — \\qedhere manquant en fin de liste ou d'équation ; \\vspace qui compense un \\footnotetext."
+    },
+    "TD8": {
+      "garantie": "exact",
+      "resume": "TD8 — correction hors de tout exercice, ou imbriquée dans une question."
     }
   },
   "trouvailles": [

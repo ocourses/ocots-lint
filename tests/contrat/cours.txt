@@ -12,5 +12,6 @@ C6 : 0 infraction(s)
 P2 : 1 infraction(s) (+ 1 exemptée(s))
 P3 : 1 infraction(s)
 P5 : 0 infraction(s)
+TD8 : 0 infraction(s)
 cours.tex:14: [ocots-lint] exemption sans règle ou sans raison, ignorée — « % ocots-lint: ignore P5 — raison »
 cours.tex:13: [ocots-lint] exemption P5 inutile — plus rien à exempter ici

@@ -13,6 +13,16 @@ au moment du tag.
 - **Relais : la liste de la PR dit quand** (#27) : « Avant de fusionner » (CI, relire l'entrée) et
   « Après la fusion » (la version se choisit dans la PR `chore(release)` des conventions, le tag
   se pose sur son merge). Elle mêlait les deux.
+- **`TD8` vérifiée** (`exact`, S8.1, #70) : une `correction` hors de tout `exercise`, ou
+  imbriquée dans une `question` sans suivre la sous-question qu'elle corrige, est signalée,
+  dans les TD et les examens. Une montée **fait apparaître** ces trouvailles : automatique 9
+  (corrigés posés après `\end{exercise}` dans quatre sujets), mesure-integration,
+  calcul-differentiel-edo et la démo 0.
+- **Support d'un fichier** (S8.0) : lu par sa classe, sinon par son dossier le plus proche
+  (`slides/`, `td/`, `exams/`), sinon le polycopié. Un fichier rangé sous `slides/` puis
+  sous `td/` est un TD, plus un transparent. Aucun écart au corpus.
+- Un fichier que l'analyse refuse : l'avertissement dit aussi les règles qu'il saute (règles
+  sans repli : `TD8`), et ne cite que les règles qui valent pour son support.
 ---
 
 ## v0.11.0 — 2026-10-27

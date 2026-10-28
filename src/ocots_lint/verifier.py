@@ -22,9 +22,9 @@ import sys
 from ocots_lint import empreintes, reference, sorties, vocabulaire, voies
 from ocots_lint.arbre import lire_arbre
 from ocots_lint.exemptions import Exemptions
-from ocots_lint.lecture import sources
+from ocots_lint.lecture import sources, support_de
 from ocots_lint.mesures import MESURES, mesurer
-from ocots_lint.regles import REGLES, SUR_ARBRE
+from ocots_lint.regles import REGLES, SANS_REPLI, SUPPORTS, SUR_ARBRE
 
 FORMATS = ("texte", "json", "sarif", "github")
 
@@ -79,21 +79,35 @@ def analyser(racines, noms, exemptions_actives=True):
 
 def refus_d_analyse(racines, noms):
     """Un avertissement par fichier que l'analyse syntaxique refuse, si une
-    des règles demandées lit l'arbre : ces règles s'y replient sur les
-    masques, ce qui doit se voir (décision 0004)."""
-    sur_arbre = sorted(SUR_ARBRE.intersection(noms))
-    if not sur_arbre:
+    des règles demandées lit l'arbre et vaut pour ce support : ces règles s'y
+    replient sur les masques, ou le sautent (`SANS_REPLI`), ce qui doit se
+    voir (décision 0004)."""
+    if not SUR_ARBRE.intersection(noms):
         return []
+    v = vocabulaire.charger()
     refus = []
     for chemin in sources(racines):
         a = lire_arbre(chemin)
-        if a.erreur is not None:
-            ligne, colonne = a.position(a.erreur.debut)
-            refus.append(sorties.Avertissement(
-                os.path.relpath(chemin), ligne,
-                f"analyse syntaxique refusée (colonne {colonne} : "
-                f"{a.erreur.message}) — {', '.join(sur_arbre)} lu par les "
-                f"masques de secours, avec leurs limites"))
+        if a.erreur is None:
+            continue
+        support = support_de(chemin, a.texte, v)
+        concernees = sorted(r for r in SUR_ARBRE.intersection(noms)
+                            if SUPPORTS[r] is None or support in SUPPORTS[r])
+        repli = [r for r in concernees if r not in SANS_REPLI]
+        sautees = [r for r in concernees if r in SANS_REPLI]
+        consequences = []
+        if repli:
+            consequences.append(f"{', '.join(repli)} lu par les masques de "
+                                f"secours, avec leurs limites")
+        if sautees:
+            consequences.append(f"{', '.join(sautees)} non vérifié sur ce fichier")
+        if not consequences:
+            continue
+        ligne, colonne = a.position(a.erreur.debut)
+        refus.append(sorties.Avertissement(
+            os.path.relpath(chemin), ligne,
+            f"analyse syntaxique refusée (colonne {colonne} : "
+            f"{a.erreur.message}) — {' ; '.join(consequences)}"))
     return refus
 
 

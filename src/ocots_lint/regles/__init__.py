@@ -9,7 +9,9 @@ sa garantie et sa lecture, et ses fixtures dans `tests/fixtures/<règle>/`.
 
 Lecture (S4) : `masques` — le texte par expressions régulières
 (`lecture.py`) ; `arbre` — l'arbre syntaxique (`arbre.py`), avec repli sur
-les masques pour un fichier que l'analyse refuse (décision 0004).
+les masques pour un fichier que l'analyse refuse (décision 0004). Une règle
+sans `repli` (S8 : la place d'un environnement ne se lit pas sans arbre)
+saute ce fichier, et `verifier` le dit.
 """
 
 from dataclasses import dataclass
@@ -21,6 +23,8 @@ from ocots_lint.regles.c6 import regle_C6
 from ocots_lint.regles.p2 import regle_P2
 from ocots_lint.regles.p3 import regle_P3
 from ocots_lint.regles.p5 import regle_P5
+from ocots_lint.regles.supports import EXERCICES
+from ocots_lint.regles.td8 import regle_TD8
 
 # Ce qu'une trouvaille — ou son absence — permet de conclure.
 GARANTIES = {
@@ -38,6 +42,8 @@ class Verificateur:
     fonction: Callable
     garantie: str
     lecture: str = "masques"
+    repli: bool = True
+    supports: frozenset | None = None     # None : tous les supports
 
     @property
     def resume(self):
@@ -51,7 +57,11 @@ REGISTRE = (
     Verificateur("C4", regle_C4, "heuristique", lecture="arbre"),
     Verificateur("C5", regle_C5, "heuristique", lecture="arbre"),
     Verificateur("C6", regle_C6, "heuristique"),
+    Verificateur("TD8", regle_TD8, "exact", lecture="arbre", repli=False,
+                 supports=EXERCICES),
 )
 
 REGLES = {v.regle: v.fonction for v in REGISTRE}
 SUR_ARBRE = frozenset(v.regle for v in REGISTRE if v.lecture == "arbre")
+SANS_REPLI = frozenset(v.regle for v in REGISTRE if not v.repli)
+SUPPORTS = {v.regle: v.supports for v in REGISTRE}
