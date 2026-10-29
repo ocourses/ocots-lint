@@ -2,7 +2,7 @@
 
 # 0009 — TD, examens, transparents : quelles règles outiller, et comment
 
-**Date** : 2026-10-28 — **État** : proposée (#70)
+**Date** : 2026-10-28 — **État** : acceptée par l'auteur (#70)
 
 ## Contexte
 
